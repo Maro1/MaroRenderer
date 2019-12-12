@@ -1,4 +1,6 @@
 #include "Window.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/KeyEvent.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -16,7 +18,7 @@ Window::Window(unsigned int width, unsigned height, const char* title)
 void Window::Update()
 {
 	glfwSwapBuffers(mWindow);
-	glfwWaitEvents();
+	glfwPollEvents();
 }
 
 void Window::CreateWindow(unsigned int width, unsigned height, const char* title)
@@ -30,12 +32,18 @@ void Window::CreateWindow(unsigned int width, unsigned height, const char* title
 	glfwMakeContextCurrent(mWindow);
 	glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-	glfwSetFramebufferSizeCallback(mWindow, framebuffer_size_callback);
+	SetCallbacks();
+
 }
 
 bool Window::ShouldClose()
 {
 	return glfwWindowShouldClose(mWindow);
+}
+
+void Window::SetCallbacks()
+{
+	glfwSetFramebufferSizeCallback(mWindow, framebuffer_size_callback);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)

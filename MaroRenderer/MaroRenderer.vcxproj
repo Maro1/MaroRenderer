@@ -144,6 +144,10 @@
     <None Include="Renderer\Shaders\basic2d.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Events\ApplicationEvent.h" />
+    <ClInclude Include="Application\Events\Event.h" />
+    <ClInclude Include="Application\Events\KeyEvent.h" />
+    <ClInclude Include="Application\Events\MouseEvent.h" />
     <ClInclude Include="Application\Window.h" />
     <ClInclude Include="Logging\Logger.h" />
     <ClInclude Include="Renderer\Renderer.h" />
