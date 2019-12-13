@@ -1,126 +1,73 @@
-#include "Renderer/Renderer.h"
-#include "Application/Window.h"
-#include <iostream>
-#include "Logging/Logger.h"
-#include "Renderer/Shader.h"
-#include <vector>
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
-#include "Events/ApplicationEvent.h"
-#include "Renderer/Camera/PerspectiveCamera.h"
+#include "Application/Application.h"
 
-const char* vShader = "#version 460 core\n"
-
-						"layout(location = 0) in vec3 aPos;\n"
-
-						"uniform mat4 model;\n"
-						"uniform mat4 view;\n"
-						"uniform mat4 projection;\n"
-
-						"void main()\n"
-						"{\n"
-						"gl_Position = projection * view * model * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-						"}\n";
-
-const char* fShader = "#version 460 core\n"
-
-						"out vec3 color;\n"
-
-						"void main()\n"
-						"{\n"
-						"color = vec3(0.2, 0.2, 0.2);\n"
-						"}\n";
-
-void OnEvent(const Event& e);
-
-bool bLeftMousePressed = false;
-glm::mat4 model = glm::mat4(1.0f);
-float currX = 0.0;
-float currY = 0.0;
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 int main()
 {
-	Window window;
-
-	window.SetEventCallback(OnEvent);
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		LOG_ERROR("Failed to initialize GLAD");
-	}
-
-	Renderer basicRenderer;
-
-	Shader basicShader(vShader, fShader);
-	basicShader.Use();
-
-	PerspectiveCamera camera(glm::vec3(0.0f, -0.3f, 3.0f));
-
-	while (!window.ShouldClose())
-	{
-		window.Update();
-
-		glm::mat4 view;
-		view = glm::lookAt(camera.GetLocation(), camera.GetLocation() + camera.GetFront(), camera.GetUp());
-
-		basicShader.SetMat4("view", view);
-
-		glm::mat4 proj = glm::mat4(1.0f);
-		proj = glm::perspective(glm::radians(45.0f), (float)window.GetWidth() / (float)window.GetHeight(), 0.1f, 100.0f);
-
-		basicShader.SetMat4("projection", proj);
-
-		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.0, 1.0, 0.0));
-		basicShader.SetMat4("model", model);
-
-		basicRenderer.Draw();
-		
-	}
+	Application app;
+	app.Run();
 }
 
-void OnEvent(const Event & e)
+void ImGuiThingy()
 {
-	if (e.GetType() == EventType::KeyPress)
+	const char* glsl_version = "#version 460";
+
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	ImGui::StyleColorsDark();
+
+	//ImGui_ImplGlfw_InitForOpenGL(window.GetGLFWwindow(), true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+
+	bool show_demo_window = true;
+	bool show_another_window = true;
+
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+	//while (!window.ShouldClose())
 	{
-		KeyPressedEvent* keypressed = (KeyPressedEvent*) &e;
-		std::cout << keypressed->GetKeyCode() << std::endl;
-		LOG_INFO("Key Pressed.");
-	}
-	else if (e.GetType() == EventType::MouseButtonPress)
-	{
-		MousePressedEvent* mousepressed = (MousePressedEvent*) &e;
-		int button = mousepressed->GetButton();
-		if (button == 0)
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
 		{
-			bLeftMousePressed = true;
+			static float f = 0.0f;
+			static int counter = 0;
+
+			ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+			ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+			ImGui::Checkbox("Another Window", &show_another_window);
+
+			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+			if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+				counter++;
+			ImGui::SameLine();
+			ImGui::Text("counter = %d", counter);
+
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::End();
 		}
-	}
-	else if (e.GetType() == EventType::MouseButtonRelease)
-	{
-		MouseReleasedEvent* mousereleased = (MouseReleasedEvent*)&e;
-		int button = mousereleased->GetButton();
-		if (button == 0)
+
+		// 3. Show another simple window.
+		if (show_another_window)
 		{
-			bLeftMousePressed = false;
+			ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+			ImGui::Text("Hello from another window!");
+			if (ImGui::Button("Close Me"))
+				show_another_window = false;
+			ImGui::End();
 		}
-	}
-	else if (e.GetType() == EventType::MouseMove)
-	{
-		MouseMovedEvent* mousemoved = (MouseMovedEvent*)&e;
-		float x = mousemoved->GetX();
-		float y = mousemoved->GetY();
-		if (bLeftMousePressed)
-		{
-			model = glm::rotate(model, (x - currX) * glm::radians(0.5f), glm::vec3(0.0, 1.0, 0.0));
-			model = glm::rotate(model, (y - currY) * glm::radians(0.5f), glm::vec3(1.0, 0.0, 0.0));
-		}
-		currX = x;
-		currY = y;
-	}
-	else if (e.GetType() == EventType::WindowResize)
-	{
-		WindowResizeEvent* windowrezize = (WindowResizeEvent*)&e;
-		glViewport(0, 0, windowrezize->GetWidth(), windowrezize->GetHeight());
+
 	}
 }
+
 

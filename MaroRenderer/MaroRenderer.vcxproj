@@ -133,9 +133,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Application.cpp" />
+    <ClCompile Include="Application\GUI\GUILayer.cpp" />
     <ClCompile Include="Application\main.cpp" />
     <ClCompile Include="Application\Window.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="include\imgui\imgui.cpp" />
+    <ClCompile Include="include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="include\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Renderer\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
@@ -145,11 +152,21 @@
     <None Include="Renderer\Shaders\basic2d.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Application.h" />
     <ClInclude Include="Application\Events\ApplicationEvent.h" />
     <ClInclude Include="Application\Events\Event.h" />
     <ClInclude Include="Application\Events\KeyEvent.h" />
     <ClInclude Include="Application\Events\MouseEvent.h" />
+    <ClInclude Include="Application\GUI\GUILayer.h" />
     <ClInclude Include="Application\Window.h" />
+    <ClInclude Include="include\imgui\imconfig.h" />
+    <ClInclude Include="include\imgui\imgui.h" />
+    <ClInclude Include="include\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="include\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="include\imgui\imgui_internal.h" />
+    <ClInclude Include="include\imgui\imstb_rectpack.h" />
+    <ClInclude Include="include\imgui\imstb_textedit.h" />
+    <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="Logging\Logger.h" />
     <ClInclude Include="Renderer\Camera\PerspectiveCamera.h" />
     <ClInclude Include="Renderer\Renderer.h" />

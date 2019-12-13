@@ -21,6 +21,8 @@ public:
 	inline int GetWidth() { return m_Data.Width; }
 	inline int GetHeight() { return m_Data.Height; }
 
+	inline GLFWwindow* GetGLFWwindow() { return m_Window; }
+
 private:
 
 	void CreateWindow(unsigned int width, unsigned height, const char* title);
