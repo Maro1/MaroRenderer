@@ -5,7 +5,7 @@
 #include "Logging/Logger.h"
 #include "Renderer/Shader.h"
 #include "Events/Event.h"
-#include "Renderer/Camera/PerspectiveCamera.h"
+#include "Renderer/Camera/ArcballCamera.h"
 
 class Application
 {
@@ -24,18 +24,18 @@ private:
 	Window* m_Window;
 	Renderer* m_Renderer;
 	Shader* m_Shader;
-	PerspectiveCamera* m_Camera;
+	ArcballCamera* m_Camera;
 
 	glm::mat4 m_ModelMat = glm::mat4(1.0f);
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);
-	glm::mat4 m_ViewMat;
+	glm::mat4 m_ViewMat = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.));;
 
 	float m_CurrMouseX = 0.0;
 	float m_CurrMouseY = 0.0;
 
 	bool bLeftMousePressed = false;
 
-	const char* vShader = "#version 460 core\n"
+	const char* vShader = "#version 330 core\n"
 
 		"layout(location = 0) in vec3 aPos;\n"
 
@@ -48,7 +48,7 @@ private:
 		"gl_Position = projection * view * model * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 		"}\n";
 
-	const char* fShader = "#version 460 core\n"
+	const char* fShader = "#version 330 core\n"
 
 		"out vec4 color;\n"
 		"uniform vec4 inColor;\n"

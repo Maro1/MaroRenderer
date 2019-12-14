@@ -18,7 +18,7 @@ void GUILayer::Attach()
 	ImGui::StyleColorsDark();
 
 	ImGui_ImplGlfw_InitForOpenGL(m_Window->GetGLFWwindow(), true);
-	ImGui_ImplOpenGL3_Init("#version 460");
+	ImGui_ImplOpenGL3_Init("#version 330");
 }
 
 void GUILayer::Detach()

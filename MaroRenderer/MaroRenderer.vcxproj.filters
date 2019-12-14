@@ -54,6 +54,9 @@
     <ClCompile Include="Application\GUI\GUILayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer\Camera\ArcballCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Renderer\Shaders\basic2d.vs" />
@@ -115,6 +118,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\GUI\GUILayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Camera\ArcballCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

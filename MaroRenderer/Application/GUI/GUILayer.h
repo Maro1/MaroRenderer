@@ -27,5 +27,5 @@ private:
 	void DarculaStyle();
 	void PhotoshopStyle();
 
-	float color[4] = { 1.0f,1.0f,1.0f,1.0f };
+	float color[4] = { 0.2f,0.2f,0.2f,0.2f };
 };

@@ -12,7 +12,7 @@ Application::Application()
 	m_Window = new Window();
 	m_Renderer = new Renderer();
 	m_Shader = new Shader(vShader, fShader);
-	m_Camera = new PerspectiveCamera(glm::vec3(0.0f, -0.3f, 3.0f));
+	m_Camera = new ArcballCamera(m_Window->GetWidth(), m_Window->GetHeight());
 
 	m_Window->SetEventCallback(BIND_FUNC(OnEvent));
 }
@@ -34,8 +34,6 @@ void Application::Run()
 		m_Window->Update();
 
 		m_Shader->Use();
-
-		m_ViewMat = glm::lookAt(m_Camera->GetLocation(), m_Camera->GetLocation() + m_Camera->GetFront(), m_Camera->GetUp());
 
 		m_Shader->SetMat4("view", m_ViewMat);
 
@@ -67,6 +65,7 @@ void Application::OnEvent(const Event& e)
 		if (button == 0)
 		{
 			bLeftMousePressed = true;
+			m_Camera->LeftMousePressed(true);
 		}
 	}
 	else if (e.GetType() == EventType::MouseButtonRelease)
@@ -76,6 +75,7 @@ void Application::OnEvent(const Event& e)
 		if (button == 0)
 		{
 			bLeftMousePressed = false;
+			m_Camera->LeftMousePressed(false);
 		}
 	}
 	else if (e.GetType() == EventType::MouseMove)
@@ -83,13 +83,8 @@ void Application::OnEvent(const Event& e)
 		MouseMovedEvent* mousemoved = (MouseMovedEvent*)&e;
 		float x = mousemoved->GetX();
 		float y = mousemoved->GetY();
-		if (bLeftMousePressed)
-		{
-			m_ModelMat = glm::rotate(m_ModelMat, (x - m_CurrMouseX) * glm::radians(0.5f), glm::vec3(0.0, 1.0, 0.0));
-			m_ModelMat = glm::rotate(m_ModelMat, (y - m_CurrMouseY) * glm::radians(0.5f), glm::vec3(1.0, 0.0, 0.0));
-		}
-		m_CurrMouseX = x;
-		m_CurrMouseY = y;
+		m_Camera->MouseMoved(x, y);
+		m_ViewMat = m_Camera->GetView();
 	}
 	else if (e.GetType() == EventType::WindowResize)
 	{
