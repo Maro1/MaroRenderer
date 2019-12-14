@@ -30,11 +30,6 @@ private:
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);
 	glm::mat4 m_ViewMat = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.));;
 
-	float m_CurrMouseX = 0.0;
-	float m_CurrMouseY = 0.0;
-
-	bool bLeftMousePressed = false;
-
 	const char* vShader = "#version 330 core\n"
 
 		"layout(location = 0) in vec3 aPos;\n"

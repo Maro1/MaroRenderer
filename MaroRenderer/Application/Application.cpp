@@ -64,7 +64,6 @@ void Application::OnEvent(const Event& e)
 		int button = mousepressed->GetButton();
 		if (button == 0)
 		{
-			bLeftMousePressed = true;
 			m_Camera->LeftMousePressed(true);
 		}
 	}
@@ -74,7 +73,6 @@ void Application::OnEvent(const Event& e)
 		int button = mousereleased->GetButton();
 		if (button == 0)
 		{
-			bLeftMousePressed = false;
 			m_Camera->LeftMousePressed(false);
 		}
 	}
