@@ -11,7 +11,7 @@ Application::Application()
 
 	m_Window = new Window();
 	m_Renderer = new Renderer();
-	m_Shader = Shader::CreateShaderFromPath("Renderer/Shaders/basic2d.vs", "Renderer/Shaders/basic2d.fs");
+	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/basic2d.vs", "Engine/Shaders/basic2d.fs");
 	m_Camera = new ArcballCamera(m_Window->GetWidth(), m_Window->GetHeight());
 
 	m_Window->SetEventCallback(BIND_FUNC(OnEvent));

@@ -143,15 +143,15 @@
     <ClCompile Include="include\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Renderer\Camera\ArcballCamera.cpp" />
-    <ClCompile Include="Renderer\Camera\Camera.cpp" />
-    <ClCompile Include="Renderer\Camera\PerspectiveCamera.cpp" />
-    <ClCompile Include="Renderer\Renderer.cpp" />
-    <ClCompile Include="Renderer\Shader.cpp" />
+    <ClCompile Include="Engine\Camera\ArcballCamera.cpp" />
+    <ClCompile Include="Engine\Camera\Camera.cpp" />
+    <ClCompile Include="Engine\Camera\PerspectiveCamera.cpp" />
+    <ClCompile Include="Engine\Renderer.cpp" />
+    <ClCompile Include="Engine\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Renderer\Shaders\basic2d.fs" />
-    <None Include="Renderer\Shaders\basic2d.vs" />
+    <None Include="Engine\Shaders\basic2d.fs" />
+    <None Include="Engine\Shaders\basic2d.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Application.h" />
@@ -170,12 +170,12 @@
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="Logging\Logger.h" />
-    <ClInclude Include="Renderer\Camera\ArcballCamera.h" />
-    <ClInclude Include="Renderer\Camera\Camera.h" />
-    <ClInclude Include="Renderer\Camera\PerspectiveCamera.h" />
-    <ClInclude Include="Renderer\Objects\Light.h" />
-    <ClInclude Include="Renderer\Renderer.h" />
-    <ClInclude Include="Renderer\Shader.h" />
+    <ClInclude Include="Engine\Camera\ArcballCamera.h" />
+    <ClInclude Include="Engine\Camera\Camera.h" />
+    <ClInclude Include="Engine\Camera\PerspectiveCamera.h" />
+    <ClInclude Include="Engine\Objects\Light.h" />
+    <ClInclude Include="Engine\Renderer.h" />
+    <ClInclude Include="Engine\Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

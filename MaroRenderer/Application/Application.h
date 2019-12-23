@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Renderer/Renderer.h"
+#include "Engine/Renderer.h"
 #include "Application/Window.h"
 #include "Logging/Logger.h"
-#include "Renderer/Shader.h"
+#include "Engine/Shader.h"
 #include "Events/Event.h"
-#include "Renderer/Camera/ArcballCamera.h"
+#include "Engine/Camera/ArcballCamera.h"
 
 class Application
 {
