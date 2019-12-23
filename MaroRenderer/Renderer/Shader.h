@@ -12,7 +12,7 @@ public:
 
 	Shader(const char* vertexSource, const char* fragmentSource);
 	
-	static Shader CreateShaderFromPath(const char* vertexPath, const char* fragmentPath);
+	static Shader* CreateShaderFromPath(const char* vertexPath, const char* fragmentPath);
 
 	void Use();
 

@@ -11,7 +11,7 @@ Application::Application()
 
 	m_Window = new Window();
 	m_Renderer = new Renderer();
-	m_Shader = new Shader(vShader, fShader);
+	m_Shader = Shader::CreateShaderFromPath("Renderer/Shaders/basic2d.vs", "Renderer/Shaders/basic2d.fs");
 	m_Camera = new ArcballCamera(m_Window->GetWidth(), m_Window->GetHeight());
 
 	m_Window->SetEventCallback(BIND_FUNC(OnEvent));
@@ -43,9 +43,11 @@ void Application::Run()
 
 		m_Shader->SetMat4("model", m_ModelMat);
 
-		m_Shader->SetFloat4("inColor", glm::vec4(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2], layer.GetColor()[3]));
+		m_Shader->SetFloat3("inColor", glm::vec3(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2]));
 
-		m_Shader->SetFloat4("lightColor", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+		m_Shader->SetFloat3("lightColor", glm::vec3(1.0f));
+		m_Shader->SetFloat3("lightPos", glm::vec3(1.2f, 1.0f, 2.0f));
+		m_Shader->SetFloat3("viewPos", m_Camera->GetPosition());
 
 		m_Renderer->Draw();
 

@@ -13,7 +13,8 @@ public:
 	void LeftMousePressed(bool pressed);
 	void MouseMoved(double x, double y);
 
-	glm::mat4 GetView() { return glm::lookAt(m_Location, m_Target, m_Up); }
+	inline const glm::mat4 GetView() { return glm::lookAt(m_Location, m_Target, m_Up); }
+	inline const glm::vec3 GetPosition() { return m_Location; }
 
 
 private:

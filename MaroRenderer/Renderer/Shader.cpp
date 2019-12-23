@@ -10,7 +10,7 @@ Shader::Shader(const char* vertexSource, const char* fragmentSource)
 	CreateShader(vertexSource, fragmentSource);
 }
 
-Shader Shader::CreateShaderFromPath(const char* vertexPath, const char* fragmentPath)
+Shader* Shader::CreateShaderFromPath(const char* vertexPath, const char* fragmentPath)
 {
 	std::string vertexCode;
 	std::string fragmentCode;
@@ -46,7 +46,7 @@ Shader Shader::CreateShaderFromPath(const char* vertexPath, const char* fragment
 	const char* vShaderCode = vertexCode.c_str();
 	const char* fShaderCode = fragmentCode.c_str();
 
-	return Shader(vShaderCode, fShaderCode);
+	return new Shader(vShaderCode, fShaderCode);
 }
 
 void Shader::CreateShader(const char* vertexSource, const char* fragmentSource)
