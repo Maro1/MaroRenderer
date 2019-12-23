@@ -45,7 +45,15 @@ void Application::Run()
 
 		m_Shader->SetFloat4("inColor", glm::vec4(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2], layer.GetColor()[3]));
 
+		m_Shader->SetFloat4("lightColor", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
 		m_Renderer->Draw();
+
+		m_Renderer->lightShader->Use();
+		m_Renderer->lightShader->SetMat4("projection", m_ProjMat);
+		m_Renderer->lightShader->SetMat4("view", m_ViewMat);
+		m_Renderer->DrawLight();
+
 		layer.End();
 	}
 }

@@ -144,6 +144,7 @@
     <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Renderer\Camera\ArcballCamera.cpp" />
+    <ClCompile Include="Renderer\Camera\Camera.cpp" />
     <ClCompile Include="Renderer\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Renderer\Shader.cpp" />
@@ -170,7 +171,9 @@
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="Logging\Logger.h" />
     <ClInclude Include="Renderer\Camera\ArcballCamera.h" />
+    <ClInclude Include="Renderer\Camera\Camera.h" />
     <ClInclude Include="Renderer\Camera\PerspectiveCamera.h" />
+    <ClInclude Include="Renderer\Objects\Light.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
   </ItemGroup>

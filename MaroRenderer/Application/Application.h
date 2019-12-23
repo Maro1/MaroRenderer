@@ -47,10 +47,11 @@ private:
 
 		"out vec4 color;\n"
 		"uniform vec4 inColor;\n"
+		"uniform vec4 lightColor;\n"
 
 		"void main()\n"
 		"{\n"
-		"color = inColor;\n"
+		"color = inColor * lightColor * 0.1;\n"
 		"}\n";
 
 };

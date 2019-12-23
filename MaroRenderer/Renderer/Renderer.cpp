@@ -9,6 +9,8 @@ Renderer::Renderer()
 		LOG_ERROR("Failed to initialize GLAD");
 	}
 
+	lightShader = new Shader(lightVShader, lightFShader);
+
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 
@@ -20,6 +22,13 @@ Renderer::Renderer()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	// Light things, only here temporarely
+
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
 }
 
 void Renderer::Draw()
@@ -28,6 +37,16 @@ void Renderer::Draw()
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void Renderer::DrawLight()
+{
+
+	lightShader->SetMat4("model", light.GetModel());
+
+	glBindVertexArray(lightVAO);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }

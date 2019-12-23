@@ -26,6 +26,7 @@ void ArcballCamera::MouseMoved(double x, double y)
 	else if (mouseEvent == 1)
 	{
 		std::cout << "Location: X: " << x << " Y: " << y << std::endl;
+		m_PrevPos = glm::vec2(x, y);
 		mouseEvent = 2;
 	}
 	else {
@@ -35,9 +36,9 @@ void ArcballCamera::MouseMoved(double x, double y)
 
 		m_Up = glm::normalize(glm::cross(cameraRight, targetToCamera));
 
-		m_Location = glm::rotate(m_Location, (m_CurrPos.y - m_PrevPos.y)*0.01f, cameraRight) + m_Target;
+		m_Location = glm::rotate(m_Location, (m_CurrPos.y - m_PrevPos.y) * 0.01f, cameraRight) + m_Target;
 
-		m_Location = glm::rotate(m_Location, (m_PrevPos.x - m_CurrPos.x)*0.01f, m_Up) + m_Target;
+		m_Location = glm::rotate(m_Location, (m_PrevPos.x - m_CurrPos.x) * 0.01f, m_Up) + m_Target;
 
 	}
 	m_PrevPos = m_CurrPos;
