@@ -17,6 +17,7 @@ void ArcballCamera::LeftMousePressed(bool pressed, int x, int y)
 	}
 	else
 	{
+		// Previous mouse position set when first clicking
 		m_PrevPos = glm::vec2(x, y);
 		mouseEvent = 1;
 	}
@@ -29,15 +30,30 @@ void ArcballCamera::MouseMoved(double x, double y)
 
 	else 
 	{
+		// Current mouse position
 		m_CurrPos = glm::vec2(x, y);
+
+		// Calculate camera vectors
 		glm::vec3 targetToCamera(m_Location - m_Target);
 		m_Right = glm::normalize(glm::cross(targetToCamera, m_Up));
-
 		m_Up = glm::normalize(glm::cross(m_Right, targetToCamera));
 
+		// Find new camera location
 		m_Location = Tumble((m_PrevPos.x - m_CurrPos.x) * RotationSpeed, (m_CurrPos.y - m_PrevPos.y) * RotationSpeed);
 	}
 	m_PrevPos = m_CurrPos;
+}
+
+void ArcballCamera::MouseScrolled(int offset)
+{
+	if (offset < 0)
+	{
+		m_Location = ((float)(0.1 - offset)) * m_Location;
+	}
+	else
+	{
+		m_Location = ((float)(offset - 0.1)) * m_Location;
+	}
 }
 
 glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)

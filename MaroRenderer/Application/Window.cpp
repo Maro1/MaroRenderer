@@ -7,7 +7,7 @@
 Window::Window()
 {
 	glfwInit();
-	CreateWindow(1080, 720, "Test");
+	CreateWindow(2560, 1440, "Test");
 }
 
 Window::Window(unsigned int width, unsigned height, const char* title)
@@ -39,7 +39,6 @@ void Window::CreateWindow(unsigned int width, unsigned height, const char* title
 	glfwSetWindowUserPointer(m_Window, &m_Data);
 
 	SetCallbacks();
-
 }
 
 bool Window::ShouldClose()
@@ -118,7 +117,7 @@ void Window::SetCallbacks()
 			{
 			case GLFW_PRESS:
 			{
-				MousePressedEvent event(button, (int) xPos, (int) yPos);
+				MousePressedEvent event(button, (int) xPos, (int) yPos, mods);
 				data.EventCallback(event);
 				break;
 			}
@@ -129,6 +128,13 @@ void Window::SetCallbacks()
 				break;
 			}
 			}
+		});
+
+	glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			MouseScrolledEvent event(xOffset, yOffset);
+			data.EventCallback(event);
 		});
 }
 

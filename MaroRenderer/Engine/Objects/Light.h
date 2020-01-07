@@ -14,6 +14,8 @@ public:
 	inline const glm::vec3 GetPosition() { return m_Position; }
 	inline const glm::mat4 GetModel() { return glm::scale(glm::translate(glm::mat4(1.0f), m_Position), glm::vec3(0.2f)); }
 
+	inline void SetPosition(glm::vec3 position) { m_Position = position; }
+
 private:
 
 	glm::vec3 m_Position;

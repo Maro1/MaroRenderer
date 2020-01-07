@@ -28,6 +28,9 @@ void Application::Run()
 
 	while (!m_Window->ShouldClose())
 	{
+
+		m_ViewMat = m_Camera->GetView();
+
 		layer.Begin();
 		layer.SetStyle(GUIStyle::Photoshop);
 
@@ -65,14 +68,15 @@ void Application::OnEvent(const Event& e)
 	if (e.GetType() == EventType::KeyPress)
 	{
 		KeyPressedEvent* keypressed = (KeyPressedEvent*)&e;
-		std::cout << keypressed->GetKeyCode() << std::endl;
-		LOG_INFO("Key Pressed.");
 	}
 	else if (e.GetType() == EventType::MouseButtonPress)
 	{
 		MousePressedEvent* mousepressed = (MousePressedEvent*)&e;
 		int button = mousepressed->GetButton();
-		if (button == 0)
+		int mods = mousepressed->GetMods();
+
+		// Hard coded for now, update later ( 4 = ALT )
+		if (button == 0 && mods == 4)
 		{
 			m_Camera->LeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
 		}
@@ -92,11 +96,19 @@ void Application::OnEvent(const Event& e)
 		float x = mousemoved->GetX();
 		float y = mousemoved->GetY();
 		m_Camera->MouseMoved(x, y);
-		m_ViewMat = m_Camera->GetView();
 	}
 	else if (e.GetType() == EventType::WindowResize)
 	{
 		WindowResizeEvent* windowrezize = (WindowResizeEvent*)&e;
 		glViewport(0, 0, windowrezize->GetWidth(), windowrezize->GetHeight());
+	}
+	else if (e.GetType() == EventType::MouseScroll)
+	{
+		MouseScrolledEvent* mousescroll = (MouseScrolledEvent*)&e;
+		int yOffset = mousescroll->GetOffsetY();
+		if (yOffset != 0)
+		{
+			m_Camera->MouseScrolled(yOffset);
+		}
 	}
 }

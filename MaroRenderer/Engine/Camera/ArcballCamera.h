@@ -12,9 +12,13 @@ public:
 
 	void LeftMousePressed(bool pressed, int x, int y);
 	void MouseMoved(double x, double y);
+	void MouseScrolled(int offset);
 
-	inline const glm::mat4 GetView() { return glm::lookAt(m_Location, m_Target, m_Up); }
-	inline const glm::vec3 GetPosition() { return m_Location; }
+	inline glm::mat4 GetView() const { return glm::lookAt(m_Location, m_Target, m_Up); }
+	inline glm::vec3 GetPosition() const { return m_Location; }
+
+	void SetTarget(glm::vec3 target) { m_Target = target; }
+	void SetLocation(glm::vec3 location) { m_Location = location; }
 
 
 private:
@@ -29,9 +33,6 @@ private:
 
 	glm::vec2 m_PrevPos = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec2 m_CurrPos = glm::vec3(0.0f, 0.0f, 0.0f);
-
-	const glm::vec3 WorldX = glm::vec3(1.0f, 0.0f, 0.0f);
-	const glm::vec3 WorldY = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	const float RotationSpeed = 0.01f;
 
