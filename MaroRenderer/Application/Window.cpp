@@ -111,18 +111,20 @@ void Window::SetCallbacks()
 	glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			double xPos, yPos;
+			glfwGetCursorPos(window, &xPos, &yPos);
 
 			switch (action)
 			{
 			case GLFW_PRESS:
 			{
-				MousePressedEvent event(button);
+				MousePressedEvent event(button, (int) xPos, (int) yPos);
 				data.EventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE:
 			{
-				MouseReleasedEvent event(button);
+				MouseReleasedEvent event(button, (int) xPos, (int) yPos);
 				data.EventCallback(event);
 				break;
 			}

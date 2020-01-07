@@ -10,7 +10,7 @@ class ArcballCamera
 public:
 	ArcballCamera(int screenWidth, int screenHeight);
 
-	void LeftMousePressed(bool pressed);
+	void LeftMousePressed(bool pressed, int x, int y);
 	void MouseMoved(double x, double y);
 
 	inline const glm::mat4 GetView() { return glm::lookAt(m_Location, m_Target, m_Up); }
@@ -20,16 +20,20 @@ public:
 private:
 
 	int m_ScreenWidth, m_ScreenHeight;
+	int mouseEvent = 0;
 
 	glm::vec3 m_Target = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 m_Location = glm::vec3(0.0f, 0.0f, -3.0f);
 	glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 m_Right = glm::vec3(1.0f, 0.0f, 0.0f);
 
 	glm::vec2 m_PrevPos = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec2 m_CurrPos = glm::vec3(0.0f, 0.0f, 0.0f);
 
+	const glm::vec3 WorldX = glm::vec3(1.0f, 0.0f, 0.0f);
+	const glm::vec3 WorldY = glm::vec3(0.0f, 1.0f, 0.0f);
 
+	const float RotationSpeed = 0.01f;
 
-	int mouseEvent = 0;
-
+	glm::vec3 Tumble(float angleX, float angleY);
 };

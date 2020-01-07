@@ -6,7 +6,7 @@ class MouseMovedEvent : public Event
 {
 public:
 
-	MouseMovedEvent(int xpos, int ypos) : m_xPos(xpos), m_yPos(ypos) {}
+	MouseMovedEvent(int xPos, int yPos) : m_xPos(xPos), m_yPos(yPos) {}
 
 	inline const int GetX() { return m_xPos; }
 	inline const int GetY() { return m_yPos; }
@@ -22,27 +22,33 @@ class MousePressedEvent : public Event
 {
 public:
 
-	MousePressedEvent(int button) : m_Button(button) {}
+	MousePressedEvent(int button, int xPos, int yPos) : m_Button(button), m_xPos(xPos), m_yPos(yPos) {}
 
 	virtual EventType GetType() const override { return EventType::MouseButtonPress; }
-	inline int GetButton() { return m_Button; }
+	inline const int GetButton() { return m_Button; }
+	inline const int GetX() { return m_xPos; }
+	inline const int GetY() { return m_yPos; }
 
 private:
 
 	int m_Button;
+	int m_xPos, m_yPos;
 };
 
 class MouseReleasedEvent : public Event
 {
 public:
 
-	MouseReleasedEvent(int button) : m_Button(button) {}
+	MouseReleasedEvent(int button, int xPos, int yPos) : m_Button(button), m_xPos(xPos), m_yPos(yPos) {}
 
 	virtual EventType GetType() const override { return EventType::MouseButtonRelease; }
-	inline int GetButton() { return m_Button; }
+	inline const int GetButton() { return m_Button; }
+	inline const int GetX() { return m_xPos; }
+	inline const int GetY() { return m_yPos; }
 
 private:
 
 	int m_Button;
+	int m_xPos, m_yPos;
 
 };

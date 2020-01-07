@@ -74,7 +74,7 @@ void Application::OnEvent(const Event& e)
 		int button = mousepressed->GetButton();
 		if (button == 0)
 		{
-			m_Camera->LeftMousePressed(true);
+			m_Camera->LeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
 		}
 	}
 	else if (e.GetType() == EventType::MouseButtonRelease)
@@ -83,7 +83,7 @@ void Application::OnEvent(const Event& e)
 		int button = mousereleased->GetButton();
 		if (button == 0)
 		{
-			m_Camera->LeftMousePressed(false);
+			m_Camera->LeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 		}
 	}
 	else if (e.GetType() == EventType::MouseMove)
