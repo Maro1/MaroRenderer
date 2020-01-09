@@ -35,6 +35,7 @@ private:
 	glm::vec2 m_CurrPos = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	const float RotationSpeed = 0.01f;
+	const float ScrollSpeed = 0.1f;
 
 	glm::vec3 Tumble(float angleX, float angleY);
 };

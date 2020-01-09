@@ -12,7 +12,6 @@ struct Vertex
 {
 	glm::vec3 Position;
 	glm::vec3 Normal;
-	glm::vec3 TexCoords;
 };
 
 // TODO: Make texture struct when neccessary
@@ -27,12 +26,13 @@ public:
 	// TODO: Implement using some library
 	static Mesh MeshFromFile(const char* path);
 
-private:
+protected:
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
 
 	// TODO: Texture when neccessary
 
+	Shader* m_Shader;
 	unsigned int VAO, VBO, EBO;
 	void InitMesh();
 

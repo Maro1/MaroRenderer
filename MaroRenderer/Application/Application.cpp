@@ -3,6 +3,7 @@
 #include "Events/MouseEvent.h"
 #include "Events/ApplicationEvent.h"
 #include "GUI/GUILayer.h"
+#include "Engine/Objects/CubeMesh.h"
 
 #define BIND_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -26,8 +27,11 @@ void Application::Run()
 	GUILayer layer(m_Window);
 	layer.Attach();
 
+	//CubeMesh mesh(m_Shader);
+
 	while (!m_Window->ShouldClose())
 	{
+		//mesh.Draw(m_Shader);
 
 		m_ViewMat = m_Camera->GetView();
 

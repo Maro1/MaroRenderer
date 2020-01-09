@@ -48,11 +48,13 @@ void ArcballCamera::MouseScrolled(int offset)
 {
 	if (offset < 0)
 	{
-		m_Location = ((float)(0.1 - offset)) * m_Location;
+		// Zoom out
+		m_Location = ((float)(ScrollSpeed - offset)) * m_Location;
 	}
 	else
 	{
-		m_Location = ((float)(offset - 0.1)) * m_Location;
+		// Zoom in
+		m_Location = ((float)(offset - ScrollSpeed)) * m_Location;
 	}
 }
 
