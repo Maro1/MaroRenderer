@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include <iostream>
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
 {
@@ -12,6 +13,10 @@ void Mesh::Draw(Shader* shader)
 	shader->Use();
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
+	for (auto index : m_Indices)
+	{
+		std::cout << index << std::endl;
+	}
 	glBindVertexArray(0);
 }
 

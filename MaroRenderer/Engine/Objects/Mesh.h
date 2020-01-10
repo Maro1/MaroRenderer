@@ -23,9 +23,6 @@ public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> m_Indices);
 	void Draw(Shader* shader);
 
-	// TODO: Implement using some library
-	static Mesh MeshFromFile(const char* path);
-
 protected:
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;

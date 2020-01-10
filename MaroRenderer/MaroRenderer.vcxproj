@@ -95,11 +95,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir);$(ProjectDir)\include\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\include\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -137,8 +138,8 @@
     <ClCompile Include="Application\GUI\GUILayer.cpp" />
     <ClCompile Include="Application\main.cpp" />
     <ClCompile Include="Application\Window.cpp" />
-    <ClCompile Include="Engine\Objects\CubeMesh.cpp" />
     <ClCompile Include="Engine\Objects\Mesh.cpp" />
+    <ClCompile Include="Engine\Objects\Model.cpp" />
     <ClCompile Include="Engine\Objects\SceneNode.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="include\imgui\imgui.cpp" />
@@ -164,8 +165,8 @@
     <ClInclude Include="Application\Events\MouseEvent.h" />
     <ClInclude Include="Application\GUI\GUILayer.h" />
     <ClInclude Include="Application\Window.h" />
-    <ClInclude Include="Engine\Objects\CubeMesh.h" />
     <ClInclude Include="Engine\Objects\Mesh.h" />
+    <ClInclude Include="Engine\Objects\Model.h" />
     <ClInclude Include="Engine\Objects\SceneNode.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
