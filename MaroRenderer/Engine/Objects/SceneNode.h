@@ -5,13 +5,13 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/vector_angle.hpp"
 #include <vector>
-#include "Model.h"
+#include "Mesh.h"
 
 class SceneNode
 {
 public:
 
-	SceneNode(Shader* shader, glm::vec3 location = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), Model* model = NULL);
+	SceneNode(Shader* shader, glm::vec3 location = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), Mesh* mesh = NULL);
 
 	~SceneNode(void);
 
@@ -36,6 +36,6 @@ private:
 	glm::mat4 m_WorldTransform;
 	glm::mat4 m_Transform;
 
-	Model* m_Model;
+	Mesh* m_Mesh;
 	Shader* m_Shader;
 };
