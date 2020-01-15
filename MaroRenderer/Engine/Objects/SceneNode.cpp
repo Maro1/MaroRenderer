@@ -1,13 +1,13 @@
 #include "SceneNode.h"
 
-SceneNode::SceneNode(Shader* shader, glm::vec3 location, glm::vec3 scale, Mesh* mesh)
+SceneNode::SceneNode(Shader* shader, glm::vec3 location, glm::vec3 scale, Model* model)
 {
 	m_Location = location;
 	m_Scale = scale;
 	m_Parent = nullptr;
 	m_Scale = scale;
 	m_Transform = glm::translate(glm::mat4(1.0f), m_Location);
-	m_Mesh = mesh;
+	m_Model = model;
 	m_Shader = shader;
 	Update();
 }
@@ -45,5 +45,5 @@ void SceneNode::Update()
 
 void SceneNode::Draw()
 {
-	m_Mesh->Draw(m_Shader);
+	m_Model->Draw(m_Shader);
 }
