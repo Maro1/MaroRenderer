@@ -2,7 +2,6 @@
 
 #include <glad/glad.h>
 #include <vector>
-#include "Objects/Light.h"
 #include "Shader.h"
 
 #include "glm/glm.hpp"
@@ -17,14 +16,7 @@ public:
 	Renderer();
 
 	void Draw();
-	void DrawLight();
-
-	Shader* lightShader;
 
 private:
-
-	unsigned int VBO, VAO;
-
-	unsigned int lightVAO;
 
 };

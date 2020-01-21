@@ -4,6 +4,7 @@
 #include "Events/ApplicationEvent.h"
 #include "GUI/GUILayer.h"
 #include "Engine/Objects/Model.h"
+#include "Engine/Objects/Light.h"
 
 #define BIND_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -29,9 +30,16 @@ void Application::Run()
 
 	std::string path = "cube.obj";
 	Model cube(path);
+	Light light(glm::vec3(0.0f, 1.0f, 2.0f));
 
 	while (!m_Window->ShouldClose())
 	{
+		glm::mat4 transform = glm::mat4(1.0);
+		transform = glm::translate(transform, glm::vec3(0, 0, 0));
+		transform = glm::rotate(transform, (float) log(glfwGetTime()) * 0.005f, glm::vec3(0.0, 1.0, 0.0)); 
+		transform = glm::translate(transform, glm::vec3(0, 0, 0));
+
+		light.SetLocation(transform * glm::vec4(light.GetLocation(), 1.0f));
 
 		m_ViewMat = m_Camera->GetView();
 
@@ -53,16 +61,17 @@ void Application::Run()
 		m_Shader->SetFloat3("inColor", glm::vec3(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2]));
 
 		m_Shader->SetFloat3("lightColor", glm::vec3(1.0f));
-		m_Shader->SetFloat3("lightPos", glm::vec3(1.2f, 1.0f, 2.0f));
+		m_Shader->SetFloat3("lightPos", light.GetLocation());
 		m_Shader->SetFloat3("viewPos", m_Camera->GetPosition());
 
 		m_Renderer->Draw();
 		cube.Draw(m_Shader);
 
-		m_Renderer->lightShader->Use();
-		m_Renderer->lightShader->SetMat4("projection", m_ProjMat);
-		m_Renderer->lightShader->SetMat4("view", m_ViewMat);
-		m_Renderer->DrawLight();
+		light.GetShader()->Use();
+		light.GetShader()->SetMat4("projection", m_ProjMat);
+		light.GetShader()->SetMat4("view", m_ViewMat);
+		light.GetShader()->SetMat4("model", light.GetModelMatrix());
+		light.Draw();
 
 
 		layer.End();

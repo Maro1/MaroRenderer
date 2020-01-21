@@ -5,9 +5,9 @@
 #include <fstream>
 #include <sstream>
 
-Shader::Shader(const char* vertexSource, const char* fragmentSource)
+Shader::Shader(std::string vertexSource, std::string fragmentSource)
 {
-	CreateShader(vertexSource, fragmentSource);
+	CreateShader(vertexSource.c_str(), fragmentSource.c_str());
 }
 
 Shader* Shader::CreateShaderFromPath(const char* vertexPath, const char* fragmentPath)
@@ -56,6 +56,7 @@ void Shader::CreateShader(const char* vertexSource, const char* fragmentSource)
 	char infoLog[512];
 
 	vertex = glCreateShader(GL_VERTEX_SHADER);
+	//std::cout << &vertexSource << std::endl;
 	glShaderSource(vertex, 1, &vertexSource, NULL);
 	glCompileShader(vertex);
 	glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
