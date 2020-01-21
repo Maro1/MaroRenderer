@@ -141,6 +141,7 @@
     <ClCompile Include="Engine\Objects\Light.cpp" />
     <ClCompile Include="Engine\Objects\Mesh.cpp" />
     <ClCompile Include="Engine\Objects\Model.cpp" />
+    <ClCompile Include="Engine\Objects\Scene.cpp" />
     <ClCompile Include="Engine\Objects\SceneNode.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="include\imgui\imgui.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Engine\Objects\Actor.h" />
     <ClInclude Include="Engine\Objects\Mesh.h" />
     <ClInclude Include="Engine\Objects\Model.h" />
+    <ClInclude Include="Engine\Objects\Scene.h" />
     <ClInclude Include="Engine\Objects\SceneNode.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />

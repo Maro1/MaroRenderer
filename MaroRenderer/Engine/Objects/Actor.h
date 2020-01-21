@@ -23,8 +23,8 @@ public:
 private:
 
 	Shader* m_Shader;
+
 	inline static Shader* DefaultActorShader() { 
 		return Shader::CreateShaderFromPath("Engine/Shaders/basic2d.vs", "Engine/Shaders/basic2d.fs"); 
 	}
-
 };
