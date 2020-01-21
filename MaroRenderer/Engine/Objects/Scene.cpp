@@ -19,7 +19,7 @@ void Scene::UpdateShaders()
 		actor->GetShader()->SetFloat3("lightColor", glm::vec3(1.0f));
 		actor->GetShader()->SetFloat3("lightPos", m_Light->GetLocation());
 		actor->GetShader()->SetFloat3("viewPos", m_Camera->GetPosition());
-		actor->GetShader()->SetFloat3("inColor", glm::vec3(0.2f, 0.2f, 0.2f));
+		actor->GetShader()->SetFloat3("inColor", m_Color);
 	}
 	m_Light->GetShader()->Use();
 	m_Light->GetShader()->SetMat4("projection", m_ProjMat);
@@ -32,7 +32,7 @@ void Scene::RotateLight(float time)
 {
 	glm::mat4 transform = glm::mat4(1.0f);
 	transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
-	transform = glm::rotate(transform, (float)log(time) * 0.005f, glm::vec3(0.0f, 1.0f, 0.0f));
+	transform = glm::rotate(transform, (float) (1 - exp(-time)) * 0.005f, glm::vec3(0.0f, 1.0f, 0.0f));
 	transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	m_Light->SetLocation(transform * glm::vec4(m_Light->GetLocation(), 1.0f));
@@ -53,5 +53,6 @@ void Scene::AddLight(Light* light)
 void Scene::Render()
 {
 	m_SceneRoot->Update();
+	m_Light->GetModel()->Draw(m_Light->GetShader());
 }
 

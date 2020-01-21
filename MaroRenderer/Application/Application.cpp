@@ -49,7 +49,7 @@ void Application::Run()
 
 		m_Window->Update();
 
-		m_Shader->SetFloat3("inColor", glm::vec3(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2]));
+		scene.SetActorColor(glm::vec3(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2]));
 
 		m_Renderer->Draw();
 		scene.UpdateShaders();

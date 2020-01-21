@@ -16,6 +16,7 @@ public:
 	void AddActor(Actor* node);
 	void AddLight(Light* light);
 	void Render();
+	void SetActorColor(glm::vec3 color) { m_Color = color; }
 
 private:
 
@@ -29,4 +30,6 @@ private:
 	glm::mat4 m_ModelMat = glm::mat4(1.0f);
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);
 	glm::mat4 m_ViewMat = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0., 0., 0.), glm::vec3(0., 1., 0.));
+
+	glm::vec3 m_Color;
 };
