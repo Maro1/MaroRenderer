@@ -4,6 +4,7 @@
 #include "Events/ApplicationEvent.h"
 #include "GUI/GUILayer.h"
 #include "Engine/Objects/Model.h"
+#include "Engine/Objects/Light.h"
 
 #define BIND_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -27,8 +28,9 @@ void Application::Run()
 	GUILayer layer(m_Window);
 	layer.Attach();
 
-	std::string path = "cube.obj";
+	std::string path = "cube.fbx";
 	Model cube(path);
+	Light light(glm::vec3(1.2f, 1.0f, 2.0f));
 
 	while (!m_Window->ShouldClose())
 	{
@@ -59,10 +61,11 @@ void Application::Run()
 		m_Renderer->Draw();
 		cube.Draw(m_Shader);
 
-		m_Renderer->lightShader->Use();
-		m_Renderer->lightShader->SetMat4("projection", m_ProjMat);
-		m_Renderer->lightShader->SetMat4("view", m_ViewMat);
-		m_Renderer->DrawLight();
+		light.GetShader()->Use();
+		light.GetShader()->SetMat4("projection", m_ProjMat);
+		light.GetShader()->SetMat4("view", m_ViewMat);
+		light.GetShader()->SetMat4("model", light.GetModelMatrix());
+		light.Draw();
 
 
 		layer.End();

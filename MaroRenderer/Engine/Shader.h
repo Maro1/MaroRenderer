@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include <string>
 
 class Shader
 {
@@ -10,7 +11,7 @@ public:
 
 	unsigned int ID = 0;
 
-	Shader(const char* vertexSource, const char* fragmentSource);
+	Shader(std::string vertexSource, std::string fragmentSource);
 	
 	static Shader* CreateShaderFromPath(const char* vertexPath, const char* fragmentPath);
 

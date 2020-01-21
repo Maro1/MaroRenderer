@@ -8,22 +8,12 @@ Renderer::Renderer()
 	{
 		LOG_ERROR("Failed to initialize GLAD");
 	}
+	glEnable(GL_DEPTH_TEST);
+
 }
 
 void Renderer::Draw()
 {
-	glBindVertexArray(VAO);
-
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void Renderer::DrawLight()
-{
-
-	lightShader->SetMat4("model", light.GetModel());
-
-	glBindVertexArray(lightVAO);
-
-	glDrawArrays(GL_TRIANGLES, 0, 36);
 }

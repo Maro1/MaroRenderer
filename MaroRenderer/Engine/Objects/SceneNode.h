@@ -23,6 +23,7 @@ public:
 
 	inline void SetLocation(glm::vec3 location) { m_Location = location; }
 	inline void SetScale(glm::vec3 scale) { m_Scale = scale; }
+	inline Shader* GetShader() { return m_Shader; }
 
 	void Draw();
 
