@@ -16,6 +16,8 @@ public:
 
 	inline glm::mat4 GetView() const { return glm::lookAt(m_Location, m_Target, m_Up); }
 	inline glm::vec3 GetPosition() const { return m_Location; }
+	inline glm::mat4 GetProjection() const { return glm::perspective(glm::radians(45.0f), 
+		(float)m_ScreenWidth / (float)m_ScreenHeight, 0.1f, 100.0f); }
 
 	void SetTarget(glm::vec3 target) { m_Target = target; }
 	void SetLocation(glm::vec3 location) { m_Location = location; }

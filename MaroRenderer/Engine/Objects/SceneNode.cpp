@@ -45,5 +45,5 @@ void SceneNode::Update()
 
 void SceneNode::Draw()
 {
-	m_Model->Draw(m_Shader);
+	if(m_Model) m_Model->Draw(m_Shader);
 }
