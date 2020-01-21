@@ -153,5 +153,8 @@
     <ClInclude Include="Engine\Objects\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Objects\Actor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

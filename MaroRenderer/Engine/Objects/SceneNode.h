@@ -11,7 +11,7 @@ class SceneNode
 {
 public:
 
-	SceneNode(Shader* shader, glm::vec3 location = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), Model* model = NULL);
+	SceneNode(Shader* shader = NULL, glm::vec3 location = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f), Model* model = NULL);
 
 	~SceneNode(void);
 

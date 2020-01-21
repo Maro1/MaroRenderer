@@ -5,6 +5,7 @@
 #include "GUI/GUILayer.h"
 #include "Engine/Objects/Model.h"
 #include "Engine/Objects/Light.h"
+#include "Engine/Objects/Actor.h"
 
 #define BIND_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -30,14 +31,19 @@ void Application::Run()
 
 	std::string path = "cube.obj";
 	Model cube(path);
+	Actor cubeActor(&cube);
 	Light light(glm::vec3(0.0f, 1.0f, 2.0f));
+
+	SceneNode scene;
+	scene.AddChild(&light);
+	scene.AddChild(&cubeActor);
 
 	while (!m_Window->ShouldClose())
 	{
-		glm::mat4 transform = glm::mat4(1.0);
-		transform = glm::translate(transform, glm::vec3(0, 0, 0));
-		transform = glm::rotate(transform, (float) log(glfwGetTime()) * 0.005f, glm::vec3(0.0, 1.0, 0.0)); 
-		transform = glm::translate(transform, glm::vec3(0, 0, 0));
+		glm::mat4 transform = glm::mat4(1.0f);
+		transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
+		transform = glm::rotate(transform, (float) log(glfwGetTime()) * 0.005f, glm::vec3(0.0f, 1.0f, 0.0f)); 
+		transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
 
 		light.SetLocation(transform * glm::vec4(light.GetLocation(), 1.0f));
 
@@ -71,7 +77,7 @@ void Application::Run()
 		light.GetShader()->SetMat4("projection", m_ProjMat);
 		light.GetShader()->SetMat4("view", m_ViewMat);
 		light.GetShader()->SetMat4("model", light.GetModelMatrix());
-		light.Draw();
+		scene.Update();
 
 
 		layer.End();
