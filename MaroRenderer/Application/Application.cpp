@@ -38,16 +38,19 @@ void Application::Run()
 	cubeActor2.SetLocation(glm::vec3(-1.0f, 0.0f, 0.0f));
 	Light light(glm::vec3(0.0f, 1.0f, 2.0f));
 
-	Scene scene;
+	Scene scene(m_Camera);
 	scene.AddLight(&light);
-	scene.AddActor(&cubeActor);
-	scene.AddActor(&cubeActor2);
-	scene.SetCamera(m_Camera);
+	for (int i = -5; i <= 5; i++)
+	{
+		Actor* cubeAc = new Actor(&cube);
+		cubeAc->SetLocation(glm::vec3(4 * cos(i * 1.0f), 4 * sin(i * 1.0f), 0.0f));
+		scene.AddActor(cubeAc);
+	}
+	//scene.AddActor(&cubeActor);
+	//scene.AddActor(&cubeActor2);
 
 	while (!m_Window->ShouldClose())
 	{
-		cubeActor2.SetLocation(glm::vec3(cos(glfwGetTime()), 0.0f, 0.0f));
-		cubeActor.SetLocation(glm::vec3(-cos(glfwGetTime()), 0.0f, 0.0f));
 		cubeActor2.SetColor(glm::vec3(0.5f, 0.0f, 0.0f));
 		scene.RotateLight(glfwGetTime());
 

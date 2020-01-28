@@ -1,9 +1,10 @@
 #include "Scene.h"
 
-Scene::Scene()
+Scene::Scene(ArcballCamera* camera)
 {
 	m_Light = new Light(glm::vec3(0.0f, 1.0f, 2.0f));
 	m_SceneRoot = new SceneNode();
+	m_Camera = camera;
 }
 
 void Scene::UpdateShaders()
