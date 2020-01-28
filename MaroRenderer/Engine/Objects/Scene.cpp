@@ -19,7 +19,7 @@ void Scene::UpdateShaders()
 		actor->GetShader()->SetFloat3("lightColor", glm::vec3(1.0f));
 		actor->GetShader()->SetFloat3("lightPos", m_Light->GetLocation());
 		actor->GetShader()->SetFloat3("viewPos", m_Camera->GetPosition());
-		actor->GetShader()->SetFloat3("inColor", m_Color);
+		actor->GetShader()->SetFloat3("inColor", actor->GetColor());
 	}
 	m_Light->GetShader()->Use();
 	m_Light->GetShader()->SetMat4("projection", m_ProjMat);
