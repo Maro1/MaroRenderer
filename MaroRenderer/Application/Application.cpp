@@ -33,15 +33,22 @@ void Application::Run()
 	std::string path = "cube.obj";
 	Model cube(path);
 	Actor cubeActor(&cube);
+	Actor cubeActor2(&cube);
+	cubeActor.SetLocation(glm::vec3(1.0f, 0.0f, 0.0f));
+	cubeActor2.SetLocation(glm::vec3(-1.0f, 0.0f, 0.0f));
 	Light light(glm::vec3(0.0f, 1.0f, 2.0f));
 
 	Scene scene;
 	scene.AddLight(&light);
 	scene.AddActor(&cubeActor);
+	scene.AddActor(&cubeActor2);
 	scene.SetCamera(m_Camera);
 
 	while (!m_Window->ShouldClose())
 	{
+		cubeActor2.SetLocation(glm::vec3(cos(glfwGetTime()), 0.0f, 0.0f));
+		cubeActor.SetLocation(glm::vec3(-cos(glfwGetTime()), 0.0f, 0.0f));
+		cubeActor2.SetColor(glm::vec3(0.5f, 0.0f, 0.0f));
 		scene.RotateLight(glfwGetTime());
 
 		layer.Begin();
@@ -49,9 +56,9 @@ void Application::Run()
 
 		m_Window->Update();
 
-		scene.SetActorColor(glm::vec3(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2]));
+		cubeActor.SetColor(glm::vec3(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2]));
 
-		m_Renderer->Draw();
+		m_Renderer->Clear();
 		scene.UpdateShaders();
 		scene.Render();
 
