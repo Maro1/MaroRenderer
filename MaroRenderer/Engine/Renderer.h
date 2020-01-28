@@ -15,7 +15,7 @@ public:
 
 	Renderer();
 
-	void Draw();
+	void Clear();
 
 private:
 
