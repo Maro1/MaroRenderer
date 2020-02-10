@@ -150,7 +150,6 @@
     <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Engine\Camera\ArcballCamera.cpp" />
-    <ClCompile Include="Engine\Camera\Camera.cpp" />
     <ClCompile Include="Engine\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="Engine\Renderer.cpp" />
     <ClCompile Include="Engine\Shader.cpp" />

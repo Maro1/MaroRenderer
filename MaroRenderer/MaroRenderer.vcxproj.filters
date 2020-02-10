@@ -48,9 +48,6 @@
     <ClCompile Include="Engine\Camera\ArcballCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Camera\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Camera\PerspectiveCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
