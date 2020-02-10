@@ -8,25 +8,23 @@
 class Camera {
 public:
 
-	Camera(glm::vec3 position, bool enablePerspective, glm::vec2 screenSize);
+	inline glm::mat4 GetView() const { return glm::lookAt(m_Location, m_Target, m_Up); }
+	inline glm::vec3 GetPosition() const { return m_Location; }
+	inline glm::mat4 GetProjection() const {
+		return glm::perspective(glm::radians(45.0f),
+			(float)m_ScreenWidth / (float)m_ScreenHeight, 0.1f, 100.0f);
+	}
 
-	const inline glm::vec3 GetPosition() { return m_Position; }
-	const inline glm::vec3 GetRotation() { return m_Rotation; }
-	const inline glm::mat4 GetProjection() { return m_Projection; }
-	const inline glm::mat4 GetView() { return m_View; }
+	void SetTarget(glm::vec3 target) { m_Target = target; }
+	void SetLocation(glm::vec3 location) { m_Location = location; }
 
-private:
+protected:
 
 	int m_ScreenWidth, m_ScreenHeight;
 
-	glm::mat4 m_Projection;
-	glm::mat4 m_View;
-
-	glm::vec3 m_Position;
-	glm::vec3 m_Rotation;
-
-	bool bPerspective;
-
-	void Init();
+	glm::vec3 m_Target = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 m_Location = glm::vec3(0.0f, 0.0f, -3.0f);
+	glm::vec3 m_Up = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 m_Right = glm::vec3(1.0f, 0.0f, 0.0f);
 
 };
