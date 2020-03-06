@@ -6,6 +6,13 @@
 #include "Engine/Shader.h"
 #include "Events/Event.h"
 #include "Engine/Camera/ArcballCamera.h"
+#include "Events/KeyEvent.h"
+#include "Events/MouseEvent.h"
+#include "Events/ApplicationEvent.h"
+#include "GUI/GUILayer.h"
+#include "Engine/Objects/Light.h"
+#include "Engine/Objects/Actor.h"
+#include "Engine/Objects/Scene.h"
 
 class Application
 {

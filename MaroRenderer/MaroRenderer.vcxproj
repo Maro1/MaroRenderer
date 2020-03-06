@@ -179,6 +179,7 @@
     <ClInclude Include="include\imgui\imstb_rectpack.h" />
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
+    <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="Logging\Logger.h" />
     <ClInclude Include="Engine\Camera\ArcballCamera.h" />
     <ClInclude Include="Engine\Camera\Camera.h" />
