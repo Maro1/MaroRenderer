@@ -23,7 +23,10 @@ void Application::Run()
 	layer.Attach();
 
 	std::string path = "cube.obj";
-	Model cube(path);
+	std::string texturePath = "Media";
+	std::string filename = "Block_Texture.jpg";
+
+	Model cube(path, texturePath, filename);
 	Actor cubeActor(&cube);
 	Light light(glm::vec3(0.0f, 1.0f, 2.0f));
 

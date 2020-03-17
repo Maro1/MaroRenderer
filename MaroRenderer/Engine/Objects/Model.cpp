@@ -127,7 +127,7 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
-	unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+	unsigned char* data = stbi_load("Box_Texture.png", &width, &height, &nrComponents, 0);
 	if (data)
 	{
 		GLenum format;
@@ -151,7 +151,7 @@ unsigned int Model::TextureFromFile(const char* path, const std::string& directo
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
+		std::cout << "Texture failed to load at path: " << filename.c_str() << std::endl;
 		stbi_image_free(data);
 	}
 

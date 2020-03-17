@@ -15,6 +15,11 @@ class Model
 public:
 
 	Model(std::string& path) { LoadModel(path); }
+	Model(std::string& path, std::string& texturePath, std::string& textureFilename) 
+	{ 
+		TextureFromFile(textureFilename.c_str(), texturePath);
+		LoadModel(path); 
+	}
 
 	void Draw(Shader* shader);
 
