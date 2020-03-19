@@ -1,12 +1,4 @@
 #include "Application.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
-#include "Events/ApplicationEvent.h"
-#include "GUI/GUILayer.h"
-#include "Engine/Objects/Model.h"
-#include "Engine/Objects/Light.h"
-#include "Engine/Objects/Actor.h"
-#include "Engine/Objects/Scene.h"
 
 #define BIND_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -31,27 +23,19 @@ void Application::Run()
 	layer.Attach();
 
 	std::string path = "cube.obj";
-	Model cube(path);
+	std::string filename = "Box_Texture.png";
+
+	Model cube(path, filename);
 	Actor cubeActor(&cube);
-	Actor cubeActor2(&cube);
-	cubeActor.SetLocation(glm::vec3(1.0f, 0.0f, 0.0f));
-	cubeActor2.SetLocation(glm::vec3(-1.0f, 0.0f, 0.0f));
 	Light light(glm::vec3(0.0f, 1.0f, 2.0f));
 
 	Scene scene(m_Camera);
 	scene.AddLight(&light);
-	for (int i = -5; i <= 5; i++)
-	{
-		Actor* cubeAc = new Actor(&cube);
-		cubeAc->SetLocation(glm::vec3(4 * cos(i * 1.0f), 4 * sin(i * 1.0f), 0.0f));
-		scene.AddActor(cubeAc);
-	}
-	//scene.AddActor(&cubeActor);
-	//scene.AddActor(&cubeActor2);
+
+	scene.AddActor(&cubeActor);
 
 	while (!m_Window->ShouldClose())
 	{
-		cubeActor2.SetColor(glm::vec3(0.5f, 0.0f, 0.0f));
 		scene.RotateLight(glfwGetTime());
 
 		layer.Begin();

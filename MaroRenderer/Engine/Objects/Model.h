@@ -15,6 +15,11 @@ class Model
 public:
 
 	Model(std::string& path) { LoadModel(path); }
+	Model(std::string& path, std::string& texturePath) 
+	{ 
+		TextureFromFile(texturePath.c_str());
+		LoadModel(path); 
+	}
 
 	void Draw(Shader* shader);
 
@@ -25,4 +30,8 @@ private:
 
 	std::vector<Mesh> m_Meshes;
 	std::string m_Directory;
+
+	unsigned int TextureFromFile(const char* path);
+	
+
 };

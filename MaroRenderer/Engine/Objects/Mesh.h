@@ -12,22 +12,27 @@ struct Vertex
 {
 	glm::vec3 Position;
 	glm::vec3 Normal;
+	glm::vec2 TexCoords;
 };
 
-// TODO: Make texture struct when neccessary
+struct Texture
+{
+	unsigned int Id;
+	std::string Type;
+	std::string Path;
+};
 
 class Mesh
 {
 public:
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> m_Indices);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 	void Draw(Shader* shader);
 
 protected:
 	std::vector<Vertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
-
-	// TODO: Texture when neccessary
+	std::vector<Texture> m_Textures;
 
 	Shader* m_Shader;
 	unsigned int VAO, VBO, EBO;
