@@ -15,9 +15,9 @@ class Model
 public:
 
 	Model(std::string& path) { LoadModel(path); }
-	Model(std::string& path, std::string& texturePath, std::string& textureFilename) 
+	Model(std::string& path, std::string& texturePath) 
 	{ 
-		TextureFromFile(textureFilename.c_str(), texturePath);
+		TextureFromFile(texturePath.c_str());
 		LoadModel(path); 
 	}
 
@@ -27,12 +27,11 @@ private:
 	void LoadModel(std::string& path);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
 	std::vector<Mesh> m_Meshes;
 	std::string m_Directory;
 
-	unsigned int TextureFromFile(const char* path, const std::string& directory);
+	unsigned int TextureFromFile(const char* path);
 	
 
 };
