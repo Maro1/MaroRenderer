@@ -138,7 +138,7 @@
     <ClCompile Include="Application\GUI\GUILayer.cpp" />
     <ClCompile Include="Application\main.cpp" />
     <ClCompile Include="Application\Window.cpp" />
-    <ClCompile Include="Engine\Objects\Light.cpp" />
+    <ClCompile Include="Engine\Lighting\Light.cpp" />
     <ClCompile Include="Engine\Objects\Mesh.cpp" />
     <ClCompile Include="Engine\Objects\Model.cpp" />
     <ClCompile Include="Engine\Objects\Scene.cpp" />
@@ -166,6 +166,8 @@
     <ClInclude Include="Application\Events\MouseEvent.h" />
     <ClInclude Include="Application\GUI\GUILayer.h" />
     <ClInclude Include="Application\Window.h" />
+    <ClInclude Include="Engine\Lighting\DirectionalLight.h" />
+    <ClInclude Include="Engine\Lighting\PointLight.h" />
     <ClInclude Include="Engine\Objects\Actor.h" />
     <ClInclude Include="Engine\Objects\Mesh.h" />
     <ClInclude Include="Engine\Objects\Model.h" />
@@ -184,7 +186,7 @@
     <ClInclude Include="Engine\Camera\ArcballCamera.h" />
     <ClInclude Include="Engine\Camera\Camera.h" />
     <ClInclude Include="Engine\Camera\PerspectiveCamera.h" />
-    <ClInclude Include="Engine\Objects\Light.h" />
+    <ClInclude Include="Engine\Lighting\Light.h" />
     <ClInclude Include="Engine\Renderer.h" />
     <ClInclude Include="Engine\Shader.h" />
   </ItemGroup>

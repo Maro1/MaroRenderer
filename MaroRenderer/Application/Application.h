@@ -10,7 +10,7 @@
 #include "Events/MouseEvent.h"
 #include "Events/ApplicationEvent.h"
 #include "GUI/GUILayer.h"
-#include "Engine/Objects/Light.h"
+#include "Engine/Lighting/Light.h"
 #include "Engine/Objects/Actor.h"
 #include "Engine/Objects/Scene.h"
 

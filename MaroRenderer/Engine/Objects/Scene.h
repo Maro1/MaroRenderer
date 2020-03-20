@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "Engine/Objects/SceneNode.h"
-#include "Engine/Objects/Light.h"
+#include "Engine/Lighting/Light.h"
 #include "Engine/Objects/Actor.h"
 #include "Engine/Camera/ArcballCamera.h"
 
