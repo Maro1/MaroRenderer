@@ -27,10 +27,12 @@ void Application::Run()
 
 	Model cube(path, filename);
 	Actor cubeActor(&cube);
-	Light light(glm::vec3(0.0f, 1.0f, 2.0f));
+	PointLight light(m_Shader, glm::vec3(0.0f, 1.0f, 2.0f));
+	DirectionalLight dirLight(m_Shader, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	Scene scene(m_Camera);
 	scene.AddLight(&light);
+	scene.AddLight(&dirLight);
 
 	scene.AddActor(&cubeActor);
 
