@@ -25,6 +25,7 @@ void Scene::UpdateShaders()
 
 		for (PointLight* light : m_Lights)
 		{
+			// Find better way to create string
 			actor->GetShader()->SetFloat3(std::string("pointLights[").append(std::to_string(light->GetID())).append("].position").c_str(), light->GetLocation());
 			actor->GetShader()->SetFloat(std::string("pointLights[").append(std::to_string(light->GetID())).append("].constant").c_str(), light->GetConstant());
 			actor->GetShader()->SetFloat(std::string("pointLights[").append(std::to_string(light->GetID())).append("].linear").c_str(), light->GetLinear());
