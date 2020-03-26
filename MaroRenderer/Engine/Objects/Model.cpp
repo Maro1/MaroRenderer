@@ -5,8 +5,6 @@
 #include <stb_image.h>
 #endif
 
-unsigned int TextureFromFile(const char* path, const std::string& directory);
-
 void Model::Draw(Shader* shader)
 {
 	for (Mesh mesh : m_Meshes)

@@ -21,6 +21,11 @@ void Scene::UpdateShaders()
 		actor->GetShader()->SetFloat3("lightPos", m_Light->GetLocation());
 		actor->GetShader()->SetFloat3("viewPos", m_Camera->GetPosition());
 		actor->GetShader()->SetFloat3("inColor", actor->GetColor());
+
+		actor->GetShader()->SetFloat3("directionLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+		actor->GetShader()->SetFloat3("directionLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+		actor->GetShader()->SetFloat3("directionLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+		actor->GetShader()->SetFloat3("directionLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 	}
 	m_Light->GetShader()->Use();
 	m_Light->GetShader()->SetMat4("projection", m_ProjMat);

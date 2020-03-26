@@ -24,9 +24,14 @@ public:
 	void SetFloat4(const char* name, const glm::vec4& value) const;
 	void SetMat4(const char* name, const glm::mat4& value) const;
 
+	inline std::string GetVertexSource() { return m_VertexSource; }
+	inline std::string GetFragmentSource() { return m_FragmentSource; }
+
 private:
 
 	void CreateShader(const char* vertexSource, const char* fragmentSource);
+	std::string m_FragmentSource;
+	std::string m_VertexSource;
 
 };
 

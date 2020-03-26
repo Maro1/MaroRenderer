@@ -7,6 +7,8 @@
 
 Shader::Shader(std::string vertexSource, std::string fragmentSource)
 {
+	m_FragmentSource = fragmentSource;
+	m_VertexSource = vertexSource;
 	CreateShader(vertexSource.c_str(), fragmentSource.c_str());
 }
 

@@ -38,6 +38,7 @@ void Application::Run()
 
 	while (!m_Window->ShouldClose())
 	{
+
 		scene.RotateLight(glfwGetTime());
 
 		layer.Begin();
