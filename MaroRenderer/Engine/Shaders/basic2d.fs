@@ -45,7 +45,10 @@ void main()
 
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
-		//result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+		if(pointLights[i].diffuse != 0) 
+		{
+			result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+		}
 	}
 
 	FragColor = vec4(result, 1.0);

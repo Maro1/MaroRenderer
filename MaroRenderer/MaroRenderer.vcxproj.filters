@@ -75,9 +75,6 @@
     <ClCompile Include="Engine\Lighting\PointLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Lighting\DirectionalLight.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shaders\basic2d.fs" />

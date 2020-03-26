@@ -2,7 +2,6 @@
 
 Scene::Scene(ArcballCamera* camera)
 {
-	m_Light = new Light(glm::vec3(0.0f, 1.0f, 2.0f));
 	m_SceneRoot = new SceneNode();
 	m_Camera = camera;
 }
@@ -17,20 +16,31 @@ void Scene::UpdateShaders()
 		actor->GetShader()->SetMat4("model", actor->GetModelMatrix());
 		actor->GetShader()->SetMat4("view", m_ViewMat);
 		actor->GetShader()->SetMat4("projection", m_ProjMat);
-		actor->GetShader()->SetFloat3("lightColor", glm::vec3(1.0f));
-		actor->GetShader()->SetFloat3("lightPos", m_Light->GetLocation());
 		actor->GetShader()->SetFloat3("viewPos", m_Camera->GetPosition());
-		actor->GetShader()->SetFloat3("inColor", actor->GetColor());
 
 		actor->GetShader()->SetFloat3("directionLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
 		actor->GetShader()->SetFloat3("directionLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
 		actor->GetShader()->SetFloat3("directionLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
 		actor->GetShader()->SetFloat3("directionLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+
+		for (PointLight* light : m_Lights)
+		{
+			actor->GetShader()->SetFloat3(std::string("pointLights[").append(std::to_string(light->GetID())).append("].position").c_str(), light->GetLocation());
+			actor->GetShader()->SetFloat(std::string("pointLights[").append(std::to_string(light->GetID())).append("].constant").c_str(), light->GetConstant());
+			actor->GetShader()->SetFloat(std::string("pointLights[").append(std::to_string(light->GetID())).append("].linear").c_str(), light->GetLinear());
+			actor->GetShader()->SetFloat(std::string("pointLights[").append(std::to_string(light->GetID())).append("].quadratic").c_str(), light->GetQuadradic());
+			actor->GetShader()->SetFloat3(std::string("pointLights[").append(std::to_string(light->GetID())).append("].ambient").c_str(), glm::vec3(0.05f, 0.05f, 0.05f));
+			actor->GetShader()->SetFloat3(std::string("pointLights[").append(std::to_string(light->GetID())).append("].diffuse").c_str(), glm::vec3(0.4f, 0.4f, 0.4f));
+			actor->GetShader()->SetFloat3(std::string("pointLights[").append(std::to_string(light->GetID())).append("].specular").c_str(), glm::vec3(0.5f, 0.5f, 0.5f));
+		}
 	}
-	m_Light->GetShader()->Use();
-	m_Light->GetShader()->SetMat4("projection", m_ProjMat);
-	m_Light->GetShader()->SetMat4("view", m_ViewMat);
-	m_Light->GetShader()->SetMat4("model", m_Light->GetModelMatrix());
+	for (PointLight* light : m_Lights)
+	{
+		light->GetShader()->Use();
+		light->GetShader()->SetMat4("projection", m_ProjMat);
+		light->GetShader()->SetMat4("view", m_ViewMat);
+		light->GetShader()->SetMat4("model", light->GetModelMatrix());
+	}
 
 }
 
@@ -41,7 +51,10 @@ void Scene::RotateLight(float time)
 	transform = glm::rotate(transform, (float) (1 - exp(-time)) * 0.005f, glm::vec3(0.0f, 1.0f, 0.0f));
 	transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
 
-	m_Light->SetLocation(transform * glm::vec4(m_Light->GetLocation(), 1.0f));
+	for (PointLight* light : m_Lights) 
+	{
+		light->SetLocation(transform * glm::vec4(light->GetLocation(), 1.0f));
+	}
 }
 
 void Scene::AddActor(Actor* actor)
@@ -50,15 +63,18 @@ void Scene::AddActor(Actor* actor)
 	m_Actors.push_back(actor);
 }
 
-// Implement further later when using more than 1 light
-void Scene::AddLight(Light* light)
+void Scene::AddPointLight(PointLight* light)
 {
 	m_SceneRoot->AddChild(light);
+	m_Lights.push_back(light);
 }
 
 void Scene::Render()
 {
 	m_SceneRoot->Update();
-	m_Light->GetModel()->Draw(m_Light->GetShader());
+	for (PointLight* light : m_Lights)
+	{
+		light->GetModel()->Draw(light->GetShader());
+	}
 }
 

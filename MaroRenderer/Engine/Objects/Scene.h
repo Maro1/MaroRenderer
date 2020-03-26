@@ -5,6 +5,7 @@
 #include "Engine/Lighting/Light.h"
 #include "Engine/Objects/Actor.h"
 #include "Engine/Camera/ArcballCamera.h"
+#include "Engine/Lighting/PointLight.h"
 
 class Scene {
 public:
@@ -14,13 +15,13 @@ public:
 	inline void SetCamera(ArcballCamera* camera) { m_Camera = camera; }
 	void RotateLight(float time);
 	void AddActor(Actor* node);
-	void AddLight(Light* light);
+	void AddPointLight(PointLight* light);
 	void Render();
 
 private:
 
 	// Only one light currently, add more later
-	Light* m_Light;
+	std::vector<PointLight*> m_Lights;
 	std::vector<Actor*> m_Actors;
 
 	ArcballCamera* m_Camera;
