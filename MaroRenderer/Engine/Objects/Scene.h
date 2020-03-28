@@ -18,9 +18,13 @@ public:
 	void AddPointLight(PointLight* light);
 	void Render();
 
+	inline void AddDirectionalLight() { m_DirectionalLight = true; }
+	inline void RemoveDirectionalLight() { m_DirectionalLight = false; }
+	inline void ToggleDirectionalLight() { m_DirectionalLight = !m_DirectionalLight; }
+
 private:
 
-	// Only one light currently, add more later
+	bool m_DirectionalLight = true;
 	std::vector<PointLight*> m_Lights;
 	std::vector<Actor*> m_Actors;
 

@@ -165,9 +165,6 @@
     <ClInclude Include="Engine\Lighting\PointLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Lighting\DirectionalLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Lighting\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>

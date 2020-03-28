@@ -18,10 +18,20 @@ void Scene::UpdateShaders()
 		actor->GetShader()->SetMat4("projection", m_ProjMat);
 		actor->GetShader()->SetFloat3("viewPos", m_Camera->GetPosition());
 
-		actor->GetShader()->SetFloat3("directionLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-		actor->GetShader()->SetFloat3("directionLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-		actor->GetShader()->SetFloat3("directionLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
-		actor->GetShader()->SetFloat3("directionLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+		if (m_DirectionalLight)
+		{
+			actor->GetShader()->SetFloat3("directionLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+			actor->GetShader()->SetFloat3("directionLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
+			actor->GetShader()->SetFloat3("directionLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
+			actor->GetShader()->SetFloat3("directionLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+		}
+		else
+		{
+			actor->GetShader()->SetFloat3("directionLight.direction", glm::vec3(0.0f));
+			actor->GetShader()->SetFloat3("directionLight.ambient", glm::vec3(0.0f));
+			actor->GetShader()->SetFloat3("directionLight.diffuse", glm::vec3(0.0f));
+			actor->GetShader()->SetFloat3("directionLight.specular", glm::vec3(0.0f));
+		}
 
 		for (PointLight* light : m_Lights)
 		{

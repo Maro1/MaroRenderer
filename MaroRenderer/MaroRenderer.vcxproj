@@ -167,7 +167,6 @@
     <ClInclude Include="Application\Events\MouseEvent.h" />
     <ClInclude Include="Application\GUI\GUILayer.h" />
     <ClInclude Include="Application\Window.h" />
-    <ClInclude Include="Engine\Lighting\DirectionalLight.h" />
     <ClInclude Include="Engine\Lighting\PointLight.h" />
     <ClInclude Include="Engine\Objects\Actor.h" />
     <ClInclude Include="Engine\Objects\Mesh.h" />

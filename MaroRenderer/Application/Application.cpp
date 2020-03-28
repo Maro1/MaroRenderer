@@ -27,20 +27,24 @@ void Application::Run()
 
 	Model cube(path, filename);
 	Actor cubeActor(&cube);
+	Actor cubeActor2(&cube);
+	cubeActor2.SetLocation(glm::vec3(2.0f, 0.0f, 0.0f));
+
 	PointLight light(m_Shader, glm::vec3(0.0f, 1.0f, 2.0f));
 	PointLight light2(m_Shader, glm::vec3(0.0f, -1.0f, -2.0f));
 
 
-	Scene scene(m_Camera);
-	scene.AddPointLight(&light);
-	scene.AddPointLight(&light2);
+	m_Scene = new Scene(m_Camera);
+	m_Scene->AddPointLight(&light);
+	m_Scene->AddPointLight(&light2);
 
-	scene.AddActor(&cubeActor);
+	m_Scene->AddActor(&cubeActor);
+	m_Scene->AddActor(&cubeActor2);
 
 	while (!m_Window->ShouldClose())
 	{
 
-		scene.RotateLight(glfwGetTime());
+		m_Scene->RotateLight(glfwGetTime());
 
 		layer.Begin();
 		layer.SetStyle(GUIStyle::Photoshop);
@@ -50,8 +54,8 @@ void Application::Run()
 		cubeActor.SetColor(glm::vec3(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2]));
 
 		m_Renderer->Clear();
-		scene.UpdateShaders();
-		scene.Render();
+		m_Scene->UpdateShaders();
+		m_Scene->Render();
 
 		layer.End();
 	}
@@ -62,6 +66,11 @@ void Application::OnEvent(const Event& e)
 	if (e.GetType() == EventType::KeyPress)
 	{
 		KeyPressedEvent* keypressed = (KeyPressedEvent*)&e;
+		if (keypressed->GetKeyCode() == 76)
+		{
+			m_Scene->ToggleDirectionalLight();
+			LOG_INFO("Toggled!");
+		}
 	}
 	else if (e.GetType() == EventType::MouseButtonPress)
 	{
