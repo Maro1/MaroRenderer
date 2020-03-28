@@ -10,7 +10,8 @@
 #include "Events/MouseEvent.h"
 #include "Events/ApplicationEvent.h"
 #include "GUI/GUILayer.h"
-#include "Engine/Objects/Light.h"
+#include "Engine/Lighting/Light.h"
+#include "Engine/Lighting/PointLight.h"
 #include "Engine/Objects/Actor.h"
 #include "Engine/Objects/Scene.h"
 
@@ -32,6 +33,7 @@ private:
 	Renderer* m_Renderer;
 	Shader* m_Shader;
 	ArcballCamera* m_Camera;
+	Scene* m_Scene;
 
 	glm::mat4 m_ModelMat = glm::mat4(1.0f);
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);

@@ -2,9 +2,10 @@
 
 #include <vector>
 #include "Engine/Objects/SceneNode.h"
-#include "Engine/Objects/Light.h"
+#include "Engine/Lighting/Light.h"
 #include "Engine/Objects/Actor.h"
 #include "Engine/Camera/ArcballCamera.h"
+#include "Engine/Lighting/PointLight.h"
 
 class Scene {
 public:
@@ -14,13 +15,17 @@ public:
 	inline void SetCamera(ArcballCamera* camera) { m_Camera = camera; }
 	void RotateLight(float time);
 	void AddActor(Actor* node);
-	void AddLight(Light* light);
+	void AddPointLight(PointLight* light);
 	void Render();
+
+	inline void AddDirectionalLight() { m_DirectionalLight = true; }
+	inline void RemoveDirectionalLight() { m_DirectionalLight = false; }
+	inline void ToggleDirectionalLight() { m_DirectionalLight = !m_DirectionalLight; }
 
 private:
 
-	// Only one light currently, add more later
-	Light* m_Light;
+	bool m_DirectionalLight = true;
+	std::vector<PointLight*> m_Lights;
 	std::vector<Actor*> m_Actors;
 
 	ArcballCamera* m_Camera;

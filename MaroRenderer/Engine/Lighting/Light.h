@@ -21,6 +21,7 @@ private:
 	Shader* CreateShader();
 	Model* CreateModel();
 
+protected:
 	glm::vec3 m_Position;
 
 };
