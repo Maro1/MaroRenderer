@@ -19,7 +19,7 @@ Application::~Application()
 
 void Application::Run()
 {
-	GUILayer layer(m_Window);
+	GUILayer layer(m_Window, this);
 	layer.Attach();
 
 	std::string path = "cube.obj";
@@ -39,7 +39,7 @@ void Application::Run()
 	m_Scene->AddPointLight(&light2);
 
 	m_Scene->AddActor(&cubeActor);
-	m_Scene->AddActor(&cubeActor2);
+	cubeActor.AddChild(&cubeActor2);
 
 	while (!m_Window->ShouldClose())
 	{

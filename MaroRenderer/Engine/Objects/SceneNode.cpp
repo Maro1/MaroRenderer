@@ -1,6 +1,6 @@
 #include "SceneNode.h"
 
-SceneNode::SceneNode(Shader* shader, glm::vec3 location, glm::vec3 scale, Model* model)
+SceneNode::SceneNode(Shader* shader, glm::vec3 location, glm::vec3 scale, Model* model) : m_UUID(Count())
 {
 	m_Location = location;
 	m_Scale = scale;

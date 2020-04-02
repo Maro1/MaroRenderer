@@ -4,9 +4,10 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-GUILayer::GUILayer(Window* window)
+GUILayer::GUILayer(Window* window, Application* app)
 {
 	m_Window = window;
+	m_App = app;
 }
 
 void GUILayer::Attach()
@@ -38,12 +39,10 @@ void GUILayer::Begin()
 	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
 	ImGui::End();
 
-	ImGui::Begin("Color");
+	ImGui::Begin("Hierarchy");
+	DisplayHierarchy(&m_App->GetScene()->GetRoot()->GetChildren());
 
-	ImGui::ColorEdit3("color", color);
-	// multiply triangle's color with this color
 	ImGui::End();
-
 }
 
 void GUILayer::End()
@@ -180,4 +179,27 @@ void GUILayer::PhotoshopStyle()
 	style->TabBorderSize = 1.0f;
 	style->TabRounding = 0.0f;
 	style->WindowRounding = 4.0f;
+}
+
+void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
+{
+	for (std::vector<SceneNode*>::const_iterator object = (*children).begin(); object != (*children).end(); ++object)
+	{
+		unsigned int flags = ImGuiTreeNodeFlags_OpenOnArrow;
+
+		if ((*object)->GetChildren().size() == 0)
+			flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+		ImGui::PushID((*object)->GetUUID());
+		bool open = ImGui::TreeNodeEx((*object)->GetLabel().c_str(), flags);
+
+		bool hasChildren = (*object)->GetChildren().size() > 0;
+		ImGui::PopID();
+
+		if (hasChildren && open)
+		{
+			DisplayHierarchy(&(*object)->GetChildren());
+			ImGui::TreePop();
+		}
+	}
 }

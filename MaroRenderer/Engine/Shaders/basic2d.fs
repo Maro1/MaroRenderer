@@ -45,7 +45,7 @@ void main()
 
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
-		if(pointLights[i].diffuse != 0) 
+		if(pointLights[i].diffuse != vec3(0)) 
 		{
 			result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 		}

@@ -1,6 +1,9 @@
 #pragma once
 
-#include "Application/Window.h"
+#include "Application/Application.h"
+
+class Application;
+class SceneNode;
 
 enum class GUIStyle
 {
@@ -10,7 +13,7 @@ enum class GUIStyle
 class GUILayer
 {
 public:
-	GUILayer(Window* window);
+	GUILayer(Window* window, Application* app);
 
 	void Attach();
 	void Detach();
@@ -23,9 +26,12 @@ public:
 
 private:
 	Window* m_Window;
+	Application* m_App;
 
 	void DarculaStyle();
 	void PhotoshopStyle();
+
+	void DisplayHierarchy(std::vector<SceneNode*>* objects);
 
 	float color[4] = { 0.2f,0.2f,0.2f,0.2f };
 };

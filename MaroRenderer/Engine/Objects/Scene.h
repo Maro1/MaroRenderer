@@ -22,6 +22,8 @@ public:
 	inline void RemoveDirectionalLight() { m_DirectionalLight = false; }
 	inline void ToggleDirectionalLight() { m_DirectionalLight = !m_DirectionalLight; }
 
+	inline SceneNode* GetRoot() { return m_SceneRoot; }
+
 private:
 
 	bool m_DirectionalLight = true;
