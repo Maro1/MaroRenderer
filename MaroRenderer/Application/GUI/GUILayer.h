@@ -28,10 +28,16 @@ private:
 	Window* m_Window;
 	Application* m_App;
 
+
+	int m_WindowHeight; 
+	int m_WindowWidth;
+
 	void DarculaStyle();
 	void PhotoshopStyle();
 
 	void DisplayHierarchy(std::vector<SceneNode*>* objects);
+	void DisplayMainMenu();
+	void DisplayTabs();
 
 	float color[4] = { 0.2f,0.2f,0.2f,0.2f };
 };
