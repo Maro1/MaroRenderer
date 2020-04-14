@@ -10,6 +10,8 @@ public:
 		InitLight();
 	}
 
+	~PointLight() {}
+
 	inline int GetID() { return currentID; }
 	inline float GetConstant() { return m_Constant; }
 	inline float GetQuadradic() { return m_Quadratic; }

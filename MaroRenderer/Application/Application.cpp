@@ -27,8 +27,9 @@ void Application::Run()
 
 	Model cube(path, filename);
 	Actor cubeActor(&cube);
-	Actor cubeActor2(&cube);
-	cubeActor2.SetLocation(glm::vec3(2.0f, 0.0f, 0.0f));
+	Actor* cubeActor2 = new Actor(&cube);
+
+	cubeActor2->SetLocation(glm::vec3(2.0f, 0.0f, 0.0f));
 
 	PointLight light(m_Shader, glm::vec3(0.0f, 1.0f, 2.0f));
 	PointLight light2(m_Shader, glm::vec3(0.0f, -1.0f, -2.0f));
@@ -39,7 +40,7 @@ void Application::Run()
 	m_Scene->AddPointLight(&light2);
 
 	m_Scene->AddActor(&cubeActor);
-	cubeActor.AddChild(&cubeActor2);
+	cubeActor.AddChild(cubeActor2);
 
 	while (!m_Window->ShouldClose())
 	{

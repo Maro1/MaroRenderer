@@ -23,6 +23,8 @@ public:
 		m_Color = glm::vec3(0.2f, 0.2f, 0.2f);
 	}
 
+	~Actor(){}
+
 	inline glm::vec3 GetColor() { return m_Color; }
 	inline void SetColor(glm::vec3 color) { m_Color = color; }
 

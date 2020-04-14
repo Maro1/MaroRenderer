@@ -40,6 +40,10 @@ void GUILayer::Begin()
 	ImGui::End();
 
 	ImGui::Begin("Hierarchy");
+
+	// Hard coded, change to use window size percentage
+	ImGui::SetWindowSize(ImVec2(200, 1400));
+
 	DisplayHierarchy(&m_App->GetScene()->GetRoot()->GetChildren());
 
 	ImGui::End();
