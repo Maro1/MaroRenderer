@@ -35,14 +35,19 @@ void GUILayer::Begin()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
+	int windowHeight = m_App->GetWindow()->GetHeight();
+	int windowWidth = m_App->GetWindow()->GetWidth();
+
 	ImGui::Begin("FPS");
 	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
+	ImGui::SetWindowSize(ImVec2(windowWidth / 10, windowHeight/20), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(windowWidth / 10, 0), ImGuiCond_Once);
 	ImGui::End();
 
-	ImGui::Begin("Hierarchy");
 
-	// Hard coded, change to use window size percentage
-	ImGui::SetWindowSize(ImVec2(200, 1400));
+	ImGui::Begin("Hierarchy");
+	ImGui::SetWindowSize(ImVec2(windowWidth / 10, windowHeight), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Once);
 
 	DisplayHierarchy(&m_App->GetScene()->GetRoot()->GetChildren());
 

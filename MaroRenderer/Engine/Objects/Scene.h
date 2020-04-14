@@ -28,7 +28,7 @@ private:
 
 	bool m_DirectionalLight = true;
 	std::vector<PointLight*> m_Lights;
-	std::vector<Actor*> m_Actors;
+	std::vector<SceneNode*> m_Actors;
 
 	ArcballCamera* m_Camera;
 	SceneNode* m_SceneRoot;
