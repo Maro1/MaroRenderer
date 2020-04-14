@@ -13,6 +13,8 @@ public:
 
 	Light(glm::vec3 position) : m_Position(position), SceneNode(CreateShader(), position, glm::vec3(2.0f), CreateModel()) { }
 
+	~Light() {}
+
 	inline const glm::mat4 GetModelMatrix() { return glm::scale(glm::translate(glm::mat4(1.0f), GetLocation()), glm::vec3(0.2f)); }
 
 

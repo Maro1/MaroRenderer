@@ -7,8 +7,12 @@ public:
 	PointLight(Shader* shader, glm::vec3 position) : Light(position), m_Shader(shader), currentID(ID())
 	{
 		m_Position = position;
+		std::string label = "Point light " + std::to_string(currentID);
+		SetLabel(label);
 		InitLight();
 	}
+
+	~PointLight() {}
 
 	inline int GetID() { return currentID; }
 	inline float GetConstant() { return m_Constant; }

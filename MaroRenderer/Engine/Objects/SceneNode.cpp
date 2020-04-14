@@ -1,6 +1,6 @@
 #include "SceneNode.h"
 
-SceneNode::SceneNode(Shader* shader, glm::vec3 location, glm::vec3 scale, Model* model)
+SceneNode::SceneNode(Shader* shader, glm::vec3 location, glm::vec3 scale, Model* model) : m_UUID(Count())
 {
 	m_Location = location;
 	m_Scale = scale;
@@ -14,10 +14,11 @@ SceneNode::SceneNode(Shader* shader, glm::vec3 location, glm::vec3 scale, Model*
 
 SceneNode::~SceneNode(void)
 {
-	for (unsigned int i = 0; i < m_Children.size(); i++)
+	for (auto c : m_Children)
 	{
-		delete m_Children[i];
+		delete c;
 	}
+	m_Children.clear();
 }
 
 void SceneNode::AddChild(SceneNode* child)

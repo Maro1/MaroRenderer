@@ -19,7 +19,7 @@ Application::~Application()
 
 void Application::Run()
 {
-	GUILayer layer(m_Window);
+	GUILayer layer(m_Window, this);
 	layer.Attach();
 
 	std::string path = "cube.obj";
@@ -27,19 +27,21 @@ void Application::Run()
 
 	Model cube(path, filename);
 	Actor cubeActor(&cube);
-	Actor cubeActor2(&cube);
-	cubeActor2.SetLocation(glm::vec3(2.0f, 0.0f, 0.0f));
+	Actor* cubeActor2 = new Actor(&cube);
+
 
 	PointLight light(m_Shader, glm::vec3(0.0f, 1.0f, 2.0f));
 	PointLight light2(m_Shader, glm::vec3(0.0f, -1.0f, -2.0f));
-
 
 	m_Scene = new Scene(m_Camera);
 	m_Scene->AddPointLight(&light);
 	m_Scene->AddPointLight(&light2);
 
 	m_Scene->AddActor(&cubeActor);
-	m_Scene->AddActor(&cubeActor2);
+	cubeActor.AddChild(cubeActor2);
+
+
+	cubeActor2->SetLocation(glm::vec3(2.0f, 0.0f, 0.0f));
 
 	while (!m_Window->ShouldClose())
 	{

@@ -10,8 +10,16 @@ void Scene::UpdateShaders()
 {
 	m_ViewMat = m_Camera->GetView();
 	m_ProjMat = m_Camera->GetProjection();
-	for (Actor* actor : m_Actors)
+	for (SceneNode* actor : m_Actors)
 	{
+		// Have to update all the children as well, maybe better to add all children to actors list
+		for (auto child : actor->GetChildren()) 
+		{
+			if (!std::count(m_Actors.begin(), m_Actors.end(), child)) 
+			{
+				m_Actors.push_back(child);
+			}
+		}
 		actor->GetShader()->Use();
 		actor->GetShader()->SetMat4("model", actor->GetModelMatrix());
 		actor->GetShader()->SetMat4("view", m_ViewMat);

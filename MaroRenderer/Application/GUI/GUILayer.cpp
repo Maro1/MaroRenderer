@@ -4,9 +4,12 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-GUILayer::GUILayer(Window* window)
+GUILayer::GUILayer(Window* window, Application* app)
 {
 	m_Window = window;
+	m_App = app;
+	m_WindowHeight = m_App->GetWindow()->GetHeight();
+	m_WindowWidth = m_App->GetWindow()->GetWidth();
 }
 
 void GUILayer::Attach()
@@ -34,15 +37,19 @@ void GUILayer::Begin()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
+	DisplayMainMenu();
+
+	
+
 	ImGui::Begin("FPS");
 	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
+	ImGui::SetWindowSize(ImVec2(m_WindowWidth / 10, m_WindowHeight/20), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(m_WindowWidth / 10, 0), ImGuiCond_Once);
 	ImGui::End();
 
-	ImGui::Begin("Color");
+	DisplayHierarchy(&m_App->GetScene()->GetRoot()->GetChildren());
 
-	ImGui::ColorEdit3("color", color);
-	// multiply triangle's color with this color
-	ImGui::End();
+	DisplayTabs();
 
 }
 
@@ -66,6 +73,82 @@ void GUILayer::SetStyle(GUIStyle style)
 		PhotoshopStyle();
 	}
 }
+
+void GUILayer::DisplayTabs()
+{
+	ImGui::Begin("Properties");
+	ImGui::SetWindowSize(ImVec2(300, m_WindowHeight), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(m_WindowWidth-600, 20), ImGuiCond_Once);
+	if (ImGui::BeginTabBar("Properties"))
+	{
+		if (ImGui::BeginTabItem("Transform"))
+		{
+			static float vec4a[4] = { 0.10f, 0.20f, 0.30f, 0.44f };
+			ImGui::InputFloat3("Location: ", vec4a, ImGuiInputTextFlags_AllowTabInput);
+			ImGui::Text("Rotation");
+			ImGui::Text("Scale");
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Material"))
+		{
+			ImGui::Text("Albedo");
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
+	ImGui::End();
+}
+
+void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
+{
+	ImGui::Begin("Hierarchy");
+	ImGui::SetWindowSize(ImVec2(m_WindowWidth / 10, m_WindowHeight), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_Once);
+
+	for (std::vector<SceneNode*>::const_iterator object = (*children).begin(); object != (*children).end(); ++object)
+	{
+		unsigned int flags = ImGuiTreeNodeFlags_OpenOnArrow;
+
+		if ((*object)->GetChildren().size() == 0)
+			flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+
+		ImGui::PushID((*object)->GetUUID());
+		bool open = ImGui::TreeNodeEx((*object)->GetLabel().c_str(), flags);
+
+		bool hasChildren = (*object)->GetChildren().size() > 0;
+		ImGui::PopID();
+
+		if (hasChildren && open)
+		{
+			DisplayHierarchy(&(*object)->GetChildren());
+			ImGui::TreePop();
+		}
+	}
+	ImGui::End();
+}
+
+void GUILayer::DisplayMainMenu()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+			if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+			ImGui::Separator();
+			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+}
+
 
 void GUILayer::DarculaStyle()
 {

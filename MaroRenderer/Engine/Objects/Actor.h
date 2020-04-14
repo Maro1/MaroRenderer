@@ -13,6 +13,9 @@ public:
 		: SceneNode(shader, location, scale, model) { 
 		m_Shader = shader;
 		m_Color = glm::vec3(0.2f, 0.2f, 0.2f);
+
+		std::string label = "Actor " + std::to_string(GetUUID());
+		SetLabel(label);
 	}
 
 	Actor(Model* model, Shader* shader = DefaultActorShader(),
@@ -21,7 +24,12 @@ public:
 		: SceneNode(shader, location, scale, model) {
 		m_Shader = shader;
 		m_Color = glm::vec3(0.2f, 0.2f, 0.2f);
+
+		std::string label = "Actor " + std::to_string(GetUUID());
+		SetLabel(label);
 	}
+
+	~Actor(){}
 
 	inline glm::vec3 GetColor() { return m_Color; }
 	inline void SetColor(glm::vec3 color) { m_Color = color; }
