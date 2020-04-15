@@ -12,7 +12,6 @@ void Scene::UpdateShaders()
 	m_ProjMat = m_Camera->GetProjection();
 	for (SceneNode* actor : m_Actors)
 	{
-		// Have to update all the children as well, maybe better to add all children to actors list
 		for (auto child : actor->GetChildren()) 
 		{
 			if (!std::count(m_Actors.begin(), m_Actors.end(), child)) 
@@ -30,8 +29,8 @@ void Scene::UpdateShaders()
 		{
 			actor->GetShader()->SetFloat3("directionLight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
 			actor->GetShader()->SetFloat3("directionLight.ambient", glm::vec3(0.05f, 0.05f, 0.05f));
-			actor->GetShader()->SetFloat3("directionLight.diffuse", glm::vec3(0.4f, 0.4f, 0.4f));
-			actor->GetShader()->SetFloat3("directionLight.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+			actor->GetShader()->SetFloat3("directionLight.diffuse", glm::vec3(m_DirectionalLightStrength));
+			actor->GetShader()->SetFloat3("directionLight.specular", glm::vec3(m_DirectionalLightStrength-0.2));
 		}
 		else
 		{

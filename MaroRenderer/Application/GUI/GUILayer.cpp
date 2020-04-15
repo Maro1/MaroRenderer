@@ -47,7 +47,10 @@ void GUILayer::Begin()
 	ImGui::SetWindowPos(ImVec2(m_WindowWidth / 10, 0), ImGuiCond_Once);
 	ImGui::End();
 
+
+	ImGui::Begin("Hierarchy");
 	DisplayHierarchy(&m_App->GetScene()->GetRoot()->GetChildren());
+	ImGui::End();
 
 	DisplayTabs();
 
@@ -94,6 +97,12 @@ void GUILayer::DisplayTabs()
 			ImGui::Text("Albedo");
 			ImGui::EndTabItem();
 		}
+		if (ImGui::BeginTabItem("Lighting"))
+		{
+			ImGui::Text("Directional light");
+			ImGui::SliderFloat("Strength", m_App->GetScene()->GetDirectionalLightStrength(), 0, 1);
+			ImGui::EndTabItem();
+		}
 		ImGui::EndTabBar();
 	}
 	ImGui::End();
@@ -101,7 +110,6 @@ void GUILayer::DisplayTabs()
 
 void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 {
-	ImGui::Begin("Hierarchy");
 	ImGui::SetWindowSize(ImVec2(m_WindowWidth / 10, m_WindowHeight), ImGuiCond_Once);
 	ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_Once);
 
@@ -124,7 +132,6 @@ void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 			ImGui::TreePop();
 		}
 	}
-	ImGui::End();
 }
 
 void GUILayer::DisplayMainMenu()
