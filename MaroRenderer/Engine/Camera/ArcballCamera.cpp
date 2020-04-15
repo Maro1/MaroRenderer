@@ -58,11 +58,20 @@ void ArcballCamera::MouseScrolled(int offset)
 	}
 }
 
+void ArcballCamera::Target(glm::vec3 target)
+{
+	glm::vec3 newPos = m_Location - (m_Target - target);
+	SetTarget(target);
+	SetLocation(newPos);
+}
+
 glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)
 {
 	// X rotation - Rodrigues Rotation Formula
 	glm::vec3 NewLocation = (1 - glm::cos(angleX)) * (glm::dot(m_Location, m_Up)) * m_Up + glm::cos(angleX)
 		* m_Location + glm::sin(angleX) * glm::cross(m_Up, m_Location);
+
+	std::cout << NewLocation.x << std::endl;
 
 	// Y rotation - Rodrigues Rotation Formula
 	NewLocation = (1 - glm::cos(angleY)) * (glm::dot(NewLocation, m_Right)) * m_Right + glm::cos(angleY)

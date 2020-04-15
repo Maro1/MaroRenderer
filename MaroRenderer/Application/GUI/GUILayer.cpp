@@ -122,6 +122,9 @@ void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 
 		ImGui::PushID((*object)->GetUUID());
 		bool open = ImGui::TreeNodeEx((*object)->GetLabel().c_str(), flags);
+		if (ImGui::IsItemClicked()) {
+			m_App->GetCamera()->Target((*object)->GetLocation());
+		}
 
 		bool hasChildren = (*object)->GetChildren().size() > 0;
 		ImGui::PopID();

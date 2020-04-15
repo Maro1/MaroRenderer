@@ -14,7 +14,7 @@ public:
 	void LeftMousePressed(bool pressed, int x, int y);
 	void MouseMoved(double x, double y);
 	void MouseScrolled(int offset);
-
+	void Target(glm::vec3 target);
 
 private:
 
