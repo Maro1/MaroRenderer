@@ -68,14 +68,17 @@ void ArcballCamera::Target(glm::vec3 target)
 glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)
 {
 	// X rotation - Rodrigues Rotation Formula
-	glm::vec3 NewLocation = (1 - glm::cos(angleX)) * (glm::dot(m_Location, m_Up)) * m_Up + glm::cos(angleX)
-		* m_Location + glm::sin(angleX) * glm::cross(m_Up, m_Location);
+	glm::vec3 originLoc = m_Location - m_Target;
 
-	std::cout << NewLocation.x << std::endl;
+	glm::vec3 NewLocation = (1 - glm::cos(angleX)) * (glm::dot(originLoc, m_Up)) * m_Up + glm::cos(angleX)
+		* originLoc + glm::sin(angleX) * glm::cross(m_Up, originLoc);
 
 	// Y rotation - Rodrigues Rotation Formula
 	NewLocation = (1 - glm::cos(angleY)) * (glm::dot(NewLocation, m_Right)) * m_Right + glm::cos(angleY)
-		* NewLocation + glm::sin(angleY) * glm::cross(m_Right, m_Location);
+		* NewLocation + glm::sin(angleY) * glm::cross(m_Right, NewLocation);
+
+
+	NewLocation += m_Target;
 
 	return NewLocation;
 }
