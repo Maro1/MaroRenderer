@@ -23,6 +23,7 @@ public:
 
 	void Run();
 	void OnEvent(const Event& e);
+	void PollEvents();
 
 	inline Window* GetWindow() { return m_Window; }
 	inline Shader* GetShader() { return m_Shader; }

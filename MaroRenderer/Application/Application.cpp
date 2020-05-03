@@ -17,6 +17,26 @@ Application::~Application()
 {
 }
 
+void Application::PollEvents()
+{
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
+	{
+		m_Camera->Forward();
+	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
+	{
+		m_Camera->Left();
+	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
+	{
+		m_Camera->Back();
+	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
+	{
+		m_Camera->Right();
+	}
+}
+
 void Application::Run()
 {
 	GUILayer layer(m_Window, this);
@@ -45,6 +65,7 @@ void Application::Run()
 
 	while (!m_Window->ShouldClose())
 	{
+		PollEvents();
 
 		m_Scene->RotateLight(glfwGetTime());
 
@@ -73,6 +94,7 @@ void Application::OnEvent(const Event& e)
 			m_Scene->ToggleDirectionalLight();
 			LOG_INFO("Toggled!");
 		}
+
 	}
 	else if (e.GetType() == EventType::MouseButtonPress)
 	{
@@ -83,6 +105,10 @@ void Application::OnEvent(const Event& e)
 		// Hard coded for now, update later ( 4 = ALT )
 		if (button == 0 && mods == 4)
 		{
+			m_Camera->AltLeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
+		}
+		else if (button == 0)
+		{
 			m_Camera->LeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
 		}
 	}
@@ -92,7 +118,7 @@ void Application::OnEvent(const Event& e)
 		int button = mousereleased->GetButton();
 		if (button == 0)
 		{
-			m_Camera->LeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
+			m_Camera->AltLeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 		}
 	}
 	else if (e.GetType() == EventType::MouseMove)
