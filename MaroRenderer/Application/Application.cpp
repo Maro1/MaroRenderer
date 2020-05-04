@@ -17,28 +17,11 @@ Application::~Application()
 {
 }
 
-void Application::PollEvents()
-{
-	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
-	{
-		m_Camera->Forward();
-	}
-	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
-	{
-		m_Camera->Left();
-	}
-	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
-	{
-		m_Camera->Back();
-	}
-	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
-	{
-		m_Camera->Right();
-	}
-}
-
 void Application::Run()
 {
+	m_DeltaTime = glfwGetTime() - m_PrevTime;
+	m_PrevTime = glfwGetTime();
+
 	GUILayer layer(m_Window, this);
 	layer.Attach();
 
@@ -84,6 +67,26 @@ void Application::Run()
 	}
 }
 
+void Application::PollEvents()
+{
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_W) == GLFW_PRESS)
+	{
+		m_Camera->Forward(m_DeltaTime);
+	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_A) == GLFW_PRESS)
+	{
+		m_Camera->Left(m_DeltaTime);
+	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_S) == GLFW_PRESS)
+	{
+		m_Camera->Back(m_DeltaTime);
+	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_D) == GLFW_PRESS)
+	{
+		m_Camera->Right(m_DeltaTime);
+	}
+}
+
 void Application::OnEvent(const Event& e)
 {
 	if (e.GetType() == EventType::KeyPress)
@@ -119,6 +122,7 @@ void Application::OnEvent(const Event& e)
 		if (button == 0)
 		{
 			m_Camera->AltLeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
+			m_Camera->LeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 		}
 	}
 	else if (e.GetType() == EventType::MouseMove)
@@ -126,7 +130,8 @@ void Application::OnEvent(const Event& e)
 		MouseMovedEvent* mousemoved = (MouseMovedEvent*)&e;
 		float x = mousemoved->GetX();
 		float y = mousemoved->GetY();
-		m_Camera->MouseMoved(x, y);
+		bool alt = glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_LEFT_ALT) == GLFW_PRESS;
+		m_Camera->MouseMoved(x, y, alt);
 	}
 	else if (e.GetType() == EventType::WindowResize)
 	{
