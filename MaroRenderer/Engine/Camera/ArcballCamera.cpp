@@ -79,7 +79,7 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 
 			/* Calculate up vector*/
 			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
-			m_Up = glm::normalize(glm::cross(right, m_Front));
+			m_Up = glm::vec3(0, 1, 0);
 
 			/* Update target location */
 			m_Target = m_Location + glm::vec3(m_Front.x * DefaultTargetDistance, m_Front.y * DefaultTargetDistance, 

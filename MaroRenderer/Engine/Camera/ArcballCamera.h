@@ -41,7 +41,7 @@ private:
 	const float RotationSpeed = 0.05f;
 	const float ScrollSpeed = 0.1f;
 	const float MoveSpeed = 0.1f;
-	const float Sensitivity = 0.0001f;
+	const float Sensitivity = 0.005f;
 	const int DefaultTargetDistance = 3;
 
 	glm::vec3 Tumble(float angleX, float angleY);
