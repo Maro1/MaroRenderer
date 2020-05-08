@@ -22,11 +22,15 @@ public:
 	inline void RemoveDirectionalLight() { m_DirectionalLight = false; }
 	inline void ToggleDirectionalLight() { m_DirectionalLight = !m_DirectionalLight; }
 
+	inline float* GetDirectionalLightStrength() { return &m_DirectionalLightStrength; }
+
 	inline SceneNode* GetRoot() { return m_SceneRoot; }
 
 private:
 
 	bool m_DirectionalLight = true;
+	float m_DirectionalLightStrength = 0.4f;
+
 	std::vector<PointLight*> m_Lights;
 	std::vector<SceneNode*> m_Actors;
 
