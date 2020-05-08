@@ -85,6 +85,14 @@ void Application::PollEvents()
 	{
 		m_Camera->Right(m_DeltaTime);
 	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_E) == GLFW_PRESS)
+	{
+		m_Camera->Up(m_DeltaTime);
+	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_Q) == GLFW_PRESS)
+	{
+		m_Camera->Down(m_DeltaTime);
+	}
 }
 
 void Application::OnEvent(const Event& e)
@@ -131,7 +139,7 @@ void Application::OnEvent(const Event& e)
 		float x = mousemoved->GetX();
 		float y = mousemoved->GetY();
 		bool alt = glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_LEFT_ALT) == GLFW_PRESS;
-		m_Camera->MouseMoved(x, y, alt);
+		m_Camera->MouseMoved(x, y, alt, m_DeltaTime);
 	}
 	else if (e.GetType() == EventType::WindowResize)
 	{

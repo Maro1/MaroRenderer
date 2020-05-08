@@ -13,7 +13,7 @@ public:
 
 	void AltLeftMousePressed(bool pressed, int x, int y);
 	void LeftMousePressed(bool pressed, int x, int y);
-	void MouseMoved(double x, double y, bool alt);
+	void MouseMoved(double x, double y, bool alt, float deltaTime);
 	void MouseScrolled(int offset);
 	void Target(glm::vec3 target);
 
@@ -21,6 +21,8 @@ public:
 	void Back(float deltaTime);
 	void Left(float deltaTime);
 	void Right(float deltaTime);
+	void Up(float deltaTime);
+	void Down(float deltaTime);
 
 private:
 
@@ -36,10 +38,10 @@ private:
 	glm::vec2 m_PrevPos = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec2 m_CurrPos = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	const float RotationSpeed = 0.01f;
+	const float RotationSpeed = 0.05f;
 	const float ScrollSpeed = 0.1f;
 	const float MoveSpeed = 0.1f;
-	const float Sensitivity = 0.00005f;
+	const float Sensitivity = 0.05f;
 
 	glm::vec3 Tumble(float angleX, float angleY);
 	glm::vec3 Look(float angleX, float angleY);

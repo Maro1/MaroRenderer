@@ -37,7 +37,7 @@ void ArcballCamera::LeftMousePressed(bool pressed, int x, int y)
 	}
 }
 
-void ArcballCamera::MouseMoved(double x, double y, bool alt)
+void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 {
 	if (alt)
 	{
@@ -49,13 +49,13 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt)
 			// Current mouse position
 			m_AltCurrPos = glm::vec2(x, y);
 
-			// Calculate camera vectors
-			glm::vec3 targetToCamera(m_Location - m_Target);
-			m_Right = glm::normalize(glm::cross(targetToCamera, m_Up));
-			m_Up = glm::normalize(glm::cross(m_Right, targetToCamera));
-
 			// Find new camera location
-			m_Location = Tumble((m_AltPrevPos.x - m_AltCurrPos.x) * RotationSpeed, (m_AltCurrPos.y - m_AltPrevPos.y) * RotationSpeed);
+			m_Location = Tumble((m_AltPrevPos.x - m_AltCurrPos.x) * RotationSpeed * deltaTime, (m_AltPrevPos.y - m_AltCurrPos.y) * RotationSpeed * deltaTime);
+
+			// Calculate camera vectors
+			m_Front = glm::normalize(m_Target - m_Location);
+			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
+			m_Up = glm::normalize(glm::cross(right, m_Front));
 		}
 		m_AltPrevPos = m_AltCurrPos;
 	}
@@ -66,7 +66,11 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt)
 
 		if (m_MouseEvent == 1)
 		{ 
-			/*Look around code*/
+			m_CurrPos = glm::vec2(x, y);
+			m_Front = Look((m_PrevPos.x - m_CurrPos.x) * Sensitivity * deltaTime, (m_CurrPos.y - m_PrevPos.y) * Sensitivity * deltaTime);
+
+			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
+			m_Up = glm::normalize(glm::cross(right, m_Front));
 		}
 		m_PrevPos = m_CurrPos;
 	}
@@ -95,26 +99,38 @@ void ArcballCamera::Target(glm::vec3 target)
 
 void ArcballCamera::Forward(float deltaTime)
 {
-	m_Location += MoveSpeed * glm::cross(m_Right, m_Up) * deltaTime;
-	m_Target += MoveSpeed * glm::cross(m_Right, m_Up) * deltaTime;
+	m_Location += MoveSpeed * m_Front * deltaTime;
+	m_Target += MoveSpeed * m_Front * deltaTime;
 }
 
 void ArcballCamera::Back(float deltaTime)
 {
-	m_Location -= MoveSpeed * glm::cross(m_Right, m_Up) * deltaTime;
-	m_Target -= MoveSpeed * glm::cross(m_Right, m_Up) * deltaTime;
+	m_Location -= MoveSpeed * m_Front * deltaTime;
+	m_Target -= MoveSpeed * m_Front * deltaTime;
 }
 
 void ArcballCamera::Left(float deltaTime)
 {
-	m_Location += MoveSpeed * m_Right * deltaTime;
-	m_Target += MoveSpeed * m_Right * deltaTime;
+	m_Location -= MoveSpeed * glm::normalize(glm::cross(m_Front, m_Up)) * deltaTime;
+	m_Target -= MoveSpeed * glm::normalize(glm::cross(m_Front, m_Up)) * deltaTime;
 }
 
 void ArcballCamera::Right(float deltaTime)
 {
-	m_Location -= MoveSpeed * m_Right * deltaTime;
-	m_Target -= MoveSpeed * m_Right * deltaTime;
+	m_Location += MoveSpeed * glm::normalize(glm::cross(m_Front, m_Up)) * deltaTime;
+	m_Target += MoveSpeed * glm::normalize(glm::cross(m_Front, m_Up)) * deltaTime;
+}
+
+void ArcballCamera::Up(float deltaTime)
+{
+	m_Location += MoveSpeed * m_Up * deltaTime;
+	m_Target += MoveSpeed * m_Up * deltaTime;
+}
+
+void ArcballCamera::Down(float deltaTime)
+{
+	m_Location -= MoveSpeed * m_Up * deltaTime;
+	m_Target -= MoveSpeed * m_Up * deltaTime;
 }
 
 glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)
@@ -126,8 +142,8 @@ glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)
 		* originLoc + glm::sin(angleX) * glm::cross(m_Up, originLoc);
 
 	// Y rotation - Rodrigues Rotation Formula
-	NewLocation = (1 - glm::cos(angleY)) * (glm::dot(NewLocation, m_Right)) * m_Right + glm::cos(angleY)
-		* NewLocation + glm::sin(angleY) * glm::cross(m_Right, NewLocation);
+	NewLocation = (1 - glm::cos(angleY)) * (glm::dot(NewLocation, glm::normalize(glm::cross(m_Front, m_Up)))) * glm::normalize(glm::cross(m_Front, m_Up)) + glm::cos(angleY)
+		* NewLocation + glm::sin(angleY) * glm::cross(glm::normalize(glm::cross(m_Front, m_Up)), NewLocation);
 
 
 	NewLocation += m_Target;
@@ -137,20 +153,10 @@ glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)
 
 glm::vec3 ArcballCamera::Look(float angleX, float angleY)
 {
-	// X rotation - Rodrigues Rotation Formula
-	glm::vec3 originLoc = m_Target - m_Location;
+	glm::vec3 newFront1 = glm::rotate(m_Front, angleX, m_Up);
+	glm::vec3 newFront2 = glm::rotate(newFront1, angleY, glm::normalize(glm::cross(m_Up, newFront1)));
 
-	glm::vec3 NewTarget = (1 - glm::cos(angleX)) * (glm::dot(originLoc, m_Up)) * m_Up + glm::cos(angleX)
-		* originLoc + glm::sin(angleX) * glm::cross(m_Up, originLoc);
-
-	// Y rotation - Rodrigues Rotation Formula
-	NewTarget = (1 - glm::cos(angleY)) * (glm::dot(NewTarget, m_Right)) * m_Right + glm::cos(angleY)
-		* NewTarget + glm::sin(angleY) * glm::cross(m_Right, NewTarget);
-
-
-	NewTarget += m_Location;
-
-	return NewTarget;
+	return newFront2;
 }
 
 
