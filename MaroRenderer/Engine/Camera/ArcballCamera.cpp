@@ -67,10 +67,13 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 		if (m_MouseEvent == 1)
 		{ 
 			m_CurrPos = glm::vec2(x, y);
+
 			m_Front = Look((m_PrevPos.x - m_CurrPos.x) * Sensitivity * deltaTime, (m_CurrPos.y - m_PrevPos.y) * Sensitivity * deltaTime);
 
 			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
 			m_Up = glm::normalize(glm::cross(right, m_Front));
+
+			//m_Target = m_Location + m_Front;
 		}
 		m_PrevPos = m_CurrPos;
 	}
@@ -156,7 +159,7 @@ glm::vec3 ArcballCamera::Look(float angleX, float angleY)
 	glm::vec3 newFront1 = glm::rotate(m_Front, angleX, m_Up);
 	glm::vec3 newFront2 = glm::rotate(newFront1, angleY, glm::normalize(glm::cross(m_Up, newFront1)));
 
-	return newFront2;
+	return glm::normalize(newFront2);
 }
 
 
