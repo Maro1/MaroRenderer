@@ -5,10 +5,12 @@
 
 ArcballCamera::ArcballCamera(int screenWidth, int screenHeight)
 {
+	/* Init screen size */
 	m_ScreenWidth = screenWidth;
 	m_ScreenHeight = screenHeight;
 }
 
+/* Keep track of first ALT + Left Click so camera doesn't jump*/
 void ArcballCamera::AltLeftMousePressed(bool pressed, int x, int y)
 {
 	if (!pressed)
@@ -23,6 +25,7 @@ void ArcballCamera::AltLeftMousePressed(bool pressed, int x, int y)
 	}
 }
 
+/* Keep track of first Left Click so camera doesn't jump*/
 void ArcballCamera::LeftMousePressed(bool pressed, int x, int y)
 {
 	if (!pressed)
@@ -41,6 +44,7 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 {
 	if (alt)
 	{
+		/* Don't move on first ALT + click */
 		if (m_AltMouseEvent == 0)
 			return;
 
@@ -61,19 +65,25 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 	}
 	else
 	{
+		/* Don't move on first click */
 		if (m_MouseEvent == 0)
 			return;
 
 		if (m_MouseEvent == 1)
 		{ 
+			/* Current mouse position */
 			m_CurrPos = glm::vec2(x, y);
 
+			/* Find new front vector */
 			m_Front = Look((m_PrevPos.x - m_CurrPos.x) * Sensitivity * deltaTime, (m_CurrPos.y - m_PrevPos.y) * Sensitivity * deltaTime);
 
+			/* Calculate up vector*/
 			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
 			m_Up = glm::normalize(glm::cross(right, m_Front));
 
-			//m_Target = m_Location + m_Front;
+			/* Update target location */
+			m_Target = m_Location + glm::vec3(m_Front.x * DefaultTargetDistance, m_Front.y * DefaultTargetDistance, 
+				m_Front.z * DefaultTargetDistance);
 		}
 		m_PrevPos = m_CurrPos;
 	}
@@ -85,11 +95,13 @@ void ArcballCamera::MouseScrolled(int offset)
 	{
 		// Zoom out
 		m_Location = ((float)(ScrollSpeed - offset)) * m_Location;
+		m_Target = ((float)(ScrollSpeed - offset)) * m_Target;
 	}
 	else
 	{
 		// Zoom in
 		m_Location = ((float)(offset - ScrollSpeed)) * m_Location;
+		m_Target = ((float)(offset - ScrollSpeed)) * m_Target;
 	}
 }
 
@@ -156,7 +168,8 @@ glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)
 
 glm::vec3 ArcballCamera::Look(float angleX, float angleY)
 {
-	glm::vec3 newFront1 = glm::rotate(m_Front, angleX, m_Up);
+	/* Rotate camera first around Y axis, then around X axis */
+	glm::vec3 newFront1 = glm::rotate(m_Front, angleX, glm::normalize(m_Up));
 	glm::vec3 newFront2 = glm::rotate(newFront1, angleY, glm::normalize(glm::cross(m_Up, newFront1)));
 
 	return glm::normalize(newFront2);
