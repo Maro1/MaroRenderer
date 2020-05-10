@@ -29,6 +29,7 @@ void Application::Run()
 	std::string filename = "Box_Texture.png";
 
 	Model cube(path, filename);
+
 	Actor cubeActor(&cube);
 	Actor* cubeActor2 = new Actor(&cube);
 
@@ -85,6 +86,14 @@ void Application::PollEvents()
 	{
 		m_Camera->Right(m_DeltaTime);
 	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_E) == GLFW_PRESS)
+	{
+		m_Camera->Up(m_DeltaTime);
+	}
+	if (glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_Q) == GLFW_PRESS)
+	{
+		m_Camera->Down(m_DeltaTime);
+	}
 }
 
 void Application::OnEvent(const Event& e)
@@ -110,6 +119,11 @@ void Application::OnEvent(const Event& e)
 		{
 			m_Camera->AltLeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
 		}
+		// Middle mouse button + alt
+		else if (button == 2 && mods == 4)
+		{
+			m_Camera->AltMiddleMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
+		}
 		else if (button == 0)
 		{
 			m_Camera->LeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
@@ -123,6 +137,7 @@ void Application::OnEvent(const Event& e)
 		{
 			m_Camera->AltLeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 			m_Camera->LeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
+			m_Camera->AltMiddleMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 		}
 	}
 	else if (e.GetType() == EventType::MouseMove)
@@ -131,7 +146,7 @@ void Application::OnEvent(const Event& e)
 		float x = mousemoved->GetX();
 		float y = mousemoved->GetY();
 		bool alt = glfwGetKey(m_Window->GetGLFWwindow(), GLFW_KEY_LEFT_ALT) == GLFW_PRESS;
-		m_Camera->MouseMoved(x, y, alt);
+		m_Camera->MouseMoved(x, y, alt, m_DeltaTime);
 	}
 	else if (e.GetType() == EventType::WindowResize)
 	{
