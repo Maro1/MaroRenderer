@@ -29,6 +29,7 @@ void Application::Run()
 	std::string filename = "Box_Texture.png";
 
 	Model cube(path, filename);
+
 	Actor cubeActor(&cube);
 	Actor* cubeActor2 = new Actor(&cube);
 
@@ -118,6 +119,11 @@ void Application::OnEvent(const Event& e)
 		{
 			m_Camera->AltLeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
 		}
+		// Middle mouse button + alt
+		else if (button == 2 && mods == 4)
+		{
+			m_Camera->AltMiddleMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
+		}
 		else if (button == 0)
 		{
 			m_Camera->LeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
@@ -131,6 +137,7 @@ void Application::OnEvent(const Event& e)
 		{
 			m_Camera->AltLeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 			m_Camera->LeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
+			m_Camera->AltMiddleMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 		}
 	}
 	else if (e.GetType() == EventType::MouseMove)

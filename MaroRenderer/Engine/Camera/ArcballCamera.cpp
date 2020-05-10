@@ -40,15 +40,26 @@ void ArcballCamera::LeftMousePressed(bool pressed, int x, int y)
 	}
 }
 
+void ArcballCamera::AltMiddleMousePressed(bool pressed, int x, int y)
+{
+	if (!pressed)
+	{
+		m_AltMiddleMouseEvent = 0;
+	}
+	else
+	{
+		// Previous mouse position set when first clicking
+		m_AltMiddlePrevPos = glm::vec2(x, y);
+		m_AltMiddleMouseEvent = 1;
+	}
+}
+
 void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 {
 	if (alt)
 	{
-		/* Don't move on first ALT + click */
-		if (m_AltMouseEvent == 0)
-			return;
 
-		else
+		if (m_AltMouseEvent == 1)
 		{
 			// Current mouse position
 			m_AltCurrPos = glm::vec2(x, y);
@@ -59,9 +70,29 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 			// Calculate camera vectors
 			m_Front = glm::normalize(m_Target - m_Location);
 			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
-			m_Up = glm::normalize(glm::cross(right, m_Front));
+			m_Up = glm::vec3(0, 1, 0);
+
+			m_AltPrevPos = m_AltCurrPos;
 		}
-		m_AltPrevPos = m_AltCurrPos;
+
+		// Come back to the below at later time 
+
+		/*if (m_AltMiddleMouseEvent == 1)
+		{
+			// Current mouse position
+			m_AltMiddleCurrPos = glm::vec2(x, y);
+
+			// Find new camera location
+			m_Location = Pan((m_AltMiddlePrevPos.x - m_AltMiddleCurrPos.x) * RotationSpeed * deltaTime, 
+				(m_AltMiddlePrevPos.y - m_AltMiddleCurrPos.y) * RotationSpeed * deltaTime);
+
+			// Calculate camera vectors
+			m_Front = glm::normalize(m_Target - m_Location);
+			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
+			m_Up = glm::vec3(0, 1, 0);
+
+			m_AltMiddlePrevPos = m_AltMiddleCurrPos;
+		}*/
 	}
 	else
 	{
@@ -82,8 +113,8 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 			m_Up = glm::vec3(0, 1, 0);
 
 			/* Update target location */
-			m_Target = m_Location + glm::vec3(m_Front.x * DefaultTargetDistance, m_Front.y * DefaultTargetDistance, 
-				m_Front.z * DefaultTargetDistance);
+			m_Target = m_Location + glm::vec3(m_Front.x * m_TargetDistance, m_Front.y * m_TargetDistance,
+				m_Front.z * m_TargetDistance);
 		}
 		m_PrevPos = m_CurrPos;
 	}
@@ -96,12 +127,14 @@ void ArcballCamera::MouseScrolled(int offset)
 		// Zoom out
 		m_Location = ((float)(ScrollSpeed - offset)) * m_Location;
 		m_Target = ((float)(ScrollSpeed - offset)) * m_Target;
+		m_TargetDistance += (ScrollSpeed - offset);
 	}
 	else
 	{
 		// Zoom in
 		m_Location = ((float)(offset - ScrollSpeed)) * m_Location;
 		m_Target = ((float)(offset - ScrollSpeed)) * m_Target;
+		m_TargetDistance -= (ScrollSpeed - offset);
 	}
 }
 
@@ -151,6 +184,7 @@ void ArcballCamera::Down(float deltaTime)
 glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)
 {
 	// X rotation - Rodrigues Rotation Formula
+
 	glm::vec3 originLoc = m_Location - m_Target;
 
 	glm::vec3 NewLocation = (1 - glm::cos(angleX)) * (glm::dot(originLoc, m_Up)) * m_Up + glm::cos(angleX)
@@ -160,8 +194,8 @@ glm::vec3 ArcballCamera::Tumble(float angleX, float angleY)
 	NewLocation = (1 - glm::cos(angleY)) * (glm::dot(NewLocation, glm::normalize(glm::cross(m_Front, m_Up)))) * glm::normalize(glm::cross(m_Front, m_Up)) + glm::cos(angleY)
 		* NewLocation + glm::sin(angleY) * glm::cross(glm::normalize(glm::cross(m_Front, m_Up)), NewLocation);
 
-
 	NewLocation += m_Target;
+
 
 	return NewLocation;
 }
@@ -173,6 +207,16 @@ glm::vec3 ArcballCamera::Look(float angleX, float angleY)
 	glm::vec3 newFront2 = glm::rotate(newFront1, angleY, glm::normalize(glm::cross(m_Up, newFront1)));
 
 	return glm::normalize(newFront2);
+}
+
+glm::vec3 ArcballCamera::Pan(float amountX, float amountY)
+{
+	glm::vec3 newLocation = m_Location;
+
+	newLocation += amountX * glm::cross(m_Front, m_Up);
+	newLocation += amountY * m_Up;
+
+	return newLocation;
 }
 
 
