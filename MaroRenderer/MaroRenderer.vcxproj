@@ -158,6 +158,8 @@
   <ItemGroup>
     <None Include="Engine\Shaders\basic2d.fs" />
     <None Include="Engine\Shaders\basic2d.vs" />
+    <None Include="Engine\Shaders\normal_mapping.fs" />
+    <None Include="Engine\Shaders\normal_mapping.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Application.h" />

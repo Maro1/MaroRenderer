@@ -7,7 +7,7 @@ Application::Application()
 
 	m_Window = new Window();
 	m_Renderer = new Renderer();
-	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/basic2d.vs", "Engine/Shaders/basic2d.fs");
+	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/normal_mapping.vs", "Engine/Shaders/normal_mapping.fs");
 	m_Camera = new ArcballCamera(m_Window->GetWidth(), m_Window->GetHeight());
 
 	m_Window->SetEventCallback(BIND_FUNC(OnEvent));
@@ -27,8 +27,9 @@ void Application::Run()
 
 	std::string path = "Assets/cube.obj";
 	std::string filename = "Assets/Box_Texture.png";
+	std::string normalPath = "Assets/Box_Normal.png";
 
-	Model cube(path, filename);
+	Model cube(path, filename, normalPath);
 
 	Actor cubeActor(&cube);
 	Actor* cubeActor2 = new Actor(&cube);

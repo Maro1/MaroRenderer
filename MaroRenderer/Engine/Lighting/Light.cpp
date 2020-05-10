@@ -28,7 +28,7 @@ Shader* Light::CreateShader()
 
 Model* Light::CreateModel()
 {
-	std::string Path = "cube.obj";
+	std::string Path = "Assets/cube.obj";
 	Model* LightModel = new Model(Path);
 	return LightModel;
 }

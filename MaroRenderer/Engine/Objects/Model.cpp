@@ -77,6 +77,22 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 	}
 
+	Texture diffuse;
+	diffuse.Type = TextureType::DIFFUSE;
+	diffuse.Path = m_DiffusePath;
+
+	diffuse.Id = TextureFromFile(m_DiffusePath.c_str());
+	textures.push_back(diffuse);
+
+	if (m_NormalPath != "") {
+		Texture normal;
+		normal.Type = TextureType::NORMAL;
+		normal.Path = m_NormalPath;
+
+		normal.Id = TextureFromFile(m_NormalPath.c_str());
+		textures.push_back(normal);
+	}
+
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
