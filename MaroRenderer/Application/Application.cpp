@@ -25,8 +25,8 @@ void Application::Run()
 	GUILayer layer(m_Window, this);
 	layer.Attach();
 
-	std::string path = "cube.obj";
-	std::string filename = "Box_Texture.png";
+	std::string path = "Assets/cube.obj";
+	std::string filename = "Assets/Box_Texture.png";
 
 	Model cube(path, filename);
 
