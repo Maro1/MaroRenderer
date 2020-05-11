@@ -15,7 +15,6 @@ void Mesh::Draw(Shader* shader)
 
 	for (unsigned int i = 0; i < m_Textures.size(); i++)
 	{
-		std::cout << m_Textures.size() << std::endl;
 		glActiveTexture(GL_TEXTURE0 + i); 
 		std::string number;
 		TextureType type = m_Textures[i].Type;
@@ -62,7 +61,15 @@ void Mesh::InitMesh()
 
 	// TexCoord position
 	glEnableVertexAttribArray(2);
-	glad_glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+	// Tangent vector
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+
+	// BiTangent vector
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 
 	glBindVertexArray(0);
 }

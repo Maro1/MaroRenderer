@@ -16,7 +16,7 @@ void Model::Draw(Shader* shader)
 void Model::LoadModel(std::string& path)
 {
 	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs |aiProcess_CalcTangentSpace);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -61,6 +61,15 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vertex.Normal.y = mesh->mNormals[i].y;
 		vertex.Normal.z = mesh->mNormals[i].z;
 
+		// Tangent space
+		vertex.Tangent.x = mesh->mTangents[i].x;
+		vertex.Tangent.y = mesh->mTangents[i].y;
+		vertex.Tangent.z = mesh->mTangents[i].z;
+
+		vertex.BiTangent.x = mesh->mBitangents[i].x;
+		vertex.BiTangent.x = mesh->mBitangents[i].x;
+		vertex.BiTangent.x = mesh->mBitangents[i].x;
+
 		if (mesh->mTextureCoords[0])
 		{
 			glm::vec2 vec;
@@ -77,12 +86,15 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 	}
 
-	Texture diffuse;
-	diffuse.Type = TextureType::DIFFUSE;
-	diffuse.Path = m_DiffusePath;
+	if(m_DiffusePath != "")
+	{
+		Texture diffuse;
+		diffuse.Type = TextureType::DIFFUSE;
+		diffuse.Path = m_DiffusePath;
 
-	diffuse.Id = TextureFromFile(m_DiffusePath.c_str());
-	textures.push_back(diffuse);
+		diffuse.Id = TextureFromFile(m_DiffusePath.c_str());
+		textures.push_back(diffuse);
+	}
 
 	if (m_NormalPath != "") {
 		Texture normal;

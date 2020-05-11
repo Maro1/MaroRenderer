@@ -7,6 +7,7 @@ out vec4 FragColor;
 in vec3 Normal;  
 in vec3 FragPos;  
 in vec2 TexCoord;
+in mat3 TBN;
 
 struct DirLight {
     vec3 direction;
@@ -42,8 +43,11 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 void main()
 {
 	vec3 norm = texture(normalMap, TexCoord).rgb;
+    norm.b = 1 - norm.b;
     norm = normalize(norm * 2.0 - 1.0);
-	vec3 viewDir = normalize(viewPos - FragPos);
+    norm = normalize(TBN * norm);
+
+	vec3 viewDir = normalize((viewPos - FragPos)*TBN);
 
 	vec3 result = CalcDirLight(directionLight, norm, viewDir);
 
@@ -60,7 +64,7 @@ void main()
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir) 
 {
-	vec3 lightDirection = normalize(-light.direction);
+	vec3 lightDirection = normalize(-light.direction*TBN);
 
 	// Diffuse
     float diff = max(dot(normal, lightDirection), 0.0);
@@ -79,7 +83,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
-    vec3 lightDirection = normalize(light.position - fragPos);
+    vec3 lightDirection = normalize(TBN*light.position - fragPos*TBN);
 
     // Diffuse
     float diff = max(dot(normal, lightDirection), 0.0);
