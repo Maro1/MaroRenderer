@@ -170,5 +170,8 @@
     <ClInclude Include="Engine\Lighting\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Application\File\FileHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

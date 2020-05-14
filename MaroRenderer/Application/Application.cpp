@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "File/FileHandler.h"
 
 #define BIND_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 
@@ -106,6 +107,11 @@ void Application::OnEvent(const Event& e)
 		{
 			m_Scene->ToggleDirectionalLight();
 			LOG_INFO("Toggled!");
+		}
+		if (keypressed->GetKeyCode() == GLFW_KEY_SPACE)
+		{
+			std::string filePath = FileHandler::ShowOpenFileDialog();
+			std::cout << "Filepath: " << filePath << std::endl;
 		}
 
 	}
