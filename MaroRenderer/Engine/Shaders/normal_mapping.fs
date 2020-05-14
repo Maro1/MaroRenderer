@@ -70,8 +70,8 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     float diff = max(dot(normal, lightDirection), 0.0);
 
 	// Specular
-    vec3 reflectDir = reflect(-lightDirection, normal);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 halfwayDir = normalize(lightDirection + viewDir);  
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
 
 	// Results 
 	vec3 ambient = light.ambient * vec3(texture(diffuseMap, TexCoord));
@@ -89,8 +89,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float diff = max(dot(normal, lightDirection), 0.0);
 
     // Specular
-    vec3 reflectDir = reflect(-lightDirection, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 halfwayDir = normalize(lightDirection + viewDir);  
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
 
     // Attenuation
     float distance = length(light.position - fragPos);

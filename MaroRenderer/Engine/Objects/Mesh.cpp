@@ -20,12 +20,12 @@ void Mesh::Draw(Shader* shader)
 		TextureType type = m_Textures[i].Type;
 		if (type == TextureType::DIFFUSE) 
 		{
-			shader->SetFloat("diffuseMap", i);
+			shader->SetInt("diffuseMap", i);
 			glActiveTexture(GL_TEXTURE0);
 		}
 		else if (type == TextureType::NORMAL)
 		{
-			shader->SetFloat("normalMap", i);
+			shader->SetInt("normalMap", i);
 			glActiveTexture(GL_TEXTURE1);
 		}
 

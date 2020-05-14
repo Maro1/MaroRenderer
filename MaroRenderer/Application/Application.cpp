@@ -26,8 +26,8 @@ void Application::Run()
 	layer.Attach();
 
 	std::string path = "Assets/cube.obj";
-	std::string filename = "Assets/Box_Texture.png"; // Assets/Box_Texture.png
-	std::string normalPath = "Assets/Box_Normal.png"; // Assets/Box_Normal.png
+	std::string filename = "Assets/Box_Texture.png"; 
+	std::string normalPath = "Assets/Box_Normal.png"; 
 
 	Model cube(path, filename, normalPath);
 
