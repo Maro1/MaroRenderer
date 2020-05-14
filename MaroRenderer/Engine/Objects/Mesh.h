@@ -13,12 +13,19 @@ struct Vertex
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
+	glm::vec3 Tangent;
+	glm::vec3 BiTangent;
+};
+
+enum class TextureType
+{
+	DIFFUSE, NORMAL
 };
 
 struct Texture
 {
 	unsigned int Id;
-	std::string Type;
+	TextureType Type;
 	std::string Path;
 };
 

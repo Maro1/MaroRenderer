@@ -40,6 +40,6 @@ private:
 	glm::vec3 m_Color;
 
 	inline static Shader* DefaultActorShader() { 
-		return Shader::CreateShaderFromPath("Engine/Shaders/basic2d.vs", "Engine/Shaders/basic2d.fs"); 
+		return Shader::CreateShaderFromPath("Engine/Shaders/normal_mapping.vs", "Engine/Shaders/normal_mapping.fs"); 
 	}
 };

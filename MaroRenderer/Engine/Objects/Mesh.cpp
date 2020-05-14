@@ -13,22 +13,24 @@ void Mesh::Draw(Shader* shader)
 {
 	shader->Use();
 
-	unsigned int diffuseNr = 1;
-	unsigned int specularNr = 1;
 	for (unsigned int i = 0; i < m_Textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); 
 		std::string number;
-		std::string name = m_Textures[i].Type;
-		if (name == "texture_diffuse")
-			number = std::to_string(diffuseNr++);
-		else if (name == "texture_specular")
-			number = std::to_string(specularNr++);
+		TextureType type = m_Textures[i].Type;
+		if (type == TextureType::DIFFUSE) 
+		{
+			shader->SetInt("diffuseMap", i);
+			glActiveTexture(GL_TEXTURE0);
+		}
+		else if (type == TextureType::NORMAL)
+		{
+			shader->SetInt("normalMap", i);
+			glActiveTexture(GL_TEXTURE1);
+		}
 
-		shader->SetFloat(("material." + name + number).c_str(), i);
 		glBindTexture(GL_TEXTURE_2D, m_Textures[i].Id);
 	}
-	glActiveTexture(GL_TEXTURE0);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
@@ -59,7 +61,15 @@ void Mesh::InitMesh()
 
 	// TexCoord position
 	glEnableVertexAttribArray(2);
-	glad_glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+	// Tangent vector
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+
+	// BiTangent vector
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 
 	glBindVertexArray(0);
 }
