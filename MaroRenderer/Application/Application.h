@@ -33,6 +33,8 @@ public:
 	inline Renderer* GetRenderer() { return m_Renderer; }
 	inline ArcballCamera* GetCamera() { return m_Camera; }
 
+	inline void SetViewPortFocused(bool focused) { m_ViewPortFocused = focused; }
+
 private:
 
 	Window* m_Window;
@@ -48,4 +50,6 @@ private:
 
 	float m_PrevTime = 0;
 	float m_DeltaTime = 0;
+
+	bool m_ViewPortFocused = false;
 };

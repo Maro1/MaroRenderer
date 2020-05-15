@@ -122,8 +122,13 @@ void GUILayer::DisplayViewport()
 		// Draw texture to viewport
 		ImGui::Image((void*)(intptr_t)tex, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y), ImVec2(0, 1), ImVec2(1, 0));
 
-		m_ViewPortRegionMin = ImGui::GetWindowContentRegionMin();
-
+		if (ImGui::IsWindowFocused()) {
+			m_App->SetViewPortFocused(true);
+		}
+		else
+		{
+			m_App->SetViewPortFocused(false);
+		}
 		m_App->GetRenderer()->UpdateFrameBuffer(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
 	}
 	ImGui::End();
