@@ -98,6 +98,13 @@ void Window::SetCallbacks()
 			}
 		});
 
+	glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int character)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent event(character);
+			data.EventCallback(event);
+		});
+
 	glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos)
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

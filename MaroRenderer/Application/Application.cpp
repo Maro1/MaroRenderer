@@ -12,6 +12,8 @@ Application::Application()
 	m_Camera = new ArcballCamera(m_Window->GetWidth(), m_Window->GetHeight());
 
 	m_Window->SetEventCallback(BIND_FUNC(OnEvent));
+
+	m_GuiLayer = new GUILayer(m_Window, this);
 }
 
 Application::~Application()
@@ -22,9 +24,6 @@ void Application::Run()
 {
 	m_DeltaTime = glfwGetTime() - m_PrevTime;
 	m_PrevTime = glfwGetTime();
-
-	GUILayer layer(m_Window, this);
-	layer.Attach();
 
 	std::string path = "Assets/cube.obj";
 	std::string filename = "Assets/Box_Texture.png"; 
@@ -49,24 +48,26 @@ void Application::Run()
 
 	cubeActor2->SetLocation(glm::vec3(2.0f, 0.0f, 0.0f));
 
+	m_GuiLayer->SetActiveNode(m_Scene->GetRoot());
+	m_GuiLayer->Attach();
+
 	while (!m_Window->ShouldClose())
 	{
 		PollEvents();
 
 		m_Scene->RotateLight(glfwGetTime());
 
-		layer.Begin();
-		layer.SetStyle(GUIStyle::Photoshop);
+		m_GuiLayer->Begin();
+		m_GuiLayer->SetStyle(GUIStyle::Photoshop);
 
 		m_Window->Update();
 
-		cubeActor.SetColor(glm::vec3(layer.GetColor()[0], layer.GetColor()[1], layer.GetColor()[2]));
 
 		m_Renderer->Clear();
 		m_Scene->UpdateShaders();
 		m_Scene->Render();
 
-		layer.End();
+		m_GuiLayer->End();
 	}
 }
 
@@ -100,6 +101,11 @@ void Application::PollEvents()
 
 void Application::OnEvent(const Event& e)
 {
+	if (e.GetType() == EventType::KeyTyped)
+	{
+		KeyTypedEvent* keytyped = (KeyTypedEvent*)&e;
+		m_GuiLayer->KeyTyped(keytyped);
+	}
 	if (e.GetType() == EventType::KeyPress)
 	{
 		KeyPressedEvent* keypressed = (KeyPressedEvent*)&e;
@@ -107,11 +113,6 @@ void Application::OnEvent(const Event& e)
 		{
 			m_Scene->ToggleDirectionalLight();
 			LOG_INFO("Toggled!");
-		}
-		if (keypressed->GetKeyCode() == GLFW_KEY_SPACE)
-		{
-			std::string filePath = FileHandler::ShowOpenFileDialog();
-			std::cout << "Filepath: " << filePath << std::endl;
 		}
 
 	}

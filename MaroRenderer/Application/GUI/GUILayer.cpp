@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "Application/File/FileHandler.h"
 
 GUILayer::GUILayer(Window* window, Application* app)
 {
@@ -39,8 +40,6 @@ void GUILayer::Begin()
 
 	DisplayMainMenu();
 
-	
-
 	ImGui::Begin("FPS");
 	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
 	ImGui::SetWindowSize(ImVec2(m_WindowWidth / 10, m_WindowHeight/20), ImGuiCond_Once);
@@ -50,6 +49,7 @@ void GUILayer::Begin()
 
 	ImGui::Begin("Hierarchy");
 	DisplayHierarchy(&m_App->GetScene()->GetRoot()->GetChildren());
+
 	ImGui::End();
 
 	DisplayTabs();
@@ -63,6 +63,17 @@ void GUILayer::End()
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void GUILayer::KeyTyped(const KeyTypedEvent* e)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	int character = e->GetKeyCode();
+	if (character > 0 && character < 0x10000)
+	{
+		io.AddInputCharacter((unsigned int)character);
+		io.KeysDown[e->GetKeyCode()] = true;
+	}
 }
 
 void GUILayer::SetStyle(GUIStyle style)
@@ -86,8 +97,13 @@ void GUILayer::DisplayTabs()
 	{
 		if (ImGui::BeginTabItem("Transform"))
 		{
-			static float vec4a[4] = { 0.10f, 0.20f, 0.30f, 0.44f };
-			ImGui::InputFloat3("Location: ", vec4a, ImGuiInputTextFlags_AllowTabInput);
+			static float vec4a[4] = { m_ActiveNode->GetLocation().x, m_ActiveNode->GetLocation().y, m_ActiveNode->GetLocation().z, 0.44f };
+			
+			ImGui::Text("Location: ");
+			ImGui::SameLine();
+			ImGui::InputFloat3("", vec4a, "%.3f");
+			char buffer[20] = "";
+			ImGui::InputText("Test: ", buffer, IM_ARRAYSIZE(buffer));
 			ImGui::Text("Rotation");
 			ImGui::Text("Scale");
 			ImGui::EndTabItem();
@@ -123,6 +139,7 @@ void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 		ImGui::PushID((*object)->GetUUID());
 		bool open = ImGui::TreeNodeEx((*object)->GetLabel().c_str(), flags);
 		if (ImGui::IsItemClicked()) {
+			m_ActiveNode = *object;
 			m_App->GetCamera()->Target((*object)->GetLocation());
 		}
 
@@ -137,12 +154,31 @@ void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 	}
 }
 
+void GUILayer::ImportModel()
+{
+	std::string filePath = FileHandler::ShowOpenFileDialog(FileHandler::FileType::MESH_FILE);
+	// Remember to delete these
+	Model* model = new Model(filePath);
+	Actor* actor = new Actor(model);
+	m_App->GetScene()->AddActor(actor);
+	m_ActiveNode = actor;
+}
+
+void GUILayer::ImportTexture()
+{
+}
+
 void GUILayer::DisplayMainMenu()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Import model")) {}
+			if (ImGui::IsItemClicked())
+			{
+				ImportModel();
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Edit"))

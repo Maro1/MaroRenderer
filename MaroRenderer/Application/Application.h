@@ -15,6 +15,8 @@
 #include "Engine/Objects/Actor.h"
 #include "Engine/Objects/Scene.h"
 
+class GUILayer;
+
 class Application
 {
 public:
@@ -37,6 +39,7 @@ private:
 	Shader* m_Shader;
 	ArcballCamera* m_Camera;
 	Scene* m_Scene;
+	GUILayer* m_GuiLayer;
 
 	glm::mat4 m_ModelMat = glm::mat4(1.0f);
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);

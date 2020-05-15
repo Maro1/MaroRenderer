@@ -20,6 +20,9 @@ public:
 	void Begin();
 	void End();
 
+	void KeyTyped(const KeyTypedEvent* e);
+	void SetActiveNode(SceneNode* node) { m_ActiveNode = node; }
+
 	void SetStyle(GUIStyle style);
 
 	inline float* GetColor() { return color; }
@@ -27,7 +30,7 @@ public:
 private:
 	Window* m_Window;
 	Application* m_App;
-
+	SceneNode* m_ActiveNode;
 
 	int m_WindowHeight; 
 	int m_WindowWidth;
@@ -38,6 +41,9 @@ private:
 	void DisplayHierarchy(std::vector<SceneNode*>* objects);
 	void DisplayMainMenu();
 	void DisplayTabs();
+	
+	void ImportModel();
+	void ImportTexture();
 
 	float color[4] = { 0.2f,0.2f,0.2f,0.2f };
 };
