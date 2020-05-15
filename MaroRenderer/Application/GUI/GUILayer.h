@@ -26,6 +26,7 @@ public:
 
 	inline float* GetColor() { return color; }
 
+
 private:
 	Window* m_Window;
 	Application* m_App;
@@ -41,6 +42,9 @@ private:
 	void DisplayMainMenu();
 	void DisplayTabs();
 	void DisplayViewport();
+	void DisplayConsole();
+
+	void CreateDockspace();
 	
 	void ImportModel();
 	void ImportTexture();

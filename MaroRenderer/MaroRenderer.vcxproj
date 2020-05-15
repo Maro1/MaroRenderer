@@ -146,6 +146,7 @@
     <ClCompile Include="Engine\Objects\SceneNode.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="include\imgui\imgui.cpp" />
+    <ClCompile Include="include\imgui\imgui_demo.cpp" />
     <ClCompile Include="include\imgui\imgui_draw.cpp" />
     <ClCompile Include="include\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp" />

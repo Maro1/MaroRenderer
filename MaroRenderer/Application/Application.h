@@ -36,7 +36,7 @@ public:
 private:
 
 	Window* m_Window;
-	Renderer* m_Renderer;
+	Renderer* m_Renderer ;
 	Shader* m_Shader;
 	ArcballCamera* m_Camera;
 	Scene* m_Scene;

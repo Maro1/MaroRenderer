@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_internal.h"
 #include "Application/File/FileHandler.h"
 
 GUILayer::GUILayer(Window* window, Application* app)
@@ -18,6 +19,7 @@ void GUILayer::Attach()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	ImGui::StyleColorsDark();
 
@@ -38,13 +40,11 @@ void GUILayer::Begin()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
+	CreateDockspace();
+
 	DisplayMainMenu();
 
-	ImGui::Begin("FPS");
-	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
-	ImGui::SetWindowSize(ImVec2(m_WindowWidth / 10, m_WindowHeight/20), ImGuiCond_Once);
-	ImGui::SetWindowPos(ImVec2(m_WindowWidth / 10, 0), ImGuiCond_Once);
-	ImGui::End();
+	DisplayConsole();
 
 
 	ImGui::Begin("Hierarchy");
@@ -116,19 +116,70 @@ void GUILayer::DisplayTabs()
 
 void GUILayer::DisplayViewport()
 {
-	ImGui::SetNextWindowSize(ImVec2(m_Window->GetWidth() / 2 + 10, m_Window->GetHeight() / 2 + 10), ImGuiCond_Once);
-	ImGui::SetNextWindowPos(ImVec2(m_Window->GetWidth() / 4, m_Window->GetHeight() / 4),  ImGuiCond_Once);
-	ImGui::Begin("Viewport", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar
-					| ImGuiWindowFlags_NoResize);
+	ImGui::SetWindowSize(ImVec2(m_Window->GetWidth() / 2 + 10, m_Window->GetHeight() / 2 + 10), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(m_Window->GetWidth() / 4, m_Window->GetHeight() / 4),  ImGuiCond_Once);
+	ImGui::Begin("Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize);
 	{
 		ImVec2 pos = ImGui::GetCursorScreenPos();
+
+		m_PrevViewportSize.x = ImGui::GetWindowSize().x;
+		m_PrevViewportSize.y = ImGui::GetWindowSize().y;
 
 		// Get FBO texture
 		unsigned int tex = m_App->GetRenderer()->GetFBOTexture();
 
 		// Draw texture to viewport
-		ImGui::Image((void*)(intptr_t)tex, ImVec2(m_Window->GetWidth() / 2, m_Window->GetHeight() / 2), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((void*)(intptr_t)tex, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y), ImVec2(0, 1), ImVec2(1, 0));
 	}
+	ImGui::End();
+}
+
+void GUILayer::DisplayConsole()
+{
+	ImGui::Begin("Console");
+	// fill at later time
+	ImGui::End();
+}
+
+void GUILayer::CreateDockspace()
+{
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->GetWorkPos());
+	ImGui::SetNextWindowSize(viewport->GetWorkSize());
+	ImGui::SetNextWindowViewport(viewport->ID);
+	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	ImGui::Begin("MyDockSpace", NULL, window_flags);
+
+	ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
+	if (!ImGui::DockBuilderGetNode(dockspaceID)) {
+		ImGui::DockBuilderRemoveNode(dockspaceID);
+		ImGui::DockBuilderAddNode(dockspaceID, ImGuiDockNodeFlags_None);
+
+		ImGuiID dock_main_id = dockspaceID;
+		ImGuiID dock_up_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.5f, nullptr, &dock_main_id);
+		ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
+		ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
+		ImGuiID dock_down_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.1f, nullptr, &dock_main_id);
+		ImGuiID dock_middle_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_None, 0.2f, nullptr, &dock_main_id);
+
+		ImGui::DockBuilderDockWindow("Properties", dock_right_id);
+		ImGui::DockBuilderDockWindow("Hierarchy", dock_left_id);
+		ImGui::DockBuilderDockWindow("Console", dock_down_id);
+		ImGui::DockBuilderDockWindow("Viewport", dock_up_id);
+
+		// Disable tab bar for custom toolbar
+		ImGuiDockNode* node = ImGui::DockBuilderGetNode(dock_up_id);
+		node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+		node->LocalFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
+		node->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton;
+
+		ImGui::DockBuilderFinish(dock_main_id);
+	}
+
+	ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f));
+
 	ImGui::End();
 }
 

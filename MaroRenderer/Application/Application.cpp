@@ -45,7 +45,6 @@ void Application::Run()
 	m_Scene->AddActor(&cubeActor);
 	cubeActor.AddChild(cubeActor2);
 
-
 	cubeActor2->SetLocation(glm::vec3(2.0f, 0.0f, 0.0f));
 
 	m_GuiLayer->SetActiveNode(m_Scene->GetRoot());
