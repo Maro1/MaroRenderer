@@ -122,9 +122,6 @@ void GUILayer::DisplayViewport()
 	{
 		ImVec2 pos = ImGui::GetCursorScreenPos();
 
-		m_PrevViewportSize.x = ImGui::GetWindowSize().x;
-		m_PrevViewportSize.y = ImGui::GetWindowSize().y;
-
 		// Get FBO texture
 		unsigned int tex = m_App->GetRenderer()->GetFBOTexture();
 
