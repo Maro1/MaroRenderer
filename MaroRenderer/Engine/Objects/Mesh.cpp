@@ -38,6 +38,19 @@ void Mesh::Draw(Shader* shader)
 	glBindVertexArray(0);
 }
 
+void Mesh::AddTexture(unsigned int textureID, TextureType type)
+{
+	for (unsigned int i = 0; i < m_Textures.size(); i++)
+	{
+		if (m_Textures[i].Type == type)
+		{
+			// removes texture from other meshes using the sam texture
+			// glDeleteTextures(1, &m_Textures[i].Id);
+			m_Textures[i].Id = textureID;
+		}
+	}
+}
+
 void Mesh::InitMesh()
 {
 	glGenVertexArrays(1, &VAO);

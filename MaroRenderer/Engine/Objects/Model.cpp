@@ -13,6 +13,16 @@ void Model::Draw(Shader* shader)
 	}
 }
 
+unsigned int Model::AddTexture(std::string& texturePath, TextureType type)
+{
+	unsigned int textureID = TextureFromFile(texturePath.c_str());
+	for (auto mesh : m_Meshes)
+	{
+		mesh.AddTexture(textureID, type);
+	}
+	return textureID;
+}
+
 void Model::LoadModel(std::string& path)
 {
 	Assimp::Importer import;
@@ -90,7 +100,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		Texture diffuse;
 		diffuse.Type = TextureType::DIFFUSE;
-		diffuse.Path = m_DiffusePath;
 
 		diffuse.Id = TextureFromFile(m_DiffusePath.c_str());
 		textures.push_back(diffuse);
@@ -99,7 +108,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	if (m_NormalPath != "") {
 		Texture normal;
 		normal.Type = TextureType::NORMAL;
-		normal.Path = m_NormalPath;
 
 		normal.Id = TextureFromFile(m_NormalPath.c_str());
 		textures.push_back(normal);
@@ -153,3 +161,5 @@ unsigned int Model::TextureFromFile(const char* path)
 
 	return textureID;
 }
+
+

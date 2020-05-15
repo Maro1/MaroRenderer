@@ -141,16 +141,13 @@ void Application::OnEvent(const Event& e)
 	}
 	else if (e.GetType() == EventType::MouseButtonRelease)
 	{
-		if (m_ViewPortFocused)
+		MouseReleasedEvent* mousereleased = (MouseReleasedEvent*)&e;
+		int button = mousereleased->GetButton();
+		if (button == 0)
 		{
-			MouseReleasedEvent* mousereleased = (MouseReleasedEvent*)&e;
-			int button = mousereleased->GetButton();
-			if (button == 0)
-			{
-				m_Camera->AltLeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
-				m_Camera->LeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
-				m_Camera->AltMiddleMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
-			}
+			m_Camera->AltLeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
+			m_Camera->LeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
+			m_Camera->AltMiddleMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 		}
 	}
 	else if (e.GetType() == EventType::MouseMove)

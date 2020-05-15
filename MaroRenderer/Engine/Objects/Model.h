@@ -24,6 +24,10 @@ public:
 
 	void Draw(Shader* shader);
 
+	unsigned int AddTexture(std::string& texturePath, TextureType type);
+
+	static unsigned int TextureFromFile(const char* path);
+
 private:
 	void LoadModel(std::string& path);
 	void ProcessNode(aiNode* node, const aiScene* scene);
@@ -35,7 +39,6 @@ private:
 	std::string m_DiffusePath;
 	std::string m_NormalPath;
 
-	unsigned int TextureFromFile(const char* path);
 	
 
 };

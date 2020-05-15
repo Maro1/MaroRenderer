@@ -8,6 +8,7 @@
 
 class Application;
 class SceneNode;
+enum class TextureType;
 
 enum class GUIStyle
 {
@@ -27,8 +28,6 @@ public:
 	void SetActiveNode(SceneNode* node) { m_ActiveNode = node; }
 
 	void SetStyle(GUIStyle style);
-
-	inline float* GetColor() { return color; }
 
 
 private:
@@ -54,7 +53,5 @@ private:
 	void CreateDockspace();
 	
 	void ImportModel();
-	void ImportTexture();
-
-	float color[4] = { 0.2f,0.2f,0.2f,0.2f };
+	unsigned int ImportTexture(TextureType type);
 };

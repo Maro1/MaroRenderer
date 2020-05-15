@@ -84,19 +84,27 @@ void GUILayer::DisplayTabs()
 		if (ImGui::BeginTabItem("Transform"))
 		{
 			static float vec4a[4] = { m_ActiveNode->GetLocation().x, m_ActiveNode->GetLocation().y, m_ActiveNode->GetLocation().z, 0.44f };
-			
+
 			ImGui::Text("Location: ");
 			ImGui::SameLine();
 			ImGui::InputFloat3("", vec4a, "%.3f");
-			char buffer[20] = "";
-			ImGui::InputText("Test: ", buffer, IM_ARRAYSIZE(buffer));
-			ImGui::Text("Rotation");
+			m_ActiveNode->SetLocation(glm::vec3(vec4a[0], vec4a[1], vec4a[2]));
+
+			ImGui::Text("Rotation: ");
+
 			ImGui::Text("Scale");
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Material"))
 		{
-			ImGui::Text("Albedo");
+			ImGui::Text("Diffuse: ");
+			ImGui::SameLine();
+			static unsigned int texId = Model::TextureFromFile("Assets/checkerboard.jpg");
+			ImGui::ImageButton((void*)(intptr_t)texId, ImVec2(100, 100));
+			if (ImGui::IsItemClicked())
+			{
+				texId = ImportTexture(TextureType::DIFFUSE);
+			}
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Lighting"))
@@ -223,8 +231,11 @@ void GUILayer::ImportModel()
 	m_ActiveNode = actor;
 }
 
-void GUILayer::ImportTexture()
+unsigned int GUILayer::ImportTexture(TextureType type)
 {
+	std::string filePath = FileHandler::ShowOpenFileDialog(FileHandler::FileType::TEXTURE_FILE);
+	
+	return m_ActiveNode->GetModel()->AddTexture(filePath, type);
 }
 
 void GUILayer::DisplayMainMenu()
