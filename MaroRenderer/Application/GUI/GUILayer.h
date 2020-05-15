@@ -1,6 +1,10 @@
 #pragma once
 
 #include "Application/Application.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_internal.h"
 
 class Application;
 class SceneNode;
@@ -34,6 +38,9 @@ private:
 
 	int m_WindowHeight; 
 	int m_WindowWidth;
+
+	ImVec2 m_ViewPortRegionMin;
+	ImVec2 m_ViewPortRegionMax;
 
 	void DarculaStyle();
 	void PhotoshopStyle();

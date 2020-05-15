@@ -42,7 +42,13 @@ void Renderer::InitFramebuffer()
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "Framebuffer not complete!" << std::endl;
+}
 
+void Renderer::UpdateFrameBuffer(int x, int y)
+{
+	glBindTexture(GL_TEXTURE_2D, m_FBOTexture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 }
 
 void Renderer::StartRender()

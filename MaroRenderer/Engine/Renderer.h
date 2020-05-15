@@ -21,6 +21,7 @@ public:
 	inline unsigned int GetFBOTexture() { return m_FBOTexture; }
 	void StartRender();
 	void StopRender();
+	void UpdateFrameBuffer(int x, int y);
 
 private:
 

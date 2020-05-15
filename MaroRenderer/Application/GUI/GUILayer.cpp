@@ -1,9 +1,5 @@
 #include "GUILayer.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_internal.h"
 #include "Application/File/FileHandler.h"
 
 GUILayer::GUILayer(Window* window, Application* app)
@@ -120,13 +116,15 @@ void GUILayer::DisplayViewport()
 	ImGui::SetWindowPos(ImVec2(m_Window->GetWidth() / 4, m_Window->GetHeight() / 4),  ImGuiCond_Once);
 	ImGui::Begin("Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize);
 	{
-		ImVec2 pos = ImGui::GetCursorScreenPos();
-
 		// Get FBO texture
 		unsigned int tex = m_App->GetRenderer()->GetFBOTexture();
 
 		// Draw texture to viewport
 		ImGui::Image((void*)(intptr_t)tex, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y), ImVec2(0, 1), ImVec2(1, 0));
+
+		m_ViewPortRegionMin = ImGui::GetWindowContentRegionMin();
+
+		m_App->GetRenderer()->UpdateFrameBuffer(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
 	}
 	ImGui::End();
 }
