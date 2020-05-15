@@ -49,10 +49,11 @@ void GUILayer::Begin()
 
 	ImGui::Begin("Hierarchy");
 	DisplayHierarchy(&m_App->GetScene()->GetRoot()->GetChildren());
-
 	ImGui::End();
 
 	DisplayTabs();
+
+	DisplayViewport();
 
 }
 
@@ -63,17 +64,6 @@ void GUILayer::End()
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void GUILayer::KeyTyped(const KeyTypedEvent* e)
-{
-	ImGuiIO& io = ImGui::GetIO();
-	int character = e->GetKeyCode();
-	if (character > 0 && character < 0x10000)
-	{
-		io.AddInputCharacter((unsigned int)character);
-		io.KeysDown[e->GetKeyCode()] = true;
-	}
 }
 
 void GUILayer::SetStyle(GUIStyle style)
@@ -120,6 +110,24 @@ void GUILayer::DisplayTabs()
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
+	}
+	ImGui::End();
+}
+
+void GUILayer::DisplayViewport()
+{
+	ImGui::SetNextWindowSize(ImVec2(m_Window->GetWidth() / 2 + 10, m_Window->GetHeight() / 2 + 10), ImGuiCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(m_Window->GetWidth() / 4, m_Window->GetHeight() / 4),  ImGuiCond_Once);
+	ImGui::Begin("Viewport", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar
+					| ImGuiWindowFlags_NoResize);
+	{
+		ImVec2 pos = ImGui::GetCursorScreenPos();
+
+		// Get FBO texture
+		unsigned int tex = m_App->GetRenderer()->GetFBOTexture();
+
+		// Draw texture to viewport
+		ImGui::Image((void*)(intptr_t)tex, ImVec2(m_Window->GetWidth() / 2, m_Window->GetHeight() / 2), ImVec2(0, 1), ImVec2(1, 0));
 	}
 	ImGui::End();
 }

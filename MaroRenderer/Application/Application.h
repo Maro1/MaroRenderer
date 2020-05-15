@@ -30,6 +30,7 @@ public:
 	inline Window* GetWindow() { return m_Window; }
 	inline Shader* GetShader() { return m_Shader; }
 	inline Scene* GetScene() { return m_Scene; }
+	inline Renderer* GetRenderer() { return m_Renderer; }
 	inline ArcballCamera* GetCamera() { return m_Camera; }
 
 private:

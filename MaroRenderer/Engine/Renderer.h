@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <vector>
 #include "Shader.h"
+#include "Application/Window.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -13,10 +14,18 @@ class Renderer
 {
 public:
 
-	Renderer();
+	Renderer(Window* window);
 
 	void Clear();
+	void InitFramebuffer();
+	inline unsigned int GetFBOTexture() { return m_FBOTexture; }
+	void StartRender();
+	void StopRender();
 
 private:
+
+	Window* m_Window;
+	unsigned int m_FBOTexture;
+	unsigned int m_Framebuffer;
 
 };

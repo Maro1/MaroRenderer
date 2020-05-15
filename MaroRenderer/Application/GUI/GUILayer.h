@@ -20,7 +20,6 @@ public:
 	void Begin();
 	void End();
 
-	void KeyTyped(const KeyTypedEvent* e);
 	void SetActiveNode(SceneNode* node) { m_ActiveNode = node; }
 
 	void SetStyle(GUIStyle style);
@@ -41,6 +40,7 @@ private:
 	void DisplayHierarchy(std::vector<SceneNode*>* objects);
 	void DisplayMainMenu();
 	void DisplayTabs();
+	void DisplayViewport();
 	
 	void ImportModel();
 	void ImportTexture();

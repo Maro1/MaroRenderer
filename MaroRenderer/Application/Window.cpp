@@ -34,7 +34,7 @@ void Window::CreateWindow(unsigned int width, unsigned height, const char* title
 	m_Data.Title = title;
 
 	glfwMakeContextCurrent(m_Window);
-	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	glfwSetWindowUserPointer(m_Window, &m_Data);
 
@@ -44,6 +44,16 @@ void Window::CreateWindow(unsigned int width, unsigned height, const char* title
 bool Window::ShouldClose()
 {
 	return glfwWindowShouldClose(m_Window);
+}
+
+void Window::HideCursor()
+{
+	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
+void Window::ShowCursor()
+{
+	glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 void Window::SetEventCallback(const EventCallbackFn & Callback)

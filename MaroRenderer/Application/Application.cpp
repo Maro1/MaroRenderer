@@ -7,7 +7,7 @@ Application::Application()
 {
 
 	m_Window = new Window();
-	m_Renderer = new Renderer();
+	m_Renderer = new Renderer(m_Window);
 	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/normal_mapping.vs", "Engine/Shaders/normal_mapping.fs");
 	m_Camera = new ArcballCamera(m_Window->GetWidth(), m_Window->GetHeight());
 
@@ -51,22 +51,24 @@ void Application::Run()
 	m_GuiLayer->SetActiveNode(m_Scene->GetRoot());
 	m_GuiLayer->Attach();
 
+	m_Renderer->InitFramebuffer();
+
 	while (!m_Window->ShouldClose())
 	{
 		PollEvents();
 
 		m_Scene->RotateLight(glfwGetTime());
 
-		m_GuiLayer->Begin();
-		m_GuiLayer->SetStyle(GUIStyle::Photoshop);
-
 		m_Window->Update();
 
-
+		m_Renderer->StartRender();
 		m_Renderer->Clear();
 		m_Scene->UpdateShaders();
 		m_Scene->Render();
+		m_Renderer->StopRender();
 
+		m_GuiLayer->Begin();
+		m_GuiLayer->SetStyle(GUIStyle::Photoshop);
 		m_GuiLayer->End();
 	}
 }
@@ -101,11 +103,6 @@ void Application::PollEvents()
 
 void Application::OnEvent(const Event& e)
 {
-	if (e.GetType() == EventType::KeyTyped)
-	{
-		KeyTypedEvent* keytyped = (KeyTypedEvent*)&e;
-		m_GuiLayer->KeyTyped(keytyped);
-	}
 	if (e.GetType() == EventType::KeyPress)
 	{
 		KeyPressedEvent* keypressed = (KeyPressedEvent*)&e;
