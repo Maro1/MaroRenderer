@@ -103,6 +103,10 @@ void Application::OnEvent(const Event& e)
 			m_Scene->ToggleDirectionalLight();
 			LOG_INFO("Toggled!");
 		}
+		else if (keypressed->GetKeyCode() == GLFW_KEY_F11)
+		{
+			m_Window->ToggleFullscreen();
+		}
 
 	}
 	else if (e.GetType() == EventType::MouseButtonPress)
