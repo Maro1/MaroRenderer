@@ -21,12 +21,10 @@ void Mesh::Draw(Shader* shader)
 		if (type == TextureType::DIFFUSE) 
 		{
 			shader->SetInt("diffuseMap", i);
-			glActiveTexture(GL_TEXTURE0);
 		}
 		else if (type == TextureType::NORMAL)
 		{
 			shader->SetInt("normalMap", i);
-			glActiveTexture(GL_TEXTURE1);
 		}
 
 		glBindTexture(GL_TEXTURE_2D, m_Textures[i].Id);
@@ -35,10 +33,12 @@ void Mesh::Draw(Shader* shader)
 	glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Mesh::AddTexture(unsigned int textureID, TextureType type)
 {
+	bool foundTexture = false;
 	for (unsigned int i = 0; i < m_Textures.size(); i++)
 	{
 		if (m_Textures[i].Type == type)
@@ -46,7 +46,15 @@ void Mesh::AddTexture(unsigned int textureID, TextureType type)
 			// removes texture from other meshes using the same texture
 			glDeleteTextures(1, &m_Textures[i].Id);
 			m_Textures[i].Id = textureID;
+			foundTexture = true;
 		}
+	}
+	if (!foundTexture)
+	{
+		Texture tex;
+		tex.Id = textureID;
+		tex.Type = type;
+		m_Textures.push_back(tex);
 	}
 }
 
