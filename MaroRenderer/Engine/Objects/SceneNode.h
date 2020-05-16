@@ -19,6 +19,7 @@ public:
 	void Update();
 
 	inline glm::vec3 GetLocation() const { return m_Location; }
+	inline glm::vec3 GetLocationP() const { return m_Location; }
 	inline glm::vec3 GetScale() const { return m_Scale; }
 
 	inline void SetLocation(glm::vec3 location) { m_Location = location; }

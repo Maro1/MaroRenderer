@@ -2,6 +2,7 @@
 
 #include <GLFW/glfw3.h>
 #include <functional>
+#include <array>
 #include "Events/Event.h"
 
 class Window
@@ -17,6 +18,8 @@ public:
 	using EventCallbackFn = std::function<void(Event&)>;
 
 	void SetEventCallback(const EventCallbackFn& Callback);
+
+	void ToggleFullscreen();
 
 	inline int GetWidth() { return m_Data.Width; }
 	inline int GetHeight() { return m_Data.Height; }
@@ -38,4 +41,9 @@ private:
 	};
 
 	WindowData m_Data;
+
+	std::array< int, 2 > m_WindowPos{ 0, 0 };
+	std::array< int, 2 > m_WindowSize{ 0, 0 };
+
+	bool m_Fullscreen = false;
 };

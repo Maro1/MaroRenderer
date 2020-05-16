@@ -1,8 +1,6 @@
 #include "GUILayer.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include "Application/File/FileHandler.h"
 
 GUILayer::GUILayer(Window* window, Application* app)
 {
@@ -17,6 +15,7 @@ void GUILayer::Attach()
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	ImGui::StyleColorsDark();
 
@@ -37,15 +36,11 @@ void GUILayer::Begin()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
+	CreateDockspace();
+
 	DisplayMainMenu();
 
-	
-
-	ImGui::Begin("FPS");
-	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
-	ImGui::SetWindowSize(ImVec2(m_WindowWidth / 10, m_WindowHeight/20), ImGuiCond_Once);
-	ImGui::SetWindowPos(ImVec2(m_WindowWidth / 10, 0), ImGuiCond_Once);
-	ImGui::End();
+	DisplayConsole();
 
 
 	ImGui::Begin("Hierarchy");
@@ -53,6 +48,8 @@ void GUILayer::Begin()
 	ImGui::End();
 
 	DisplayTabs();
+
+	DisplayViewport();
 
 }
 
@@ -86,15 +83,37 @@ void GUILayer::DisplayTabs()
 	{
 		if (ImGui::BeginTabItem("Transform"))
 		{
-			static float vec4a[4] = { 0.10f, 0.20f, 0.30f, 0.44f };
-			ImGui::InputFloat3("Location: ", vec4a, ImGuiInputTextFlags_AllowTabInput);
-			ImGui::Text("Rotation");
+			static float vec4a[4] = { m_ActiveNode->GetLocation().x, m_ActiveNode->GetLocation().y, m_ActiveNode->GetLocation().z, 0.44f };
+
+			ImGui::Text("Location: ");
+			ImGui::SameLine();
+			ImGui::InputFloat3("", vec4a, "%.3f");
+			m_ActiveNode->SetLocation(glm::vec3(vec4a[0], vec4a[1], vec4a[2]));
+
+			ImGui::Text("Rotation: ");
+
 			ImGui::Text("Scale");
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Material"))
 		{
-			ImGui::Text("Albedo");
+			ImGui::Text("Diffuse: ");
+			ImGui::SameLine();
+			static unsigned int diffuseId = Model::TextureFromFile("Assets/checkerboard.jpg");
+			ImGui::ImageButton((void*)(intptr_t)diffuseId, ImVec2(100, 100));
+			if (ImGui::IsItemClicked())
+			{
+				diffuseId = ImportTexture(TextureType::DIFFUSE);
+			}
+
+			ImGui::Text("Normal: ");
+			ImGui::SameLine();
+			static unsigned int normalId = Model::TextureFromFile("Assets/checkerboard.jpg");
+			ImGui::ImageButton((void*)(intptr_t)normalId, ImVec2(100, 100));
+			if (ImGui::IsItemClicked())
+			{
+				normalId = ImportTexture(TextureType::NORMAL);
+			}
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Lighting"))
@@ -105,6 +124,80 @@ void GUILayer::DisplayTabs()
 		}
 		ImGui::EndTabBar();
 	}
+	ImGui::End();
+}
+
+void GUILayer::DisplayViewport()
+{
+	ImGui::SetWindowSize(ImVec2(m_Window->GetWidth() / 2 + 10, m_Window->GetHeight() / 2 + 10), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2(m_Window->GetWidth() / 4, m_Window->GetHeight() / 4),  ImGuiCond_Once);
+	ImGui::Begin("Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize);
+	{
+		// Get FBO texture
+		unsigned int tex = m_App->GetRenderer()->GetFBOTexture();
+
+		// Draw texture to viewport
+		ImGui::Image((void*)(intptr_t)tex, ImVec2(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y), ImVec2(0, 1), ImVec2(1, 0));
+
+		if (ImGui::IsWindowFocused()) {
+			m_App->SetViewPortFocused(true);
+		}
+		else
+		{
+			m_App->SetViewPortFocused(false);
+		}
+		m_App->GetRenderer()->UpdateFrameBuffer(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+		m_App->GetCamera()->SetViewPortSize(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+	}
+	ImGui::End();
+}
+
+void GUILayer::DisplayConsole()
+{
+	ImGui::Begin("Console");
+	// fill at later time
+	ImGui::End();
+}
+
+void GUILayer::CreateDockspace()
+{
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->GetWorkPos());
+	ImGui::SetNextWindowSize(viewport->GetWorkSize());
+	ImGui::SetNextWindowViewport(viewport->ID);
+	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	ImGui::Begin("MyDockSpace", NULL, window_flags);
+
+	ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
+	if (!ImGui::DockBuilderGetNode(dockspaceID)) {
+		ImGui::DockBuilderRemoveNode(dockspaceID);
+		ImGui::DockBuilderAddNode(dockspaceID, ImGuiDockNodeFlags_None);
+
+		ImGuiID dock_main_id = dockspaceID;
+		ImGuiID dock_up_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.5f, nullptr, &dock_main_id);
+		ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
+		ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
+		ImGuiID dock_down_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.1f, nullptr, &dock_main_id);
+		ImGuiID dock_middle_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_None, 0.2f, nullptr, &dock_main_id);
+
+		ImGui::DockBuilderDockWindow("Properties", dock_right_id);
+		ImGui::DockBuilderDockWindow("Hierarchy", dock_left_id);
+		ImGui::DockBuilderDockWindow("Console", dock_down_id);
+		ImGui::DockBuilderDockWindow("Viewport", dock_up_id);
+
+		// Disable tab bar for custom toolbar
+		ImGuiDockNode* node = ImGui::DockBuilderGetNode(dock_up_id);
+		node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
+		node->LocalFlags |= ImGuiDockNodeFlags_NoWindowMenuButton;
+		node->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton;
+
+		ImGui::DockBuilderFinish(dock_main_id);
+	}
+
+	ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f));
+
 	ImGui::End();
 }
 
@@ -123,6 +216,7 @@ void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 		ImGui::PushID((*object)->GetUUID());
 		bool open = ImGui::TreeNodeEx((*object)->GetLabel().c_str(), flags);
 		if (ImGui::IsItemClicked()) {
+			m_ActiveNode = *object;
 			m_App->GetCamera()->Target((*object)->GetLocation());
 		}
 
@@ -137,12 +231,34 @@ void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 	}
 }
 
+void GUILayer::ImportModel()
+{
+	std::string filePath = FileHandler::ShowOpenFileDialog(FileHandler::FileType::MESH_FILE);
+	// Remember to delete these
+	Model* model = new Model(filePath);
+	Actor* actor = new Actor(model);
+	m_App->GetScene()->AddActor(actor);
+	m_ActiveNode = actor;
+}
+
+unsigned int GUILayer::ImportTexture(TextureType type)
+{
+	std::string filePath = FileHandler::ShowOpenFileDialog(FileHandler::FileType::TEXTURE_FILE);
+	
+	return m_ActiveNode->GetModel()->AddTexture(filePath, type);
+}
+
 void GUILayer::DisplayMainMenu()
 {
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Import model")) {}
+			if (ImGui::IsItemClicked())
+			{
+				ImportModel();
+			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Edit"))

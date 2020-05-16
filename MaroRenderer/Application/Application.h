@@ -15,6 +15,8 @@
 #include "Engine/Objects/Actor.h"
 #include "Engine/Objects/Scene.h"
 
+class GUILayer;
+
 class Application
 {
 public:
@@ -28,15 +30,19 @@ public:
 	inline Window* GetWindow() { return m_Window; }
 	inline Shader* GetShader() { return m_Shader; }
 	inline Scene* GetScene() { return m_Scene; }
+	inline Renderer* GetRenderer() { return m_Renderer; }
 	inline ArcballCamera* GetCamera() { return m_Camera; }
+
+	inline void SetViewPortFocused(bool focused) { m_ViewPortFocused = focused; }
 
 private:
 
 	Window* m_Window;
-	Renderer* m_Renderer;
+	Renderer* m_Renderer ;
 	Shader* m_Shader;
 	ArcballCamera* m_Camera;
 	Scene* m_Scene;
+	GUILayer* m_GuiLayer;
 
 	glm::mat4 m_ModelMat = glm::mat4(1.0f);
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);
@@ -44,4 +50,6 @@ private:
 
 	float m_PrevTime = 0;
 	float m_DeltaTime = 0;
+
+	bool m_ViewPortFocused = false;
 };

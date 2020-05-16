@@ -7,10 +7,20 @@
 
 void Model::Draw(Shader* shader)
 {
-	for (Mesh mesh : m_Meshes)
+	for (Mesh* mesh : m_Meshes)
 	{
-		mesh.Draw(shader);
+		mesh->Draw(shader);
 	}
+}
+
+unsigned int Model::AddTexture(std::string& texturePath, TextureType type)
+{
+	unsigned int textureID = TextureFromFile(texturePath.c_str());
+	for (auto mesh : m_Meshes)
+	{
+		mesh->AddTexture(textureID, type);
+	}
+	return textureID;
 }
 
 void Model::LoadModel(std::string& path)
@@ -41,7 +51,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+Mesh* Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -90,7 +100,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		Texture diffuse;
 		diffuse.Type = TextureType::DIFFUSE;
-		diffuse.Path = m_DiffusePath;
 
 		diffuse.Id = TextureFromFile(m_DiffusePath.c_str());
 		textures.push_back(diffuse);
@@ -99,7 +108,6 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	if (m_NormalPath != "") {
 		Texture normal;
 		normal.Type = TextureType::NORMAL;
-		normal.Path = m_NormalPath;
 
 		normal.Id = TextureFromFile(m_NormalPath.c_str());
 		textures.push_back(normal);
@@ -114,7 +122,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	return Mesh(vertices, indices, textures);
+	return new Mesh(vertices, indices, textures);
 }
 
 unsigned int Model::TextureFromFile(const char* path)
@@ -143,6 +151,8 @@ unsigned int Model::TextureFromFile(const char* path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+		glBindTexture(GL_TEXTURE_2D, 0);
+
 		stbi_image_free(data);
 	}
 	else
@@ -153,3 +163,5 @@ unsigned int Model::TextureFromFile(const char* path)
 
 	return textureID;
 }
+
+

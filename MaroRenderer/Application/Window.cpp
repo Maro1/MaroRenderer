@@ -26,11 +26,11 @@ void Window::CreateWindow(unsigned int width, unsigned height, const char* title
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_MAXIMIZED, 1);
 
 	m_Window = glfwCreateWindow(width, height, title, NULL, NULL);
 
-	m_Data.Width = width;
-	m_Data.Height = height;
+	glfwGetWindowSize(m_Window, (int*)&m_Data.Width, (int*)&m_Data.Height);
 	m_Data.Title = title;
 
 	glfwMakeContextCurrent(m_Window);
@@ -49,6 +49,27 @@ bool Window::ShouldClose()
 void Window::SetEventCallback(const EventCallbackFn & Callback)
 {
 	m_Data.EventCallback = Callback;
+}
+
+void Window::ToggleFullscreen()
+{
+	if (!m_Fullscreen)
+	{
+		// For windowed fullscreen
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+		// Backup windowed position/size
+		glfwGetWindowPos(m_Window, &m_WindowPos[0], &m_WindowPos[1]);
+		glfwGetWindowSize(m_Window, &m_WindowSize[0], &m_WindowSize[1]);
+
+		glfwSetWindowMonitor(m_Window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	}
+	else
+	{
+		glfwSetWindowMonitor(m_Window, nullptr, m_WindowPos[0], m_WindowPos[1], m_WindowSize[0], m_WindowSize[1], 0);
+	}
+	m_Fullscreen = !m_Fullscreen;
 }
 
 void Window::SetCallbacks()
@@ -96,6 +117,13 @@ void Window::SetCallbacks()
 				break;
 			}
 			}
+		});
+
+	glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int character)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent event(character);
+			data.EventCallback(event);
 		});
 
 	glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos)

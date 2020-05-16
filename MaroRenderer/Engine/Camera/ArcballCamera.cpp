@@ -6,8 +6,8 @@
 ArcballCamera::ArcballCamera(int screenWidth, int screenHeight)
 {
 	/* Init screen size */
-	m_ScreenWidth = screenWidth;
-	m_ScreenHeight = screenHeight;
+	m_ViewPortWidth = screenWidth;
+	m_ViewPortHeight = screenHeight;
 }
 
 /* Keep track of first ALT + Left Click so camera doesn't jump*/
