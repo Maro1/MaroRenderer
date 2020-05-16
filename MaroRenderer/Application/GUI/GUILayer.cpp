@@ -138,6 +138,7 @@ void GUILayer::DisplayViewport()
 			m_App->SetViewPortFocused(false);
 		}
 		m_App->GetRenderer()->UpdateFrameBuffer(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+		m_App->GetCamera()->SetViewPortSize(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
 	}
 	ImGui::End();
 }

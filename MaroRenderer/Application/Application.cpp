@@ -61,7 +61,6 @@ void Application::Run()
 		m_Window->Update();
 
 		m_Renderer->StartRender();
-		m_Renderer->Clear();
 		m_Scene->UpdateShaders();
 		m_Scene->Render();
 		m_Renderer->StopRender();

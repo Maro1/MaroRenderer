@@ -24,6 +24,7 @@ void Renderer::InitFramebuffer()
 {
 	glGenFramebuffers(1, &m_Framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glGenTextures(1, &m_FBOTexture);
 	glBindTexture(GL_TEXTURE_2D, m_FBOTexture);
@@ -46,19 +47,21 @@ void Renderer::InitFramebuffer()
 
 void Renderer::UpdateFrameBuffer(int x, int y)
 {
-	glBindTexture(GL_TEXTURE_2D, m_FBOTexture);
+	int frameBufferWidth, frameBufferHeight;
+	glfwGetFramebufferSize(m_Window->GetGLFWwindow(), &frameBufferWidth, &frameBufferHeight);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	// Really bad solution, needs fix
+	glViewport(0, 0, frameBufferWidth + 280, frameBufferHeight);
 }
 
 void Renderer::StartRender()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_Framebuffer);
+	Clear();
 }
 
 void Renderer::StopRender()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	Clear();
 }
 
