@@ -7,9 +7,9 @@
 
 void Model::Draw(Shader* shader)
 {
-	for (Mesh mesh : m_Meshes)
+	for (Mesh* mesh : m_Meshes)
 	{
-		mesh.Draw(shader);
+		mesh->Draw(shader);
 	}
 }
 
@@ -18,7 +18,7 @@ unsigned int Model::AddTexture(std::string& texturePath, TextureType type)
 	unsigned int textureID = TextureFromFile(texturePath.c_str());
 	for (auto mesh : m_Meshes)
 	{
-		mesh.AddTexture(textureID, type);
+		mesh->AddTexture(textureID, type);
 	}
 	return textureID;
 }
@@ -51,7 +51,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+Mesh* Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -122,7 +122,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	return Mesh(vertices, indices, textures);
+	return new Mesh(vertices, indices, textures);
 }
 
 unsigned int Model::TextureFromFile(const char* path)

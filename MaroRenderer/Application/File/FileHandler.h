@@ -9,7 +9,7 @@ namespace FileHandler
 {
     const COMDLG_FILTERSPEC meshFileTypes[] =
     {
-        {L"Mesh file (*.obj, *.fbx)",       L"*.obj;.fbx"}
+        {L"Mesh file (*.obj, *.fbx)",       L"*.obj;*.fbx"}
     };
 
     const COMDLG_FILTERSPEC textureFileTypes[] =

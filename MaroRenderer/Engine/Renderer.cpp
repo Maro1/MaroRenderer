@@ -51,7 +51,7 @@ void Renderer::UpdateFrameBuffer(int x, int y)
 	glfwGetFramebufferSize(m_Window->GetGLFWwindow(), &frameBufferWidth, &frameBufferHeight);
 
 	// Really bad solution, needs fix
-	glViewport(0, 0, frameBufferWidth + 280, frameBufferHeight);
+	glViewport(0, 0, frameBufferWidth, frameBufferHeight);
 }
 
 void Renderer::StartRender()

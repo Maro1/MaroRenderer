@@ -43,8 +43,8 @@ void Mesh::AddTexture(unsigned int textureID, TextureType type)
 	{
 		if (m_Textures[i].Type == type)
 		{
-			// removes texture from other meshes using the sam texture
-			// glDeleteTextures(1, &m_Textures[i].Id);
+			// removes texture from other meshes using the same texture
+			glDeleteTextures(1, &m_Textures[i].Id);
 			m_Textures[i].Id = textureID;
 		}
 	}

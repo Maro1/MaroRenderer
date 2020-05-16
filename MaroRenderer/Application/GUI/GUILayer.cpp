@@ -99,11 +99,20 @@ void GUILayer::DisplayTabs()
 		{
 			ImGui::Text("Diffuse: ");
 			ImGui::SameLine();
-			static unsigned int texId = Model::TextureFromFile("Assets/checkerboard.jpg");
-			ImGui::ImageButton((void*)(intptr_t)texId, ImVec2(100, 100));
+			static unsigned int diffuseId = Model::TextureFromFile("Assets/checkerboard.jpg");
+			ImGui::ImageButton((void*)(intptr_t)diffuseId, ImVec2(100, 100));
 			if (ImGui::IsItemClicked())
 			{
-				texId = ImportTexture(TextureType::DIFFUSE);
+				diffuseId = ImportTexture(TextureType::DIFFUSE);
+			}
+
+			ImGui::Text("Normal: ");
+			ImGui::SameLine();
+			static unsigned int normalId = Model::TextureFromFile("Assets/checkerboard.jpg");
+			ImGui::ImageButton((void*)(intptr_t)normalId, ImVec2(100, 100));
+			if (ImGui::IsItemClicked())
+			{
+				normalId = ImportTexture(TextureType::NORMAL);
 			}
 			ImGui::EndTabItem();
 		}
