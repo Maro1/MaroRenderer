@@ -25,6 +25,7 @@ void Mesh::Draw(Shader* shader)
 		else if (type == TextureType::NORMAL)
 		{
 			shader->SetInt("normalMap", i);
+			shader->SetBool("usingNormal", true);
 		}
 
 		glBindTexture(GL_TEXTURE_2D, m_Textures[i].Id);

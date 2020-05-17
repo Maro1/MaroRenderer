@@ -37,15 +37,25 @@ uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform sampler2D diffuseMap;
 uniform sampler2D normalMap;
 
+uniform bool usingNormal;
+
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {
-	vec3 norm = texture(normalMap, TexCoord).rgb;
-    norm.b = 1 - norm.b;
-    norm = normalize(norm * 2.0 - 1.0);
-    norm = normalize(TBN * norm);
+	vec3 norm;
+    if(usingNormal)
+    {
+        norm = texture(normalMap, TexCoord).rgb;
+        norm.b = 1 - norm.b;
+        norm = normalize(norm * 2.0 - 1.0);
+        norm = normalize(TBN * norm);
+    }
+    else
+    {
+        norm = Normal;
+	}
 
 	vec3 viewDir = normalize((viewPos - FragPos)*TBN);
 
@@ -59,7 +69,8 @@ void main()
 		}
 	}
 
-	FragColor = vec4(result, 1.0);
+    float gamma = 2.2;
+	FragColor = pow(vec4(result, 1.0), vec4(1.0/gamma));
 } 
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir) 
