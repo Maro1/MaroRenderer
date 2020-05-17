@@ -84,6 +84,8 @@
     <None Include="Engine\Shaders\basic2d.vs" />
     <None Include="Engine\Shaders\normal_mapping.fs" />
     <None Include="Engine\Shaders\normal_mapping.vs" />
+    <None Include="Engine\Shaders\pbr.vs" />
+    <None Include="Engine\Shaders\pbr.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logging\Logger.h">

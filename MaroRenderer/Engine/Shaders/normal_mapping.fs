@@ -69,8 +69,7 @@ void main()
 		}
 	}
 
-    float gamma = 2.2;
-	FragColor = pow(vec4(result, 1.0), vec4(1.0/gamma));
+	FragColor = vec4(result, 1.0);
 } 
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir) 

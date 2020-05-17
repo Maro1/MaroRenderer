@@ -8,7 +8,7 @@ Application::Application()
 
 	m_Window = new Window();
 	m_Renderer = new Renderer(m_Window);
-	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/normal_mapping.vs", "Engine/Shaders/normal_mapping.fs");
+	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/pbr.vs", "Engine/Shaders/pbr.fs");
 	m_Camera = new ArcballCamera(m_Window->GetWidth(), m_Window->GetHeight());
 
 	m_Window->SetEventCallback(BIND_FUNC(OnEvent));
