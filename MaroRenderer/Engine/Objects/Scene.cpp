@@ -2,7 +2,7 @@
 
 Scene::Scene(ArcballCamera* camera)
 {
-	m_SceneRoot = new SceneNode();
+	m_SceneRoot = new Actor();
 	m_Camera = camera;
 }
 

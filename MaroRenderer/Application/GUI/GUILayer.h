@@ -33,7 +33,9 @@ public:
 private:
 	Window* m_Window;
 	Application* m_App;
-	SceneNode* m_ActiveNode;
+	SceneNode* m_ActiveNode = nullptr;
+
+	unsigned int m_CheckerboardID;
 
 	int m_WindowHeight; 
 	int m_WindowWidth;

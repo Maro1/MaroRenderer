@@ -22,6 +22,8 @@ public:
 
 	inline void SetPosition(glm::vec3 position) { m_Position = position; }
 
+	virtual bool HasMaterial() override { return false; }
+
 private:
 
 	float m_Constant;

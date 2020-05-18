@@ -33,6 +33,8 @@ public:
 	inline unsigned int GetUUID() { return m_UUID; }
 	inline std::string GetLabel() { return m_Label; }
 
+	virtual bool HasMaterial() = 0;
+
 	void Draw();
 
 private:

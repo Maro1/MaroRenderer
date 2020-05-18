@@ -13,6 +13,12 @@ void Mesh::Draw(Shader* shader)
 {
 	shader->Use();
 
+	shader->SetInt("diffuseMap", 0);
+	shader->SetInt("normalMap", 0);
+
+	shader->SetBool("usingDiffuse", false);
+	shader->SetBool("usingNormal", false);
+
 	for (unsigned int i = 0; i < m_Textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); 
@@ -21,11 +27,20 @@ void Mesh::Draw(Shader* shader)
 		if (type == TextureType::DIFFUSE) 
 		{
 			shader->SetInt("diffuseMap", i);
+			shader->SetBool("usingDiffuse", true);
 		}
 		else if (type == TextureType::NORMAL)
 		{
 			shader->SetInt("normalMap", i);
 			shader->SetBool("usingNormal", true);
+		}
+		else if (type == TextureType::METALLIC)
+		{
+			shader->SetInt("metallicMap", i);
+		}
+		else if (type == TextureType::ROUGHNESS)
+		{
+			shader->SetInt("roughnessMap", i);
 		}
 
 		glBindTexture(GL_TEXTURE_2D, m_Textures[i].Id);
@@ -44,7 +59,6 @@ void Mesh::AddTexture(unsigned int textureID, TextureType type)
 	{
 		if (m_Textures[i].Type == type)
 		{
-			// removes texture from other meshes using the same texture
 			glDeleteTextures(1, &m_Textures[i].Id);
 			m_Textures[i].Id = textureID;
 			foundTexture = true;

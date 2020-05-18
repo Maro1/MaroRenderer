@@ -8,6 +8,7 @@ GUILayer::GUILayer(Window* window, Application* app)
 	m_App = app;
 	m_WindowHeight = m_App->GetWindow()->GetHeight();
 	m_WindowWidth = m_App->GetWindow()->GetWidth();
+	m_CheckerboardID = Model::TextureFromFile("Assets/checkerboard.png");
 }
 
 void GUILayer::Attach()
@@ -81,40 +82,69 @@ void GUILayer::DisplayTabs()
 	ImGui::SetWindowPos(ImVec2(m_WindowWidth-600, 20), ImGuiCond_Once);
 	if (ImGui::BeginTabBar("Properties"))
 	{
-		if (ImGui::BeginTabItem("Transform"))
+		if (m_ActiveNode != nullptr)
 		{
-			static float vec4a[4] = { m_ActiveNode->GetLocation().x, m_ActiveNode->GetLocation().y, m_ActiveNode->GetLocation().z, 0.44f };
+			if (ImGui::BeginTabItem("Transform"))
+			{
+				float vec4a[4] = { m_ActiveNode->GetLocation().x, m_ActiveNode->GetLocation().y, m_ActiveNode->GetLocation().z, 0.44f };
 
-			ImGui::Text("Location: ");
-			ImGui::SameLine();
-			ImGui::InputFloat3("", vec4a, "%.3f");
-			m_ActiveNode->SetLocation(glm::vec3(vec4a[0], vec4a[1], vec4a[2]));
+				ImGui::Text("Location: ");
+				ImGui::SameLine();
+				ImGui::InputFloat3("", vec4a, "%.3f");
+				m_ActiveNode->SetLocation(glm::vec3(vec4a[0], vec4a[1], vec4a[2]));
 
-			ImGui::Text("Rotation: ");
+				ImGui::Text("Rotation: ");
 
-			ImGui::Text("Scale");
-			ImGui::EndTabItem();
+				ImGui::Text("Scale");
+				ImGui::EndTabItem();
+			}
 		}
-		if (ImGui::BeginTabItem("Material"))
+		if (m_ActiveNode != nullptr)
 		{
-			ImGui::Text("Diffuse: ");
-			ImGui::SameLine();
-			static unsigned int diffuseId = Model::TextureFromFile("Assets/checkerboard.jpg");
-			ImGui::ImageButton((void*)(intptr_t)diffuseId, ImVec2(100, 100));
-			if (ImGui::IsItemClicked())
+			if (m_ActiveNode->HasMaterial())
 			{
-				diffuseId = ImportTexture(TextureType::DIFFUSE);
-			}
+				if (ImGui::BeginTabItem("Material"))
+				{
+					if (ImGui::CollapsingHeader("Diffuse"))
+					{
+						unsigned int diffuseId = m_CheckerboardID;
+						ImGui::ImageButton((void*)(intptr_t)diffuseId, ImVec2(100, 100));
+						if (ImGui::IsItemClicked())
+						{
+							diffuseId = ImportTexture(TextureType::DIFFUSE);
+						}
+					}
 
-			ImGui::Text("Normal: ");
-			ImGui::SameLine();
-			static unsigned int normalId = Model::TextureFromFile("Assets/checkerboard.jpg");
-			ImGui::ImageButton((void*)(intptr_t)normalId, ImVec2(100, 100));
-			if (ImGui::IsItemClicked())
-			{
-				normalId = ImportTexture(TextureType::NORMAL);
+					if (ImGui::CollapsingHeader("Normal"))
+					{
+						unsigned int normalId = m_CheckerboardID;
+						ImGui::ImageButton((void*)(intptr_t)normalId, ImVec2(100, 100));
+						if (ImGui::IsItemClicked())
+						{
+							normalId = ImportTexture(TextureType::NORMAL);
+						}
+					}
+					if (ImGui::CollapsingHeader("Metallic"))
+					{
+						unsigned int metallicId = m_CheckerboardID;
+						ImGui::ImageButton((void*)(intptr_t)metallicId, ImVec2(100, 100));
+						if (ImGui::IsItemClicked())
+						{
+							metallicId = ImportTexture(TextureType::METALLIC);
+						}
+					}
+					if (ImGui::CollapsingHeader("Roughness"))
+					{
+						unsigned int roughnessId = m_CheckerboardID;
+						ImGui::ImageButton((void*)(intptr_t)roughnessId, ImVec2(100, 100));
+						if (ImGui::IsItemClicked())
+						{
+							roughnessId = ImportTexture(TextureType::ROUGHNESS);
+						}
+					}
+					ImGui::EndTabItem();
+				}
 			}
-			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Lighting"))
 		{

@@ -38,7 +38,6 @@ void Application::Run()
 	m_Scene->AddPointLight(&light);
 	m_Scene->AddPointLight(&light2);
 
-	m_GuiLayer->SetActiveNode(m_Scene->GetRoot());
 	m_GuiLayer->Attach();
 
 	m_Renderer->InitFramebuffer();

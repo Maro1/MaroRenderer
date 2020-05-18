@@ -33,56 +33,40 @@ uniform vec3 viewPos;
 uniform DirLight directionLight;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
+// textureSamples
 uniform sampler2D diffuseMap;
 uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
 uniform sampler2D roughnessMap;
 
 uniform bool usingNormal;
+uniform bool usingDiffuse;
 
 const float PI = 3.14159265359;
 
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
-float DistributionGGX(vec3 N, vec3 H, float roughness)
+vec3 FresnelSchlick(float cosAngle, vec3 reflectionCoeff)
 {
-    float a = roughness*roughness;
-    float a2 = a*a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
-
-    float nom   = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
-
-    return nom / denom;
+	return reflectionCoeff + (1.0 -reflectionCoeff ) * pow(1.0 - cosAngle, 5.0);
 }
-// ----------------------------------------------------------------------------
-float GeometrySchlickGGX(float NdotV, float roughness)
+
+float NormalDist(float NdotH, float coeff)
 {
-    float r = (roughness + 1.0);
-    float k = (r*r) / 8.0;
-
-    float nom   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
-
-    return nom / denom;
+	float a = coeff * coeff;
+	float a2 = a * a;
+	float denom = NdotH * NdotH * (a2 - 1.0) + 1.0;
+	denom = PI * denom * denom;
+	return a2 / max(denom, 0.0000001);
 }
-// ----------------------------------------------------------------------------
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
-{
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
 
-    return ggx1 * ggx2;
-}
-// ----------------------------------------------------------------------------
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
+float GeometrySmith(float NdotV, float NdotL, float coeff)
 {
-    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+	float r = coeff + 1.0;
+	float k = (r * r) / 8.0;
+	float ggx1 = NdotV / (NdotV * (1.0 - k) + k);
+	float ggx2 = NdotL / (NdotL * (1.0 - k) + k);
+	return ggx1 * ggx2;
 }
 
 void main()
@@ -100,64 +84,57 @@ void main()
         norm = Normal;
 	}
 
-    //vec3 albedo     = pow(texture(diffuseMap, TexCoord).rgb, vec3(2.2));
-    vec3 albedo = vec3(0.3, 0.3, 0.3);
-    float metallic  = 0.5;
-    float roughness = 0.5;
+	vec3 viewDir = normalize((viewPos - FragPos)*TBN);
 
-	vec3 V = normalize((viewPos - FragPos)*TBN);
+	vec3 L0 = vec3(0.0);
 
-    vec3 F0 = vec3(0.04); 
-    F0 = mix(F0, albedo, metallic);
+	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
+	{
+		if(pointLights[i].diffuse != vec3(0)) 
+		{
+			L0 += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+		}
+	}
+	vec3 ambient = vec3(0.03) * vec3(texture(diffuseMap, TexCoord));
 
-	// reflectance equation
-    vec3 Lo = vec3(0.0);
-    for(int i = 0; i < 4; ++i) 
-    {
-        // calculate per-light radiance
-        vec3 L = normalize(pointLights[i].position - FragPos);
-        vec3 H = normalize(V + L);
-        float distance = length(pointLights[i].position - FragPos);
-        float attenuation = 1.0 / (distance * distance);
-        vec3 radiance = pointLights[i].specular * attenuation;
+	vec3 color = ambient + L0;
 
-        // Cook-Torrance BRDF
-        float NDF = DistributionGGX(norm, H, roughness);   
-        float G   = GeometrySmith(norm, V, L, roughness);      
-        vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);
-           
-        vec3 nominator    = NDF * G * F; 
-        float denominator = 4 * max(dot(norm, V), 0.0) * max(dot(norm, L), 0.0) + 0.001; // 0.001 to prevent divide by zero.
-        vec3 specular = nominator / denominator;
-        
-        // kS is equal to Fresnel
-        vec3 kS = F;
-        // for energy conservation, the diffuse and specular light can't
-        // be above 1.0 (unless the surface emits light); to preserve this
-        // relationship the diffuse component (kD) should equal 1.0 - kS.
-        vec3 kD = vec3(1.0) - kS;
-        // multiply kD by the inverse metalness such that only non-metals 
-        // have diffuse lighting, or a linear blend if partly metal (pure metals
-        // have no diffuse light).
-        kD *= 1.0 - metallic;	  
+	color = color / (color + vec3(1.0/2.2));
+	color = pow(color, vec3(1.0/2.2));
 
-        // scale light by NdotL
-        float NdotL = max(dot(norm, L), 0.0);        
-
-        // add to outgoing radiance Lo
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
-    }   
-    // ambient lighting (note that the next IBL tutorial will replace 
-    // this ambient lighting with environment lighting).
-    vec3 ambient = vec3(0.03) * albedo;
-    
-    vec3 color = ambient + Lo;
-
-    // HDR tonemapping
-    color = color / (color + vec3(1.0));
-    // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
-
-    FragColor = vec4(color, 1.0);
+	FragColor = vec4(color, 1.0);
 } 
+
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+	vec3 albedo = texture(diffuseMap, TexCoord).rgb;
+	float metallic = texture(metallicMap, TexCoord).r;
+	float roughness = texture(roughnessMap, TexCoord).r;
+
+	vec3 baseRef = mix(vec3(0.04), albedo, metallic);
+
+    vec3 L = normalize(TBN*light.position - fragPos*TBN);
+	vec3 H = normalize(viewDir + L);
+	float dist = length(light.position - fragPos);
+	float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist)); 
+	vec3 radiance = light.diffuse * attenuation;
+
+    float NdotV = max(dot(normal, viewDir), 0.0000001);
+	float NdotL = max(dot(normal, L), 0.0000001);
+	float HdotV = max(dot(H, viewDir), 0.0);
+	float NdotH = max(dot(normal, H), 0.0);
+
+	float D = NormalDist(NdotH, roughness);
+	float G = GeometrySmith(NdotV, NdotL, roughness);
+	vec3 F = FresnelSchlick(HdotV, baseRef);
+
+	vec3 spec = D * G * F;
+	spec /= 4.0 * NdotV * NdotL;
+
+	vec3 kD = vec3(1.0) - F;
+
+	kD *= 1.0 - metallic;
+
+	return (kD * albedo / PI + spec) * radiance * NdotL;
+}
 
