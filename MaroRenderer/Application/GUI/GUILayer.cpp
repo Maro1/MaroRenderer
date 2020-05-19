@@ -86,16 +86,27 @@ void GUILayer::DisplayTabs()
 		{
 			if (ImGui::BeginTabItem("Transform"))
 			{
-				float vec4a[4] = { m_ActiveNode->GetLocation().x, m_ActiveNode->GetLocation().y, m_ActiveNode->GetLocation().z, 0.44f };
+				if (ImGui::CollapsingHeader("Location"))
+				{
+					float vec4a[4] = { m_ActiveNode->GetLocation().x, m_ActiveNode->GetLocation().y, m_ActiveNode->GetLocation().z, 0.44f };
+					ImGui::InputFloat3("##loc", vec4a, "%.3f");
+					m_ActiveNode->SetLocation(glm::vec3(vec4a[0], vec4a[1], vec4a[2]));
+				}
+				
+				if (ImGui::CollapsingHeader("Rotation"))
+				{
+					float rot4a[4] = { m_ActiveNode->GetRotation().x, m_ActiveNode->GetRotation().y, m_ActiveNode->GetRotation().z, 0.44f };
+					ImGui::InputFloat3("##rot", rot4a, "%.3f");
+					m_ActiveNode->SetRotation(glm::vec3(rot4a[0], rot4a[1], rot4a[2]));
+				}
 
-				ImGui::Text("Location: ");
-				ImGui::SameLine();
-				ImGui::InputFloat3("", vec4a, "%.3f");
-				m_ActiveNode->SetLocation(glm::vec3(vec4a[0], vec4a[1], vec4a[2]));
+				if (ImGui::CollapsingHeader("Scale"))
+				{
+					float scale4a[4] = { m_ActiveNode->GetScale().x, m_ActiveNode->GetScale().y, m_ActiveNode->GetScale().z, 0.44f };
+					ImGui::InputFloat3("##scale", scale4a, "%.3f");
+					m_ActiveNode->SetScale(glm::vec3(scale4a[0], scale4a[1], scale4a[2]));
+				}
 
-				ImGui::Text("Rotation: ");
-
-				ImGui::Text("Scale");
 				ImGui::EndTabItem();
 			}
 		}

@@ -12,7 +12,7 @@ public:
 	inline glm::vec3 GetPosition() const { return m_Location; }
 	inline glm::mat4 GetProjection() const {
 		return glm::perspective(glm::radians(45.0f),
-			(float)m_ViewPortWidth / (float)m_ViewPortHeight, 0.1f, 100.0f);
+			(float)m_ViewPortWidth / (float)m_ViewPortHeight, 0.1f, 1000.0f);
 	}
 
 	void SetTarget(glm::vec3 target) { m_Target = target; }

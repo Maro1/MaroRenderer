@@ -14,7 +14,7 @@ namespace FileHandler
 
     const COMDLG_FILTERSPEC textureFileTypes[] =
     {
-        {L"Texture file (*.png, *.jpg, *.jpeg)",       L"*.png;*.jpg;*.jpeg"}
+        {L"Texture file (*.png, *.jpg, *.jpeg, *.tga)",       L"*.png;*.jpg;*.jpeg;*.tga"}
     };
 
     enum class FileType

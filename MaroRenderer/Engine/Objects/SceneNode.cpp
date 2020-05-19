@@ -7,6 +7,7 @@ SceneNode::SceneNode(Shader* shader, glm::vec3 location, glm::vec3 scale, Model*
 	m_Parent = nullptr;
 	m_Scale = scale;
 	m_Transform = glm::translate(glm::mat4(1.0f), m_Location);
+	m_Transform = glm::scale(m_Transform, scale);
 	m_Model = model;
 	m_Shader = shader;
 	Update();
@@ -42,6 +43,14 @@ void SceneNode::Update()
 		child->Update();
 	}
 	Draw();
+}
+
+glm::mat4 SceneNode::GetModelMatrix()
+{
+
+	glm::mat4 translatedScaled = glm::scale(glm::translate(glm::mat4(1.0f), GetLocation()), glm::vec3(m_Scale));
+	glm::mat4 rot = glm::eulerAngleXYZ(glm::radians(m_Rotation.x), glm::radians(m_Rotation.y), glm::radians(m_Rotation.z));
+	return rot * translatedScaled;
 }
 
 void SceneNode::Draw()
