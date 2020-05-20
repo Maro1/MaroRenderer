@@ -7,7 +7,7 @@ class Cubemap
 {
 public:
 
-	Cubemap(Camera* camera, std::vector<std::string> texturePaths);
+	Cubemap(Camera* camera, std::string texturePath);
 
 	~Cubemap();
 
@@ -15,7 +15,7 @@ public:
 
 private:
 
-	std::vector<std::string> m_TexturePaths;
+	std::string m_TexturePath;
 	unsigned int m_TextureID;
 
 	Shader* m_Shader;

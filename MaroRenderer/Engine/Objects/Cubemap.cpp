@@ -3,7 +3,7 @@
 
 #include <stb_image.h>
 
-Cubemap::Cubemap(Camera* camera, std::vector<std::string> texturePaths) : m_Camera(camera), m_TexturePaths(texturePaths)
+Cubemap::Cubemap(Camera* camera, std::string texturePath) : m_Camera(camera), m_TexturePath(texturePath)
 {
 	m_TextureID = CubemapFromFile();
 	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/cubemap.vs", "Engine/Shaders/cubemap.fs");
@@ -27,7 +27,7 @@ void Cubemap::Draw()
 
 	glBindVertexArray(VAO);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, m_TextureID);
+	glBindTexture(GL_TEXTURE_2D, m_TextureID);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
@@ -36,34 +36,30 @@ void Cubemap::Draw()
 
 unsigned int Cubemap::CubemapFromFile()
 {
+	stbi_set_flip_vertically_on_load(true);
 	unsigned int textureID;
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
 	int width, height, nrComponents;
 
-	unsigned char* data;
-
-	for (unsigned int i = 0; i < m_TexturePaths.size(); i++)
+	unsigned char* data = stbi_load(m_TexturePath.c_str(), &width, &height, &nrComponents, 0);
+	if (data)
 	{
-		data = stbi_load(m_TexturePaths[i].c_str(), &width, &height, &nrComponents, 0);
-		if (data)
-		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenTextures(1, &textureID);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 
-			stbi_image_free(data);
-		}
-		else
-		{
-			std::cout << "Texture failed to load at path: " << m_TexturePaths[i] << std::endl;
-			stbi_image_free(data);
-		}
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
 	}
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	else
+	{
+		std::cout << "Texture failed to load at path: " << m_TexturePath << std::endl;
+		stbi_image_free(data);
+	}
 
 	return textureID;
 }

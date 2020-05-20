@@ -41,17 +41,8 @@ void Application::Run()
 
 	m_Renderer->InitFramebuffer();
 
-	std::vector<std::string> cubemapPaths
-	{
-		"Assets/skybox/right.jpg",
-		"Assets/skybox/left.jpg",
-		"Assets/skybox/top.jpg",
-		"Assets/skybox/bottom.jpg",
-		"Assets/skybox/front.jpg",
-		"Assets/skybox/back.jpg"
-	};
-
-	Cubemap cubeMap(m_Camera, cubemapPaths);
+	std::string cubemapPath = "Assets/skybox_hdr/skybox.hdr";
+	Cubemap cubeMap(m_Camera, cubemapPath);
 
 	while (!m_Window->ShouldClose())
 	{
