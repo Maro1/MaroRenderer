@@ -78,6 +78,9 @@
     <ClCompile Include="include\imgui\imgui_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Objects\Cubemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shaders\basic2d.fs" />
@@ -86,6 +89,8 @@
     <None Include="Engine\Shaders\normal_mapping.vs" />
     <None Include="Engine\Shaders\pbr.vs" />
     <None Include="Engine\Shaders\pbr.fs" />
+    <None Include="Engine\Shaders\cubemap.vs" />
+    <None Include="Engine\Shaders\cubemap.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logging\Logger.h">
@@ -176,6 +181,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\File\FileHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Objects\Cubemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

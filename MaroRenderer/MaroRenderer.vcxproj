@@ -140,6 +140,7 @@
     <ClCompile Include="Application\Window.cpp" />
     <ClCompile Include="Engine\Lighting\Light.cpp" />
     <ClCompile Include="Engine\Lighting\PointLight.cpp" />
+    <ClCompile Include="Engine\Objects\Cubemap.cpp" />
     <ClCompile Include="Engine\Objects\Mesh.cpp" />
     <ClCompile Include="Engine\Objects\Model.cpp" />
     <ClCompile Include="Engine\Objects\Scene.cpp" />
@@ -159,6 +160,8 @@
   <ItemGroup>
     <None Include="Engine\Shaders\basic2d.fs" />
     <None Include="Engine\Shaders\basic2d.vs" />
+    <None Include="Engine\Shaders\cubemap.fs" />
+    <None Include="Engine\Shaders\cubemap.vs" />
     <None Include="Engine\Shaders\normal_mapping.fs" />
     <None Include="Engine\Shaders\normal_mapping.vs" />
     <None Include="Engine\Shaders\pbr.fs" />
@@ -175,6 +178,7 @@
     <ClInclude Include="Application\Window.h" />
     <ClInclude Include="Engine\Lighting\PointLight.h" />
     <ClInclude Include="Engine\Objects\Actor.h" />
+    <ClInclude Include="Engine\Objects\Cubemap.h" />
     <ClInclude Include="Engine\Objects\Mesh.h" />
     <ClInclude Include="Engine\Objects\Model.h" />
     <ClInclude Include="Engine\Objects\Scene.h" />

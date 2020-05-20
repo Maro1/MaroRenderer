@@ -14,6 +14,7 @@
 #include "Engine/Lighting/PointLight.h"
 #include "Engine/Objects/Actor.h"
 #include "Engine/Objects/Scene.h"
+#include "Engine/Objects/Cubemap.h"
 
 class GUILayer;
 

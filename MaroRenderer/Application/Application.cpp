@@ -5,7 +5,6 @@
 
 Application::Application()
 {
-
 	m_Window = new Window();
 	m_Renderer = new Renderer(m_Window);
 	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/pbr.vs", "Engine/Shaders/pbr.fs");
@@ -42,6 +41,18 @@ void Application::Run()
 
 	m_Renderer->InitFramebuffer();
 
+	std::vector<std::string> cubemapPaths
+	{
+		"Assets/skybox/right.jpg",
+		"Assets/skybox/left.jpg",
+		"Assets/skybox/top.jpg",
+		"Assets/skybox/bottom.jpg",
+		"Assets/skybox/front.jpg",
+		"Assets/skybox/back.jpg"
+	};
+
+	Cubemap cubeMap(m_Camera, cubemapPaths);
+
 	while (!m_Window->ShouldClose())
 	{
 		PollEvents();
@@ -53,6 +64,7 @@ void Application::Run()
 		m_Renderer->StartRender();
 		m_Scene->UpdateShaders();
 		m_Scene->Render();
+		cubeMap.Draw();
 		m_Renderer->StopRender();
 
 		m_GuiLayer->Begin();
