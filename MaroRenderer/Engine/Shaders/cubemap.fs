@@ -4,22 +4,15 @@ out vec4 FragColor;
 
 in vec3 TexCoord;
 
-uniform sampler2D cubemap;
-
-const vec2 invAtan = vec2(0.1591, 0.3183);
-vec2 SampleSphericalMap(vec3 v)
-{
-    vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
-    uv *= invAtan;
-    uv += 0.5;
-    return uv;
-}
-
+uniform samplerCube cubemap;
 
 void main()
 {
-	vec2 uv = SampleSphericalMap(normalize(TexCoord)); // make sure to normalize localPos
-    vec3 color = texture(cubemap, uv).rgb;
+	vec3 envcolor = texture(cubemap, TexCoord).rgb;
 
-	FragColor = vec4(color, 1.0);
+	envcolor = envcolor / (envcolor + vec3(1.0));
+	envcolor = pow(envcolor, vec3(1.0/2.2));
+
+	//FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	FragColor = vec4(envcolor, 1.0);
 }
