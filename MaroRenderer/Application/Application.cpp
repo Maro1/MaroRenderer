@@ -55,7 +55,6 @@ void Application::Run()
 		m_Renderer->StartRender();
 		m_Scene->UpdateShaders();
 		m_Scene->Render();
-
 		cubeMap.Draw();
 		m_Renderer->StopRender();
 

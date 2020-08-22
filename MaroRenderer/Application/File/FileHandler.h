@@ -47,6 +47,8 @@ namespace FileHandler
 
                     if (SUCCEEDED(result))
                     {
+                        // We are just going to print out the 
+                        // name of the file for sample sake.
                         PWSTR pszFilePath = NULL;
                         result = psiResult->GetDisplayName(SIGDN_FILESYSPATH,
                             &pszFilePath);
