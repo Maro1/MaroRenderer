@@ -19,6 +19,8 @@ void Mesh::Draw(Shader* shader)
 	shader->SetBool("usingDiffuse", false);
 	shader->SetBool("usingNormal", false);
 
+	//shader->SetInt("irradianceMap", GL_TEXTURE0 + m_Textures.size() + 1);
+
 	for (unsigned int i = 0; i < m_Textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); 

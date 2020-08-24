@@ -41,8 +41,9 @@ void Application::Run()
 
 	m_Renderer->InitFramebuffer();
 
-	std::string cubemapPath = "Assets/skybox_hdr/skybox.hdr";
-	Cubemap cubeMap(m_Camera, cubemapPath);
+	std::string SkyboxPath = "Assets/skybox_hdr/skybox.hdr";
+	Skybox skybox(m_Camera, m_Renderer, SkyboxPath);
+	m_Scene->AddSkybox(&skybox);
 
 	while (!m_Window->ShouldClose())
 	{
@@ -55,7 +56,6 @@ void Application::Run()
 		m_Renderer->StartRender();
 		m_Scene->UpdateShaders();
 		m_Scene->Render();
-		cubeMap.Draw();
 		m_Renderer->StopRender();
 
 		m_GuiLayer->Begin();

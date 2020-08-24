@@ -6,6 +6,7 @@
 #include "Engine/Objects/Actor.h"
 #include "Engine/Camera/ArcballCamera.h"
 #include "Engine/Lighting/PointLight.h"
+#include "Engine/Objects/Skybox.h"
 
 class Scene {
 public:
@@ -16,6 +17,7 @@ public:
 	void RotateLight(float time);
 	void AddActor(Actor* node);
 	void AddPointLight(PointLight* light);
+	void AddSkybox(Skybox* skybox);
 	void Render();
 
 	inline void AddDirectionalLight() { m_DirectionalLight = true; }
@@ -36,6 +38,7 @@ private:
 
 	ArcballCamera* m_Camera;
 	SceneNode* m_SceneRoot;
+	Skybox* m_Skybox;
 
 	glm::mat4 m_ModelMat = glm::mat4(1.0f);
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);

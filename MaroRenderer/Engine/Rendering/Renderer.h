@@ -23,6 +23,8 @@ public:
 	void StopRender();
 	void UpdateFrameBuffer(int x, int y);
 
+	unsigned int GetFramebuffer() { return m_Framebuffer; }
+
 private:
 
 	Window* m_Window;

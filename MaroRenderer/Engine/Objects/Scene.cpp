@@ -87,6 +87,11 @@ void Scene::AddPointLight(PointLight* light)
 	m_Lights.push_back(light);
 }
 
+void Scene::AddSkybox(Skybox* skybox)
+{
+	m_Skybox = skybox;
+}
+
 void Scene::Render()
 {
 	m_SceneRoot->Update();
@@ -94,5 +99,6 @@ void Scene::Render()
 	{
 		light->GetModel()->Draw(light->GetShader());
 	}
+	m_Skybox->Draw();
 }
 

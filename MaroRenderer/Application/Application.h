@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Engine/Renderer.h"
+#include "Engine/Rendering/Renderer.h"
 #include "Application/Window.h"
 #include "Logging/Logger.h"
-#include "Engine/Shader.h"
+#include "Engine/Rendering/Shader.h"
 #include "Events/Event.h"
 #include "Engine/Camera/ArcballCamera.h"
 #include "Events/KeyEvent.h"
@@ -14,7 +14,7 @@
 #include "Engine/Lighting/PointLight.h"
 #include "Engine/Objects/Actor.h"
 #include "Engine/Objects/Scene.h"
-#include "Engine/Objects/Cubemap.h"
+#include "Engine/Objects/Skybox.h"
 
 class GUILayer;
 

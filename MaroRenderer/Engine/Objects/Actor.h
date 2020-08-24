@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine/Objects/SceneNode.h"
-#include "Engine/Shader.h"
+#include "Engine/Rendering/Shader.h"
 
 class Actor : public SceneNode {
 

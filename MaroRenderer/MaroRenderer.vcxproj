@@ -140,11 +140,13 @@
     <ClCompile Include="Application\Window.cpp" />
     <ClCompile Include="Engine\Lighting\Light.cpp" />
     <ClCompile Include="Engine\Lighting\PointLight.cpp" />
-    <ClCompile Include="Engine\Objects\Cubemap.cpp" />
+    <ClCompile Include="Engine\Objects\Skybox.cpp" />
     <ClCompile Include="Engine\Objects\Mesh.cpp" />
     <ClCompile Include="Engine\Objects\Model.cpp" />
     <ClCompile Include="Engine\Objects\Scene.cpp" />
     <ClCompile Include="Engine\Objects\SceneNode.cpp" />
+    <ClCompile Include="Engine\Rendering\Framebuffer.cpp" />
+    <ClCompile Include="Engine\Rendering\Renderbuffer.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="include\imgui\imgui.cpp" />
     <ClCompile Include="include\imgui\imgui_demo.cpp" />
@@ -154,14 +156,17 @@
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Engine\Camera\ArcballCamera.cpp" />
     <ClCompile Include="Engine\Camera\PerspectiveCamera.cpp" />
-    <ClCompile Include="Engine\Renderer.cpp" />
-    <ClCompile Include="Engine\Shader.cpp" />
+    <ClCompile Include="Engine\Rendering\Renderer.cpp" />
+    <ClCompile Include="Engine\Rendering\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Engine\Shaders\background.fs" />
+    <None Include="Engine\Shaders\background.vs" />
     <None Include="Engine\Shaders\basic2d.fs" />
     <None Include="Engine\Shaders\basic2d.vs" />
-    <None Include="Engine\Shaders\cubemap.fs" />
+    <None Include="Engine\Shaders\equi_to_cubemap.fs" />
     <None Include="Engine\Shaders\cubemap.vs" />
+    <None Include="Engine\Shaders\irradiance.fs" />
     <None Include="Engine\Shaders\normal_mapping.fs" />
     <None Include="Engine\Shaders\normal_mapping.vs" />
     <None Include="Engine\Shaders\pbr.fs" />
@@ -178,11 +183,13 @@
     <ClInclude Include="Application\Window.h" />
     <ClInclude Include="Engine\Lighting\PointLight.h" />
     <ClInclude Include="Engine\Objects\Actor.h" />
-    <ClInclude Include="Engine\Objects\Cubemap.h" />
+    <ClInclude Include="Engine\Objects\Skybox.h" />
     <ClInclude Include="Engine\Objects\Mesh.h" />
     <ClInclude Include="Engine\Objects\Model.h" />
     <ClInclude Include="Engine\Objects\Scene.h" />
     <ClInclude Include="Engine\Objects\SceneNode.h" />
+    <ClInclude Include="Engine\Rendering\Framebuffer.h" />
+    <ClInclude Include="Engine\Rendering\Renderbuffer.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
     <ClInclude Include="include\imgui\imgui_impl_glfw.h" />
@@ -197,8 +204,8 @@
     <ClInclude Include="Engine\Camera\Camera.h" />
     <ClInclude Include="Engine\Camera\PerspectiveCamera.h" />
     <ClInclude Include="Engine\Lighting\Light.h" />
-    <ClInclude Include="Engine\Renderer.h" />
-    <ClInclude Include="Engine\Shader.h" />
+    <ClInclude Include="Engine\Rendering\Renderer.h" />
+    <ClInclude Include="Engine\Rendering\Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

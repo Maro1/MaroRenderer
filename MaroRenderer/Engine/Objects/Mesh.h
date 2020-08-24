@@ -5,8 +5,8 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/vector_angle.hpp"
 #include <vector>
-#include "Engine/Shader.h"
-#include "Engine/Renderer.h"
+#include "Engine/Rendering/Shader.h"
+#include "Engine/Rendering/Renderer.h"
 
 struct Vertex
 {

@@ -1,5 +1,5 @@
 #include "Shader.h"
-#include "Engine/Renderer.h"
+#include "Engine/Rendering/Renderer.h"
 #include "Logging/Logger.h"
 #include <string>
 #include <fstream>
@@ -43,6 +43,7 @@ Shader* Shader::CreateShaderFromPath(const char* vertexPath, const char* fragmen
 	catch (std::ifstream::failure e)
 	{
 		LOG_ERROR("Shader file not successfully read!");
+		LOG_ERROR(vertexPath);
 	}
 
 	const char* vShaderCode = vertexCode.c_str();

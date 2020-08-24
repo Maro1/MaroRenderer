@@ -4,6 +4,8 @@
 
 out vec4 FragColor;
 
+uniform samplerCube irradianceMap;
+
 in vec3 Normal;  
 in vec3 FragPos;  
 in vec2 TexCoord;
@@ -95,7 +97,7 @@ void main()
 			L0 += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 		}
 	}
-	vec3 ambient = vec3(0.03) * vec3(texture(diffuseMap, TexCoord));
+	vec3 ambient = vec3(0.03) * texture(irradianceMap, norm).rgb;//vec3(texture(diffuseMap, TexCoord));// * texture(irradianceMap, norm).rgb;
 
 	vec3 color = ambient + L0;
 
