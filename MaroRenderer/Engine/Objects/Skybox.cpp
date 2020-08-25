@@ -34,7 +34,7 @@ void Skybox::Draw()
 	m_BackgroundShader->SetMat4("view", m_Camera->GetView());
 	m_BackgroundShader->SetMat4("projection", m_Camera->GetProjection());
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, m_IrradianceMap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_Cubemap);
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);

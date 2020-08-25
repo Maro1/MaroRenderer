@@ -30,12 +30,12 @@ void Application::Run()
 
 	Model cube(path, filename, normalPath);
 
-	PointLight light(m_Shader, glm::vec3(0.0f, 1.0f, 2.0f));
-	PointLight light2(m_Shader, glm::vec3(0.0f, -1.0f, -2.0f));
+	//PointLight light(m_Shader, glm::vec3(0.0f, 1.0f, 2.0f));
+	//PointLight light2(m_Shader, glm::vec3(0.0f, -1.0f, -2.0f));
 
 	m_Scene = new Scene(m_Camera);
-	m_Scene->AddPointLight(&light);
-	m_Scene->AddPointLight(&light2);
+	//m_Scene->AddPointLight(&light);
+	//m_Scene->AddPointLight(&light2);
 
 	m_GuiLayer->Attach();
 
@@ -49,7 +49,7 @@ void Application::Run()
 	{
 		PollEvents();
 
-		m_Scene->RotateLight(glfwGetTime());
+		//m_Scene->RotateLight(glfwGetTime());
 
 		m_Window->Update();
 

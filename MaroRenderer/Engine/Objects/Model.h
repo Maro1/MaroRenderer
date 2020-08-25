@@ -26,6 +26,8 @@ public:
 
 	unsigned int AddTexture(std::string& texturePath, TextureType type);
 
+	std::vector<Mesh*> GetMeshes() { return m_Meshes; }
+
 	static unsigned int TextureFromFile(const char* path);
 
 private:

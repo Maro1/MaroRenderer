@@ -53,6 +53,11 @@ vec3 FresnelSchlick(float cosAngle, vec3 reflectionCoeff)
 	return reflectionCoeff + (1.0 -reflectionCoeff ) * pow(1.0 - cosAngle, 5.0);
 }
 
+vec3 FresnelSchlickRoughness(float cosAngle, vec3 reflectionCoeff, float roughness)
+{
+	return reflectionCoeff + (max(vec3(1.0 - roughness), reflectionCoeff) - reflectionCoeff) * pow(1.0 - cosAngle, 5.0);
+}
+
 float NormalDist(float NdotH, float coeff)
 {
 	float a = coeff * coeff;
@@ -97,7 +102,11 @@ void main()
 			L0 += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 		}
 	}
-	vec3 ambient = vec3(0.03) * texture(irradianceMap, norm).rgb;//vec3(texture(diffuseMap, TexCoord));// * texture(irradianceMap, norm).rgb;
+
+	vec3 irradiance = texture(irradianceMap, norm).rgb;
+	vec3 diffuse = irradiance * texture(diffuseMap, TexCoord).rgb;
+
+	vec3 ambient = vec3(0.03) * diffuse;
 
 	vec3 color = ambient + L0;
 

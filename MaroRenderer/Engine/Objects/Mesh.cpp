@@ -19,8 +19,6 @@ void Mesh::Draw(Shader* shader)
 	shader->SetBool("usingDiffuse", false);
 	shader->SetBool("usingNormal", false);
 
-	//shader->SetInt("irradianceMap", GL_TEXTURE0 + m_Textures.size() + 1);
-
 	for (unsigned int i = 0; i < m_Textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); 
@@ -43,6 +41,10 @@ void Mesh::Draw(Shader* shader)
 		else if (type == TextureType::ROUGHNESS)
 		{
 			shader->SetInt("roughnessMap", i);
+		}
+		else if (type == TextureType::IRRADIANCE)
+		{
+			shader->SetInt("irradianceMap", i);
 		}
 
 		glBindTexture(GL_TEXTURE_2D, m_Textures[i].Id);

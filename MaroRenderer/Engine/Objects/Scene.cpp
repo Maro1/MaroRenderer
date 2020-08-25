@@ -79,6 +79,10 @@ void Scene::AddActor(Actor* actor)
 {
 	m_SceneRoot->AddChild(actor);
 	m_Actors.push_back(actor);
+	for (auto mesh : actor->GetModel()->GetMeshes())
+	{
+		mesh->AddTexture(m_Skybox->GetIrradiance(), TextureType::IRRADIANCE);
+	}
 }
 
 void Scene::AddPointLight(PointLight* light)
@@ -90,6 +94,13 @@ void Scene::AddPointLight(PointLight* light)
 void Scene::AddSkybox(Skybox* skybox)
 {
 	m_Skybox = skybox;
+	for (auto actor : m_Actors)
+	{
+		for (auto mesh : actor->GetModel()->GetMeshes())
+		{
+			mesh->AddTexture(skybox->GetIrradiance(), TextureType::IRRADIANCE);
+		}
+	}
 }
 
 void Scene::Render()

@@ -16,6 +16,8 @@ public:
 	void Draw();
 	Framebuffer GetFramebuffer() { return m_CaptureFramebuffer; }
 
+	unsigned int GetIrradiance() { return m_IrradianceMap; }
+
 private:
 
 	std::string m_TexturePath;

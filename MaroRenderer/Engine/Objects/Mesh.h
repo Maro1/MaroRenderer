@@ -19,7 +19,7 @@ struct Vertex
 
 enum class TextureType
 {
-	DIFFUSE, NORMAL, METALLIC, ROUGHNESS
+	DIFFUSE, NORMAL, METALLIC, ROUGHNESS, IRRADIANCE
 };
 
 struct Texture
