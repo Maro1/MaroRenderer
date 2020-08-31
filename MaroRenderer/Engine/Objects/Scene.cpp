@@ -82,6 +82,8 @@ void Scene::AddActor(Actor* actor)
 	for (auto mesh : actor->GetModel()->GetMeshes())
 	{
 		mesh->AddTexture(m_Skybox->GetIrradiance(), TextureType::IRRADIANCE);
+		mesh->AddTexture(m_Skybox->GetPrefilter(), TextureType::PREFILTER);
+		mesh->AddTexture(m_Skybox->GetBRDF(), TextureType::BRDF);
 	}
 }
 

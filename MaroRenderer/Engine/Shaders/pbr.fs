@@ -5,6 +5,8 @@
 out vec4 FragColor;
 
 uniform samplerCube irradianceMap;
+uniform samplerCube prefilterMap;
+uniform sampler2D brdfMap;
 
 in vec3 Normal;  
 in vec3 FragPos;  
@@ -106,14 +108,37 @@ void main()
 	vec3 irradiance = texture(irradianceMap, norm).rgb;
 	vec3 diffuse = irradiance * texture(diffuseMap, TexCoord).rgb;
 
-	vec3 ambient = vec3(0.03) * diffuse;
+	vec3 albedo = texture(diffuseMap, TexCoord).rgb;
+	float metallic = texture(metallicMap, TexCoord).r;
+	float roughness = texture(roughnessMap, TexCoord).r;
 
-	vec3 color = ambient + L0;
+	vec3 F0 = vec3(0.04); 
+    F0 = mix(F0, albedo, metallic);
 
-	color = color / (color + vec3(1.0/2.2));
-	color = pow(color, vec3(1.0/2.2));
+	// ambient lighting (we now use IBL as the ambient term)
+    vec3 F = FresnelSchlickRoughness(max(dot(norm, viewDir), 0.0), F0, roughness);
+    
+    vec3 kS = F;
+    vec3 kD = 1.0 - kS;
+    kD *= 1.0 - metallic;	  
+    
+    // sample both the pre-filter map and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.
+	vec3 R = reflect(-viewDir, norm); 
+    const float MAX_REFLECTION_LOD = 4.0;
+    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
+    vec2 brdf  = texture(brdfMap, vec2(max(dot(norm, viewDir), 0.0), roughness)).rg;
+    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-	FragColor = vec4(color, 1.0);
+    vec3 ambient = (kD * diffuse + specular);
+
+    vec3 color = ambient + L0;
+
+    // HDR tonemapping
+    color = color / (color + vec3(1.0));
+    // gamma correct
+    color = pow(color, vec3(1.0/2.2)); 
+
+    FragColor = vec4(color , 1.0);
 } 
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)

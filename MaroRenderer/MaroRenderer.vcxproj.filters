@@ -100,6 +100,9 @@
     <None Include="Engine\Shaders\background.vs" />
     <None Include="Engine\Shaders\background.fs" />
     <None Include="Engine\Shaders\irradiance.fs" />
+    <None Include="Engine\Shaders\prefilter.fs" />
+    <None Include="Engine\Shaders\brdf.vs" />
+    <None Include="Engine\Shaders\brdf.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logging\Logger.h">

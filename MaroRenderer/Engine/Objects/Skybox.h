@@ -17,6 +17,8 @@ public:
 	Framebuffer GetFramebuffer() { return m_CaptureFramebuffer; }
 
 	unsigned int GetIrradiance() { return m_IrradianceMap; }
+	unsigned int GetPrefilter() { return m_PrefilterMap; }
+	unsigned int GetBRDF() { return m_BRDFTexture; }
 
 private:
 
@@ -25,16 +27,22 @@ private:
 	unsigned int m_HdrTexture;
 	unsigned int m_Cubemap;
 	unsigned int m_IrradianceMap;
+	unsigned int m_PrefilterMap;
+	unsigned int m_BRDFTexture;
 
 	Shader* m_EquiCubeShader;
 	Shader* m_BackgroundShader;
 	Shader* m_IrradianceShader;
+	Shader* m_PrefilterShader;
+	Shader* m_BRDFShader;
+
 	Camera* m_Camera;
 	Renderer* m_Renderer;
 
 	glm::mat4 m_Model = glm::mat4(1.0f);
 
 	unsigned int VAO, VBO;
+	unsigned int Quad_VAO, Quad_VBO;
 
 	Framebuffer m_CaptureFramebuffer;
 	Renderbuffer m_CaptureRenderbuffer;
@@ -85,6 +93,13 @@ private:
 		 1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
 		-1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
 		-1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left        
+	};
+
+	float m_QuadVertices[20] = {
+		-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+		 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 	};
 
 	glm::mat4 m_CaptureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);

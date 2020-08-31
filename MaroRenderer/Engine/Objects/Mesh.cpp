@@ -46,6 +46,14 @@ void Mesh::Draw(Shader* shader)
 		{
 			shader->SetInt("irradianceMap", i);
 		}
+		else if (type == TextureType::PREFILTER)
+		{
+			shader->SetInt("prefilterMap", i);
+		}
+		else if (type == TextureType::BRDF)
+		{
+			shader->SetInt("brdfMap", i);
+		}
 
 		glBindTexture(GL_TEXTURE_2D, m_Textures[i].Id);
 	}

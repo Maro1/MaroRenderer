@@ -164,6 +164,8 @@
     <None Include="Engine\Shaders\background.vs" />
     <None Include="Engine\Shaders\basic2d.fs" />
     <None Include="Engine\Shaders\basic2d.vs" />
+    <None Include="Engine\Shaders\brdf.fs" />
+    <None Include="Engine\Shaders\brdf.vs" />
     <None Include="Engine\Shaders\equi_to_cubemap.fs" />
     <None Include="Engine\Shaders\cubemap.vs" />
     <None Include="Engine\Shaders\irradiance.fs" />
@@ -171,6 +173,7 @@
     <None Include="Engine\Shaders\normal_mapping.vs" />
     <None Include="Engine\Shaders\pbr.fs" />
     <None Include="Engine\Shaders\pbr.vs" />
+    <None Include="Engine\Shaders\prefilter.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Application.h" />
