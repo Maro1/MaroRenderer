@@ -9,12 +9,12 @@ namespace FileHandler
 {
     const COMDLG_FILTERSPEC meshFileTypes[] =
     {
-        {L"Mesh file (*.obj, *.fbx)",       L"*.obj;*.fbx"}
+        {L"Mesh file (*.obj, *.fbx )",       L"*.obj;*.fbx"}
     };
 
     const COMDLG_FILTERSPEC textureFileTypes[] =
     {
-        {L"Texture file (*.png, *.jpg, *.jpeg, *.tga)",       L"*.png;*.jpg;*.jpeg;*.tga"}
+        {L"Texture file (*.png, *.jpg, *.jpeg, *.tga, *.hdr)",       L"*.png;*.jpg;*.jpeg;*.tga;*.hdr"}
     };
 
     enum class FileType

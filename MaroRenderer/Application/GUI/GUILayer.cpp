@@ -116,41 +116,53 @@ void GUILayer::DisplayTabs()
 			{
 				if (ImGui::BeginTabItem("Material"))
 				{
-					if (ImGui::CollapsingHeader("Diffuse"))
+					if (ImGui::CollapsingHeader("Albedo"))
 					{
-						unsigned int diffuseId = m_CheckerboardID;
-						ImGui::ImageButton((void*)(intptr_t)diffuseId, ImVec2(100, 100));
+						if (m_AlbedoID)
+							ImGui::ImageButton((void*)(intptr_t)m_AlbedoID, ImVec2(100, 100));
+						else
+							ImGui::ImageButton((void*)(intptr_t)m_CheckerboardID, ImVec2(100, 100));
+
 						if (ImGui::IsItemClicked())
 						{
-							diffuseId = ImportTexture(TextureType::DIFFUSE);
+							m_AlbedoID = ImportTexture(TextureType::DIFFUSE);
 						}
 					}
 
 					if (ImGui::CollapsingHeader("Normal"))
 					{
-						unsigned int normalId = m_CheckerboardID;
-						ImGui::ImageButton((void*)(intptr_t)normalId, ImVec2(100, 100));
+						if (m_NormalID)
+							ImGui::ImageButton((void*)(intptr_t)m_NormalID, ImVec2(100, 100));
+						else
+							ImGui::ImageButton((void*)(intptr_t)m_CheckerboardID, ImVec2(100, 100));
+
 						if (ImGui::IsItemClicked())
 						{
-							normalId = ImportTexture(TextureType::NORMAL);
+							m_NormalID = ImportTexture(TextureType::NORMAL);
 						}
 					}
 					if (ImGui::CollapsingHeader("Metallic"))
 					{
-						unsigned int metallicId = m_CheckerboardID;
-						ImGui::ImageButton((void*)(intptr_t)metallicId, ImVec2(100, 100));
+						if (m_MetallicID)
+							ImGui::ImageButton((void*)(intptr_t)m_MetallicID, ImVec2(100, 100));
+						else
+							ImGui::ImageButton((void*)(intptr_t)m_CheckerboardID, ImVec2(100, 100));
+
 						if (ImGui::IsItemClicked())
 						{
-							metallicId = ImportTexture(TextureType::METALLIC);
+							m_MetallicID = ImportTexture(TextureType::METALLIC);
 						}
 					}
 					if (ImGui::CollapsingHeader("Roughness"))
 					{
-						unsigned int roughnessId = m_CheckerboardID;
-						ImGui::ImageButton((void*)(intptr_t)roughnessId, ImVec2(100, 100));
+						if (m_RoughnessID)
+							ImGui::ImageButton((void*)(intptr_t)m_RoughnessID, ImVec2(100, 100));
+						else
+							ImGui::ImageButton((void*)(intptr_t)m_CheckerboardID, ImVec2(100, 100));
+
 						if (ImGui::IsItemClicked())
 						{
-							roughnessId = ImportTexture(TextureType::ROUGHNESS);
+							m_RoughnessID = ImportTexture(TextureType::ROUGHNESS);
 						}
 					}
 					ImGui::EndTabItem();
@@ -161,6 +173,16 @@ void GUILayer::DisplayTabs()
 		{
 			ImGui::Text("Directional light");
 			ImGui::SliderFloat("Strength", m_App->GetScene()->GetDirectionalLightStrength(), 0, 1);
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Skybox"))
+		{
+			ImGui::ImageButton((void*)(intptr_t)m_Skybox->GetTexture(), ImVec2(100, 100));
+
+			if (ImGui::IsItemClicked())
+			{
+				m_Skybox->SetTexture(FileDialogTexturePath());
+			}
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
@@ -189,6 +211,7 @@ void GUILayer::DisplayViewport()
 		}
 		m_App->GetRenderer()->UpdateFrameBuffer(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
 		m_App->GetCamera()->SetViewPortSize(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+		m_App->GetCamera()->SetViewPortPos(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
 	}
 	ImGui::End();
 }
@@ -287,6 +310,11 @@ unsigned int GUILayer::ImportTexture(TextureType type)
 	std::string filePath = FileHandler::ShowOpenFileDialog(FileHandler::FileType::TEXTURE_FILE);
 	
 	return m_ActiveNode->GetModel()->AddTexture(filePath, type);
+}
+
+std::string GUILayer::FileDialogTexturePath()
+{
+	return FileHandler::ShowOpenFileDialog(FileHandler::FileType::TEXTURE_FILE);
 }
 
 void GUILayer::DisplayMainMenu()

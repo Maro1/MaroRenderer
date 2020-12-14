@@ -76,6 +76,13 @@ void Skybox::Draw()
 	glBindVertexArray(0);
 }
 
+void Skybox::SetTexture(const std::string texturePath)
+{
+	m_TexturePath = texturePath;
+	m_HdrTexture = SkyboxFromFile();
+	Init();
+}
+
 unsigned int Skybox::SkyboxFromFile()
 {
 	stbi_set_flip_vertically_on_load(true);

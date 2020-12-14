@@ -9,16 +9,19 @@ class Skybox
 {
 public:
 
-	Skybox(Camera* camera, Renderer* renderer, std::string texturePath);
+	Skybox(Camera* camera, Renderer* renderer, const std::string texturePath);
 
 	~Skybox();
 
 	void Draw();
 	Framebuffer GetFramebuffer() { return m_CaptureFramebuffer; }
 
-	unsigned int GetIrradiance() { return m_IrradianceMap; }
-	unsigned int GetPrefilter() { return m_PrefilterMap; }
-	unsigned int GetBRDF() { return m_BRDFTexture; }
+	inline unsigned int GetIrradiance() { return m_IrradianceMap; }
+	inline unsigned int GetPrefilter() { return m_PrefilterMap; }
+	inline unsigned int GetBRDF() { return m_BRDFTexture; }
+	inline unsigned int GetTexture() { return m_HdrTexture; }
+
+	void SetTexture(const std::string texturePath);
 
 private:
 

@@ -20,6 +20,9 @@ void Scene::UpdateShaders()
 			}
 		}
 		actor->GetShader()->Use();
+
+		actor->GetShader()->SetBool("highlighted", m_HighlightedActor == actor);
+
 		actor->GetShader()->SetMat4("model", actor->GetModelMatrix());
 		actor->GetShader()->SetMat4("view", m_ViewMat);
 		actor->GetShader()->SetMat4("projection", m_ProjMat);
@@ -114,4 +117,3 @@ void Scene::Render()
 	}
 	m_Skybox->Draw();
 }
-

@@ -19,11 +19,7 @@ void main()
 {
     FragPos = vec3(model * vec4(aPos, 1.0));
     mat3 modelMat = mat3(transpose(inverse(model))); 
-
-    vec3 T = normalize(modelMat * aTangent);
-    vec3 B = normalize(modelMat * aBiTangent);
     Normal = normalize(modelMat * aNormal);
-    TBN = mat3(T, B, Normal);
     
     gl_Position = projection * view * vec4(FragPos, 1.0);
 	TexCoord = aTexCoord;

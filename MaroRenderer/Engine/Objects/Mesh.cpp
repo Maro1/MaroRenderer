@@ -26,8 +26,8 @@ void Mesh::Draw(Shader* shader)
 		TextureType type = m_Textures[i].Type;
 		if (type == TextureType::DIFFUSE) 
 		{
-			shader->SetInt("diffuseMap", i);
-			shader->SetBool("usingDiffuse", true);
+			shader->SetInt("albedoMap", i);
+			shader->SetBool("usingAlbedo", true);
 		}
 		else if (type == TextureType::NORMAL)
 		{
@@ -37,10 +37,12 @@ void Mesh::Draw(Shader* shader)
 		else if (type == TextureType::METALLIC)
 		{
 			shader->SetInt("metallicMap", i);
+			shader->SetBool("usingMetallic", true);
 		}
 		else if (type == TextureType::ROUGHNESS)
 		{
 			shader->SetInt("roughnessMap", i);
+			shader->SetInt("usingRoughness", true);
 		}
 		else if (type == TextureType::IRRADIANCE)
 		{
@@ -117,6 +119,22 @@ void Mesh::InitMesh()
 	// BiTangent vector
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+
+	glBindVertexArray(0);
+}
+
+void Mesh::DrawColor(int color, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 viewPos)
+{
+	Shader* colorShader = Shader::CreateShaderFromPath("Engine/Shaders/color.vs", "Engine/Shaders/color.fs");
+	colorShader->Use();
+	colorShader->SetMat4("model", model);
+	colorShader->SetMat4("view", view);
+	colorShader->SetMat4("projection", projection);
+	colorShader->SetFloat3("viewPos", viewPos);
+	colorShader->SetInt("color", color);
+
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 }

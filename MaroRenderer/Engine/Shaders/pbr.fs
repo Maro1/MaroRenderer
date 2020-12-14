@@ -1,17 +1,12 @@
-#version 330 core
+#version 430 core
 
 #define MAX_POINT_LIGHTS 10
 
 out vec4 FragColor;
 
-uniform samplerCube irradianceMap;
-uniform samplerCube prefilterMap;
-uniform sampler2D brdfMap;
-
 in vec3 Normal;  
 in vec3 FragPos;  
 in vec2 TexCoord;
-in mat3 TBN;
 
 struct DirLight {
     vec3 direction;
@@ -32,13 +27,14 @@ struct PointLight {
     vec3 diffuse;
     vec3 specular;
 };
-  
-uniform vec3 viewPos; 
-uniform DirLight directionLight;
-uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
-// textureSamples
-uniform sampler2D diffuseMap;
+// IBL Maps
+uniform samplerCube irradianceMap;
+uniform samplerCube prefilterMap;
+uniform sampler2D brdfMap;
+
+// Textures
+uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
 uniform sampler2D roughnessMap;
@@ -46,13 +42,35 @@ uniform sampler2D roughnessMap;
 uniform bool usingNormal;
 uniform bool usingDiffuse;
 
+uniform vec3 viewPos; 
+uniform DirLight directionLight;
+uniform PointLight pointLights[MAX_POINT_LIGHTS];
+
 const float PI = 3.14159265359;
+const vec3 FDialectric = vec3(0.04); 
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
-vec3 FresnelSchlick(float cosAngle, vec3 reflectionCoeff)
+vec3 getNormalFromMap()
 {
-	return reflectionCoeff + (1.0 -reflectionCoeff ) * pow(1.0 - cosAngle, 5.0);
+    vec3 tangentNormal = texture(normalMap, TexCoord).xyz * 2.0 - 1.0;
+
+    vec3 Q1  = dFdx(FragPos);
+    vec3 Q2  = dFdy(FragPos);
+    vec2 st1 = dFdx(TexCoord);
+    vec2 st2 = dFdy(TexCoord);
+
+    vec3 N   = normalize(Normal);
+    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B  = -normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+
+    return normalize(TBN * tangentNormal);
+}
+
+vec3 FresnelSchlick(vec3 F0, float cosTheta)
+{
+	return F0 + (vec3(1.0) - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
 vec3 FresnelSchlickRoughness(float cosAngle, vec3 reflectionCoeff, float roughness)
@@ -69,108 +87,81 @@ float NormalDist(float NdotH, float coeff)
 	return a2 / max(denom, 0.0000001);
 }
 
+float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float r = (roughness + 1.0);
+    float k = (r*r) / 8.0;
+
+    float nom   = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+
+    return nom / denom;
+}
+
 float GeometrySmith(float NdotV, float NdotL, float coeff)
 {
 	float r = coeff + 1.0;
 	float k = (r * r) / 8.0;
-	float ggx1 = NdotV / (NdotV * (1.0 - k) + k);
-	float ggx2 = NdotL / (NdotL * (1.0 - k) + k);
-	return ggx1 * ggx2;
+
+	float ggx2 = GeometrySchlickGGX(NdotV, coeff);
+    float ggx1 = GeometrySchlickGGX(NdotL, coeff);
+
+    return ggx1 * ggx2;
 }
 
 void main()
 {
+
+	vec3 albedo = pow(texture(albedoMap, TexCoord).rgb, vec3(2.2));
+	float metallic = texture(metallicMap, TexCoord).r;
+	float roughness = texture(roughnessMap, TexCoord).r;
+
 	vec3 norm;
     if(usingNormal)
     {
-        norm = texture(normalMap, TexCoord).rgb;
-        norm.b = 1 - norm.b;
-        norm = normalize(norm * 2.0 - 1.0);
-        norm = normalize(TBN * norm);
+        norm = getNormalFromMap();
     }
     else
     {
         norm = Normal;
 	}
 
-	vec3 viewDir = normalize((viewPos - FragPos)*TBN);
+	vec3 viewDir = normalize(viewPos - FragPos);
+	vec3 reflectDir = reflect(viewDir, norm);
 
-	vec3 L0 = vec3(0.0);
+	vec3 L0 = viewDir;
 
-	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
-	{
-		if(pointLights[i].diffuse != vec3(0)) 
-		{
-			L0 += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
-		}
-	}
+    float cosL0 = max(0.0, dot(norm, L0));
+
+    vec3 Lr = 2.0 * cosL0 * norm - L0;
+
 
 	vec3 irradiance = texture(irradianceMap, norm).rgb;
-	vec3 diffuse = irradiance * texture(diffuseMap, TexCoord).rgb;
 
-	vec3 albedo = texture(diffuseMap, TexCoord).rgb;
-	float metallic = texture(metallicMap, TexCoord).r;
-	float roughness = texture(roughnessMap, TexCoord).r;
+    vec3 F0 = mix(FDialectric, albedo, metallic);
 
-	vec3 F0 = vec3(0.04); 
-    F0 = mix(F0, albedo, metallic);
-
-	// ambient lighting (we now use IBL as the ambient term)
-    vec3 F = FresnelSchlickRoughness(max(dot(norm, viewDir), 0.0), F0, roughness);
+    vec3 F = FresnelSchlick(F0, cosL0);
     
-    vec3 kS = F;
-    vec3 kD = 1.0 - kS;
-    kD *= 1.0 - metallic;	  
+    vec3 kD = mix(vec3(1.0) - F, vec3(0.0), metallic);
     
-    // sample both the pre-filter map and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.
-	vec3 R = reflect(-viewDir, norm); 
-    const float MAX_REFLECTION_LOD = 4.0;
-    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
-    vec2 brdf  = texture(brdfMap, vec2(max(dot(norm, viewDir), 0.0), roughness)).rg;
-    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
+    vec3 diffuse = kD * albedo * irradiance;
 
-    vec3 ambient = (kD * diffuse + specular);
+    int specularTextureLevels = textureQueryLevels(prefilterMap);
+    vec3 specularIrradiance = textureLod(prefilterMap, Lr, roughness * specularTextureLevels).rgb;
 
-    vec3 color = ambient + L0;
+    vec2 specularBRDF = texture(brdfMap, vec2(cosL0, roughness)).rg;
+
+    vec3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
+
+    vec3 color = diffuse + specularIBL;
 
     // HDR tonemapping
     color = color / (color + vec3(1.0));
     // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
+    color = pow(color, vec3(1/3.3)); 
 
     FragColor = vec4(color , 1.0);
 } 
 
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
-{
-	vec3 albedo = texture(diffuseMap, TexCoord).rgb;
-	float metallic = texture(metallicMap, TexCoord).r;
-	float roughness = texture(roughnessMap, TexCoord).r;
 
-	vec3 baseRef = mix(vec3(0.04), albedo, metallic);
-
-    vec3 L = normalize(TBN*light.position - fragPos*TBN);
-	vec3 H = normalize(viewDir + L);
-	float dist = length(light.position - fragPos);
-	float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist)); 
-	vec3 radiance = light.diffuse * attenuation;
-
-    float NdotV = max(dot(normal, viewDir), 0.0000001);
-	float NdotL = max(dot(normal, L), 0.0000001);
-	float HdotV = max(dot(H, viewDir), 0.0);
-	float NdotH = max(dot(normal, H), 0.0);
-
-	float D = NormalDist(NdotH, roughness);
-	float G = GeometrySmith(NdotV, NdotL, roughness);
-	vec3 F = FresnelSchlick(HdotV, baseRef);
-
-	vec3 spec = D * G * F;
-	spec /= 4.0 * NdotV * NdotL;
-
-	vec3 kD = vec3(1.0) - F;
-
-	kD *= 1.0 - metallic;
-
-	return (kD * albedo / PI + spec) * radiance * NdotL;
-}
 

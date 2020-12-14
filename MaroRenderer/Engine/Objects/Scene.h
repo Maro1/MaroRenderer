@@ -20,13 +20,16 @@ public:
 	void AddSkybox(Skybox* skybox);
 	void Render();
 
+	inline void HighlightActor(SceneNode* actor) { m_HighlightedActor = actor; }
 	inline void AddDirectionalLight() { m_DirectionalLight = true; }
 	inline void RemoveDirectionalLight() { m_DirectionalLight = false; }
 	inline void ToggleDirectionalLight() { m_DirectionalLight = !m_DirectionalLight; }
 
 	inline float* GetDirectionalLightStrength() { return &m_DirectionalLightStrength; }
-
 	inline SceneNode* GetRoot() { return m_SceneRoot; }
+	inline Skybox* GetSkybox() { return m_Skybox; }
+	inline ArcballCamera* GetCamera() { return m_Camera; }
+	inline std::vector<SceneNode*> GetActors() { return m_Actors; }
 
 private:
 
@@ -39,6 +42,7 @@ private:
 	ArcballCamera* m_Camera;
 	SceneNode* m_SceneRoot;
 	Skybox* m_Skybox;
+	SceneNode* m_HighlightedActor = nullptr;
 
 	glm::mat4 m_ModelMat = glm::mat4(1.0f);
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);

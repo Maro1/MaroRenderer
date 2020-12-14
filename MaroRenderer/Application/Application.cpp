@@ -7,7 +7,7 @@ Application::Application()
 {
 	m_Window = new Window();
 	m_Renderer = new Renderer(m_Window);
-	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/pbr.vs", "Engine/Shaders/pbr.fs");
+	m_Shader = Shader::CreateShaderFromPath("Engine/Shaders/pbr_2.vs", "Engine/Shaders/pbr_2.fs");
 	m_Camera = new ArcballCamera(m_Window->GetWidth(), m_Window->GetHeight());
 
 	m_Window->SetEventCallback(BIND_FUNC(OnEvent));
@@ -41,15 +41,16 @@ void Application::Run()
 
 	m_Renderer->InitFramebuffer();
 
-	std::string SkyboxPath = "Assets/skybox_hdr/skybox.hdr";
+	std::string SkyboxPath = "Assets/skybox_hdr/s.hdr";
 	Skybox skybox(m_Camera, m_Renderer, SkyboxPath);
 	m_Scene->AddSkybox(&skybox);
+
+	m_GuiLayer->SetSkybox(&skybox);
+	m_ObjectPicker = new ObjectPicker(m_Scene);
 
 	while (!m_Window->ShouldClose())
 	{
 		PollEvents();
-
-		//m_Scene->RotateLight(glfwGetTime());
 
 		m_Window->Update();
 
@@ -129,7 +130,7 @@ void Application::OnEvent(const Event& e)
 			{
 				m_Camera->AltMiddleMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
 			}
-			else if (button == 0)
+			else if (button == 1)
 			{
 				m_Camera->LeftMousePressed(true, mousepressed->GetX(), mousepressed->GetY());
 			}
@@ -139,11 +140,19 @@ void Application::OnEvent(const Event& e)
 	{
 		MouseReleasedEvent* mousereleased = (MouseReleasedEvent*)&e;
 		int button = mousereleased->GetButton();
-		if (button == 0)
+		if (button == 1)
 		{
 			m_Camera->AltLeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 			m_Camera->LeftMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
 			m_Camera->AltMiddleMousePressed(false, mousereleased->GetX(), mousereleased->GetY());
+		}
+		if (button == 0)
+		{
+			SceneNode* node = m_ObjectPicker->PickObject(mousereleased);
+			if (node) {
+				m_Scene->HighlightActor(node);
+				m_GuiLayer->SetActiveNode(node);
+			}
 		}
 	}
 	else if (e.GetType() == EventType::MouseMove)

@@ -17,12 +17,18 @@ public:
 
 	void SetTarget(glm::vec3 target) { m_Target = target; }
 	void SetLocation(glm::vec3 location) { m_Location = location; }
+
 	void SetViewPortSize(int x, int y) { m_ViewPortWidth = x; m_ViewPortHeight = y; }
 	glm::vec2 GetViewPortSize() { return glm::vec2(m_ViewPortWidth, m_ViewPortHeight); }
+
+	void SetViewPortPos(int x, int y) {m_ViewPortPos = glm::vec2(x, y); }
+	glm::vec2 GetViewPortPos() { return m_ViewPortPos; }
 
 protected:
 
 	int m_ViewPortWidth, m_ViewPortHeight;
+
+	glm::vec2 m_ViewPortPos;
 
 	glm::vec3 m_Target = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 m_Location = glm::vec3(0.0f, 0.0f, -3.0f);

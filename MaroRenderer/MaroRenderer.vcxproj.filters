@@ -87,6 +87,12 @@
     <ClCompile Include="Engine\Rendering\Renderbuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Application\ObjectPicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Gizmo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shaders\basic2d.fs" />
@@ -103,6 +109,10 @@
     <None Include="Engine\Shaders\prefilter.fs" />
     <None Include="Engine\Shaders\brdf.vs" />
     <None Include="Engine\Shaders\brdf.fs" />
+    <None Include="Engine\Shaders\pbr_2.vs" />
+    <None Include="Engine\Shaders\pbr_2.fs" />
+    <None Include="Engine\Shaders\color.vs" />
+    <None Include="Engine\Shaders\color.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logging\Logger.h">
@@ -202,6 +212,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Rendering\Renderbuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\ObjectPicker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Gizmo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

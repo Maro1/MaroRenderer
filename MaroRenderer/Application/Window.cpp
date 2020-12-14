@@ -7,7 +7,7 @@
 Window::Window()
 {
 	glfwInit();
-	CreateWindow(2560, 1440, "Test");
+	CreateWindow(2560, 1440, "MaroRenderer");
 }
 
 Window::Window(unsigned int width, unsigned height, const char* title)

@@ -34,6 +34,7 @@ public:
 
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 	void Draw(Shader* shader);
+	void DrawColor(int color, glm::mat4 model, glm::mat4 view, glm::mat4 projection, glm::vec3 viewPos);
 
 	void AddTexture(unsigned int tetureID, TextureType type);
 

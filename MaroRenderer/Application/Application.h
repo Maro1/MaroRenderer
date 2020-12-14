@@ -2,6 +2,7 @@
 
 #include "Engine/Rendering/Renderer.h"
 #include "Application/Window.h"
+#include "Application/ObjectPicker.h"
 #include "Logging/Logger.h"
 #include "Engine/Rendering/Shader.h"
 #include "Events/Event.h"
@@ -44,6 +45,7 @@ private:
 	ArcballCamera* m_Camera;
 	Scene* m_Scene;
 	GUILayer* m_GuiLayer;
+	ObjectPicker* m_ObjectPicker;
 
 	glm::mat4 m_ModelMat = glm::mat4(1.0f);
 	glm::mat4 m_ProjMat = glm::mat4(1.0f);
