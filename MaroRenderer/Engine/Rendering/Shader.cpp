@@ -27,6 +27,7 @@ Shader* Shader::CreateShaderFromPath(const char* vertexPath, const char* fragmen
 
 	try
 	{
+		std::cout << vertexPath << std::endl;
 		vShaderFile.open(vertexPath);
 		fShaderFile.open(fragmentPath);
 		std::stringstream vShaderStream, fShaderStream;

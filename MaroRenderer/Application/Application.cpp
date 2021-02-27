@@ -24,12 +24,6 @@ void Application::Run()
 	m_DeltaTime = glfwGetTime() - m_PrevTime;
 	m_PrevTime = glfwGetTime();
 
-	std::string path = "Assets/cube.obj";
-	std::string filename = "Assets/Box_Texture.png"; 
-	std::string normalPath = "Assets/Box_Normal.png"; 
-
-	Model cube(path, filename, normalPath);
-
 	//PointLight light(m_Shader, glm::vec3(0.0f, 1.0f, 2.0f));
 	//PointLight light2(m_Shader, glm::vec3(0.0f, -1.0f, -2.0f));
 

@@ -41,7 +41,7 @@ private:
 	Shader* m_Shader;
 	glm::vec3 m_Color;
 
-	inline static Shader* DefaultActorShader() { 
-		return Shader::CreateShaderFromPath("Engine/Shaders/pbr.vs", "Engine/Shaders/pbr.fs"); 
+	inline static Shader* DefaultActorShader() {
+		return Shader::CreateShaderFromPath("Engine/Shaders/pbr.vs", "Engine/Shaders/pbr.fs");
 	}
 };

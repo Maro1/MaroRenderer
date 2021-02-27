@@ -8,14 +8,14 @@ uniform samplerCube irradianceMap;
 uniform samplerCube prefilterMap;
 uniform sampler2D brdfMap;
 
-in vec3 Normal;  
-in vec3 FragPos;  
+in vec3 Normal;
+in vec3 FragPos;
 in vec2 TexCoord;
 in mat3 TBN;
 
 struct DirLight {
     vec3 direction;
-	
+
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -23,17 +23,17 @@ struct DirLight {
 
 struct PointLight {
     vec3 position;
-    
+
     float constant;
     float linear;
     float quadratic;
-	
+
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
 };
-  
-uniform vec3 viewPos; 
+
+uniform vec3 viewPos;
 uniform DirLight directionLight;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
@@ -99,7 +99,7 @@ void main()
 
 	for(int i = 0; i < MAX_POINT_LIGHTS; i++)
 	{
-		if(pointLights[i].diffuse != vec3(0)) 
+		if(pointLights[i].diffuse != vec3(0))
 		{
 			L0 += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 		}
@@ -112,20 +112,20 @@ void main()
 	float metallic = texture(metallicMap, TexCoord).r;
 	float roughness = texture(roughnessMap, TexCoord).r;
 
-	vec3 F0 = vec3(0.04); 
+	vec3 F0 = vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
 	// ambient lighting (we now use IBL as the ambient term)
     vec3 F = FresnelSchlickRoughness(max(dot(norm, viewDir), 0.0), F0, roughness);
-    
+
     vec3 kS = F;
     vec3 kD = 1.0 - kS;
-    kD *= 1.0 - metallic;	  
-    
+    kD *= 1.0 - metallic;
+
     // sample both the pre-filter map and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.
-	vec3 R = reflect(-viewDir, norm); 
+	vec3 R = reflect(-viewDir, norm);
     const float MAX_REFLECTION_LOD = 4.0;
-    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
+    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;
     vec2 brdf  = texture(brdfMap, vec2(max(dot(norm, viewDir), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
@@ -136,10 +136,10 @@ void main()
     // HDR tonemapping
     color = color / (color + vec3(1.0));
     // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
+    color = pow(color, vec3(1.0/2.2));
 
-    FragColor = vec4(color , 1.0);
-} 
+    FragColor = vec4(1.0);
+}
 
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
@@ -152,7 +152,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     vec3 L = normalize(TBN*light.position - fragPos*TBN);
 	vec3 H = normalize(viewDir + L);
 	float dist = length(light.position - fragPos);
-	float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist)); 
+	float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist));
 	vec3 radiance = light.diffuse * attenuation;
 
     float NdotV = max(dot(normal, viewDir), 0.0000001);
@@ -173,4 +173,3 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 	return (kD * albedo / PI + spec) * radiance * NdotL;
 }
-

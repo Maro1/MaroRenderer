@@ -69,7 +69,6 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 
 			// Calculate camera vectors
 			m_Front = glm::normalize(m_Target - m_Location);
-			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
 			m_Up = glm::vec3(0, 1, 0);
 
 			m_AltPrevPos = m_AltCurrPos;
@@ -101,7 +100,7 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 			return;
 
 		if (m_MouseEvent == 1)
-		{ 
+		{
 			/* Current mouse position */
 			m_CurrPos = glm::vec2(x, y);
 
@@ -109,12 +108,11 @@ void ArcballCamera::MouseMoved(double x, double y, bool alt, float deltaTime)
 			m_Front = Look((m_PrevPos.x - m_CurrPos.x) * Sensitivity * deltaTime, (m_CurrPos.y - m_PrevPos.y) * Sensitivity * deltaTime);
 
 			/* Calculate up vector*/
-			glm::vec3 right = glm::normalize(glm::cross(m_Front, m_Up));
 			m_Up = glm::vec3(0, 1, 0);
 
 			/* Update target location */
 			m_Target = m_Location + glm::vec3(m_Front.x * m_TargetDistance, m_Front.y * m_TargetDistance,
-				m_Front.z * m_TargetDistance);
+			m_Front.z * m_TargetDistance);
 		}
 		m_PrevPos = m_CurrPos;
 	}

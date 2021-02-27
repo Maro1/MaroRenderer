@@ -45,7 +45,8 @@ void GUILayer::Begin()
 
 
 	ImGui::Begin("Hierarchy");
-	DisplayHierarchy(&m_App->GetScene()->GetRoot()->GetChildren());
+	std::vector<SceneNode*> children = m_App->GetScene()->GetRoot()->GetChildren();
+	DisplayHierarchy(&children);
 	ImGui::End();
 
 	DisplayTabs();
@@ -92,7 +93,7 @@ void GUILayer::DisplayTabs()
 					ImGui::InputFloat3("##loc", vec4a, "%.3f");
 					m_ActiveNode->SetLocation(glm::vec3(vec4a[0], vec4a[1], vec4a[2]));
 				}
-				
+
 				if (ImGui::CollapsingHeader("Rotation"))
 				{
 					float rot4a[4] = { m_ActiveNode->GetRotation().x, m_ActiveNode->GetRotation().y, m_ActiveNode->GetRotation().z, 0.44f };
@@ -170,8 +171,8 @@ void GUILayer::DisplayTabs()
 
 void GUILayer::DisplayViewport()
 {
-	ImGui::SetWindowSize(ImVec2(m_Window->GetWidth() / 2 + 10, m_Window->GetHeight() / 2 + 10), ImGuiCond_Once);
-	ImGui::SetWindowPos(ImVec2(m_Window->GetWidth() / 4, m_Window->GetHeight() / 4),  ImGuiCond_Once);
+	ImGui::SetWindowSize(ImVec2((float) m_Window->GetWidth() / 2 + 10, (float) m_Window->GetHeight() / 2 + 10), ImGuiCond_Once);
+	ImGui::SetWindowPos(ImVec2((float) m_Window->GetWidth() / 4, (float) m_Window->GetHeight() / 4),  ImGuiCond_Once);
 	ImGui::Begin("Viewport", NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize);
 	{
 		// Get FBO texture
@@ -221,7 +222,7 @@ void GUILayer::CreateDockspace()
 		ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
 		ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
 		ImGuiID dock_down_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.1f, nullptr, &dock_main_id);
-		ImGuiID dock_middle_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_None, 0.2f, nullptr, &dock_main_id);
+		//ImGuiID dock_middle_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_None, 0.2f, nullptr, &dock_main_id);
 
 		ImGui::DockBuilderDockWindow("Properties", dock_right_id);
 		ImGui::DockBuilderDockWindow("Hierarchy", dock_left_id);
@@ -266,7 +267,8 @@ void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 
 		if (hasChildren && open)
 		{
-			DisplayHierarchy(&(*object)->GetChildren());
+			std::vector<SceneNode*> children = (*object)->GetChildren();
+			DisplayHierarchy(&children);
 			ImGui::TreePop();
 		}
 	}
@@ -275,6 +277,7 @@ void GUILayer::DisplayHierarchy(std::vector<SceneNode*>* children)
 void GUILayer::ImportModel()
 {
 	std::string filePath = FileHandler::ShowOpenFileDialog(FileHandler::FileType::MESH_FILE);
+	if (filePath == "") return;
 	// Remember to delete these
 	Model* model = new Model(filePath);
 	Actor* actor = new Actor(model);
@@ -285,7 +288,8 @@ void GUILayer::ImportModel()
 unsigned int GUILayer::ImportTexture(TextureType type)
 {
 	std::string filePath = FileHandler::ShowOpenFileDialog(FileHandler::FileType::TEXTURE_FILE);
-	
+	if (filePath == "") return 0;
+
 	return m_ActiveNode->GetModel()->AddTexture(filePath, type);
 }
 
